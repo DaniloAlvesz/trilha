@@ -9,12 +9,14 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        paper: "#F4F4EB",
-        primary: "#1A4331",
-        action: "#7C2D3A",
-        clinical: "#2E7D32",
-        alert: "#B8860B",
-        borderDark: "#000000",
+        clinical: {
+          paper: '#FDF8F9',   // Blush Off-White (Fundo principal)
+          ink: '#2A111A',     // Ameixa Profundo (Textos principais e bordas)
+          action: '#801A3D',  // Rosa Carmim (Botões primários vitais)
+          surface: '#D46C85', // Rosa Velho Médio (Ações secundárias/tags)
+          alert: '#B54D22',   // Terracota Quente (Alertas críticos de estoque)
+          success: '#4A7059', // Verde Sálvia (Status de sucesso/concluído)
+        },
       },
       fontFamily: {
         serif: ["Merriweather", "PT Serif", "Georgia", "serif"],

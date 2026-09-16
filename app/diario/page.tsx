@@ -101,38 +101,38 @@ export default function DiarioPage() {
   return (
     <div className="space-y-6">
       {/* Cabeçalho */}
-      <section className="border-b-4 border-black pb-4">
-        <span className="font-mono text-[10px] sm:text-xs uppercase font-bold text-[#7C2D3A] block">
+      <section className="border-b-4 border-clinical-ink pb-4">
+        <span className="font-mono text-[10px] sm:text-xs uppercase font-bold text-clinical-action block">
           RECURSO OFICIAL: HL7 FHIR R4 // OBSERVATION
         </span>
-        <h1 className="font-serif text-2xl sm:text-3xl font-black uppercase break-words">
+        <h1 className="font-serif text-2xl sm:text-3xl font-black uppercase break-words text-clinical-ink">
           MEU DIÁRIO // OBSERVATÓRIO DE SINTOMAS E HUMOR
         </h1>
-        <p className="font-mono text-xs sm:text-sm uppercase text-black font-bold mt-1 break-words">
+        <p className="font-mono text-xs sm:text-sm uppercase text-clinical-ink font-bold mt-1 break-words">
           REGISTRO RIGOROSO DE SEQUELAS CRÔNICAS, LINFEDEMA, FADIGA E FLUTUAÇÕES HORMONAIS
         </p>
       </section>
 
       {/* Log de Estado da Engine */}
-      <div className="border-2 border-black bg-black text-[#F4F4EB] p-2.5 sm:p-3 font-mono text-xs sm:text-sm uppercase flex flex-col sm:flex-row justify-between items-start sm:items-center gap-1">
+      <div className="border-2 border-clinical-ink bg-clinical-ink text-white p-2.5 sm:p-3 font-mono text-xs sm:text-sm uppercase flex flex-col sm:flex-row justify-between items-start sm:items-center gap-1">
         <span>ESTADO DA ENGINE:</span>
-        <span className="text-[#B8860B] font-bold break-words">{statusLog}</span>
+        <span className="text-clinical-surface font-bold break-words">{statusLog}</span>
       </div>
 
       {/* Formulário de Registro (Sem Modais, Ação Primária em Vinho Terroso) */}
-      <section className="border-4 border-[#7C2D3A] bg-[#F4F4EB] p-4 sm:p-5 space-y-4">
-        <div className="border-b-2 border-black pb-2 flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
-          <h2 className="font-serif text-xl sm:text-2xl font-black uppercase text-[#7C2D3A]">
+      <section className="border-4 border-clinical-ink bg-clinical-paper p-4 sm:p-5 space-y-4">
+        <div className="border-b-2 border-clinical-ink pb-2 flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
+          <h2 className="font-serif text-xl sm:text-2xl font-black uppercase text-clinical-action">
             NOVA OBSERVAÇÃO CLÍNICA
           </h2>
           <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
             <button
               type="button"
               onClick={() => setCategoria("symptom")}
-              className={`w-full sm:w-auto min-h-[44px] sm:min-h-[48px] px-3 sm:px-4 font-mono text-xs sm:text-sm font-bold uppercase border-2 border-black transition-none text-center ${
+              className={`w-full sm:w-auto min-h-[44px] sm:min-h-[48px] px-3 sm:px-4 font-mono text-xs sm:text-sm font-bold uppercase border-2 border-clinical-ink transition-none text-center ${
                 categoria === "symptom"
-                  ? "bg-[#7C2D3A] text-[#F4F4EB]"
-                  : "bg-white text-black hover:bg-black hover:text-[#F4F4EB]"
+                  ? "bg-clinical-action text-white"
+                  : "bg-white text-clinical-ink hover:bg-clinical-surface hover:text-clinical-ink"
               }`}
             >
               REGISTRAR SINTOMA FÍSICO
@@ -140,10 +140,10 @@ export default function DiarioPage() {
             <button
               type="button"
               onClick={() => setCategoria("emotional_state")}
-              className={`w-full sm:w-auto min-h-[44px] sm:min-h-[48px] px-3 sm:px-4 font-mono text-xs sm:text-sm font-bold uppercase border-2 border-black transition-none text-center ${
+              className={`w-full sm:w-auto min-h-[44px] sm:min-h-[48px] px-3 sm:px-4 font-mono text-xs sm:text-sm font-bold uppercase border-2 border-clinical-ink transition-none text-center ${
                 categoria === "emotional_state"
-                  ? "bg-[#7C2D3A] text-[#F4F4EB]"
-                  : "bg-white text-black hover:bg-black hover:text-[#F4F4EB]"
+                  ? "bg-clinical-action text-white"
+                  : "bg-white text-clinical-ink hover:bg-clinical-surface hover:text-clinical-ink"
               }`}
             >
               REGISTRAR ESTADO EMOCIONAL
@@ -155,7 +155,7 @@ export default function DiarioPage() {
           {categoria === "symptom" ? (
             <div className="space-y-4">
               <div>
-                <label htmlFor="sintoma-nome" className="block font-mono text-xs sm:text-sm font-bold uppercase mb-1">
+                <label htmlFor="sintoma-nome" className="block font-mono text-xs sm:text-sm font-bold uppercase mb-1 text-clinical-ink">
                   SINTOMA OBSERVADO (EX: FADIGA, INCHAÇO NO BRAÇO, DORES ARTICULARES, ONDAS DE CALOR):
                 </label>
                 <input
@@ -164,12 +164,12 @@ export default function DiarioPage() {
                   value={sintomaNome}
                   onChange={(e) => setSintomaNome(e.target.value)}
                   placeholder="DIGITE O SINTOMA..."
-                  className="w-full min-h-[48px] px-3 border-2 border-black font-mono text-sm sm:text-base bg-white text-black focus:outline-none focus:bg-white"
+                  className="w-full min-h-[48px] px-3 border-2 border-clinical-ink font-mono text-sm sm:text-base bg-white text-clinical-ink focus:outline-none focus:bg-white"
                   required
                 />
               </div>
               <div>
-                <label htmlFor="sintoma-desc" className="block font-mono text-xs sm:text-sm font-bold uppercase mb-1">
+                <label htmlFor="sintoma-desc" className="block font-mono text-xs sm:text-sm font-bold uppercase mb-1 text-clinical-ink">
                   DETALHAMENTO SOMÁTICO (HORÁRIO DE PICO, INTENSIDADE, LOCALIZAÇÃO):
                 </label>
                 <textarea
@@ -177,13 +177,13 @@ export default function DiarioPage() {
                   value={descricao}
                   onChange={(e) => setDescricao(e.target.value)}
                   placeholder="EX: BRAÇO ESQUERDO COM SENSAÇÃO DE PESO APÓS ESFORÇO REPETITIVO..."
-                  className="w-full min-h-[96px] p-3 border-2 border-black font-mono text-sm sm:text-base bg-white text-black focus:outline-none focus:bg-white"
+                  className="w-full min-h-[96px] p-3 border-2 border-clinical-ink font-mono text-sm sm:text-base bg-white text-clinical-ink focus:outline-none focus:bg-white"
                 />
               </div>
             </div>
           ) : (
             <div className="space-y-4">
-              <label className="block font-mono text-xs sm:text-sm font-bold uppercase">
+              <label className="block font-mono text-xs sm:text-sm font-bold uppercase text-clinical-ink">
                 ESCALA FUNCIONAL DE HUMOR (VALOR ESTATÍSTICO DE DADO):
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
@@ -192,10 +192,10 @@ export default function DiarioPage() {
                     key={h.code}
                     type="button"
                     onClick={() => setHumorSelecionado(h.emoji)}
-                    className={`min-h-[52px] sm:min-h-[56px] p-2 border-2 border-black flex flex-col items-center justify-center font-mono text-xs font-bold transition-none ${
+                    className={`min-h-[52px] sm:min-h-[56px] p-2 border-2 border-clinical-ink flex flex-col items-center justify-center font-mono text-xs font-bold transition-none ${
                       humorSelecionado === h.emoji
-                        ? "bg-black text-[#F4F4EB] border-black"
-                        : "bg-white text-black hover:bg-[#F4F4EB]"
+                        ? "bg-clinical-ink text-white border-clinical-ink"
+                        : "bg-white text-clinical-ink hover:bg-clinical-surface hover:text-clinical-ink"
                     }`}
                   >
                     <span className="text-xl sm:text-2xl mb-1">{h.emoji}</span>
@@ -204,7 +204,7 @@ export default function DiarioPage() {
                 ))}
               </div>
               <div>
-                <label htmlFor="humor-desc" className="block font-mono text-xs sm:text-sm font-bold uppercase mb-1">
+                <label htmlFor="humor-desc" className="block font-mono text-xs sm:text-sm font-bold uppercase mb-1 text-clinical-ink">
                   ANOTAÇÃO EMOCIONAL OU CONTEXTO DE ISOLAMENTO:
                 </label>
                 <textarea
@@ -212,7 +212,7 @@ export default function DiarioPage() {
                   value={descricao}
                   onChange={(e) => setDescricao(e.target.value)}
                   placeholder="DIGITE SOBRE O ESTADO DE DISPOSIÇÃO OU PENSAMENTOS SOBRE O TRATAMENTO..."
-                  className="w-full min-h-[96px] p-3 border-2 border-black font-mono text-sm sm:text-base bg-white text-black focus:outline-none focus:bg-white"
+                  className="w-full min-h-[96px] p-3 border-2 border-clinical-ink font-mono text-sm sm:text-base bg-white text-clinical-ink focus:outline-none focus:bg-white"
                 />
               </div>
             </div>
@@ -220,7 +220,7 @@ export default function DiarioPage() {
 
           <button
             type="submit"
-            className="w-full sm:w-auto min-h-[48px] px-6 sm:px-8 bg-[#7C2D3A] text-[#F4F4EB] font-mono text-sm sm:text-base font-black uppercase border-2 border-black hover:bg-black hover:text-[#F4F4EB] active:bg-[#F4F4EB] active:text-[#7C2D3A] transition-none text-center"
+            className="w-full sm:w-auto min-h-[48px] px-6 sm:px-8 bg-clinical-action text-white font-mono text-sm sm:text-base font-black uppercase border-2 border-clinical-ink hover:bg-clinical-ink hover:text-white transition-none text-center"
           >
             ARQUIVAR OBSERVAÇÃO NO PRONTUÁRIO
           </button>
@@ -229,12 +229,12 @@ export default function DiarioPage() {
 
       {/* Histórico Cronológico de Observações */}
       <section className="space-y-4">
-        <h2 className="font-serif text-xl sm:text-2xl font-black uppercase border-b-2 border-black pb-2">
+        <h2 className="font-serif text-xl sm:text-2xl font-black uppercase border-b-2 border-clinical-ink pb-2 text-clinical-ink">
           HISTÓRICO CRONOLÓGICO DE REGISTROS
         </h2>
 
         {observations.length === 0 ? (
-          <div className="border-4 border-black p-6 sm:p-8 bg-white text-center font-mono text-base sm:text-lg font-black uppercase">
+          <div className="border-4 border-clinical-ink p-6 sm:p-8 bg-white text-center font-mono text-base sm:text-lg font-black uppercase text-clinical-ink">
             [NENHUM EVENTO CLÍNICO REGISTRADO NESTA COMPETÊNCIA]
           </div>
         ) : (
@@ -253,32 +253,32 @@ export default function DiarioPage() {
             return (
               <article
                 key={obs.id}
-                className="border-2 border-black bg-white p-3.5 sm:p-5 space-y-3"
+                className="border-2 border-clinical-ink bg-white p-3.5 sm:p-5 space-y-3"
               >
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b-2 border-black pb-2 gap-2">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b-2 border-clinical-ink pb-2 gap-2">
                   <div>
-                    <span className="font-mono text-[10px] sm:text-xs font-bold uppercase block text-black/70">
+                    <span className="font-mono text-[10px] sm:text-xs font-bold uppercase block text-clinical-ink/70">
                       ID: {obs.id} // SISTEMA: {obs.codeSystem} // CATEGORIA: {obs.categoryCode.toUpperCase()}
                     </span>
-                    <h3 className="font-serif text-lg sm:text-xl font-black uppercase text-[#7C2D3A] break-words">
+                    <h3 className="font-serif text-lg sm:text-xl font-black uppercase text-clinical-action break-words">
                       {obs.codeValue}
                     </h3>
                   </div>
-                  <div className="font-mono text-xs sm:text-sm font-black bg-black text-[#F4F4EB] px-2.5 py-1 border border-black self-start md:self-auto shrink-0">
+                  <div className="font-mono text-xs sm:text-sm font-black bg-clinical-ink text-white px-2.5 py-1 border border-clinical-ink self-start md:self-auto shrink-0">
                     {dataFormatada} • {horaFormatada}
                   </div>
                 </div>
 
                 {obs.valueString && (
-                  <p className="font-mono text-xs sm:text-base bg-[#F4F4EB] border border-black p-2.5 sm:p-3 font-bold break-words">
+                  <p className="font-mono text-xs sm:text-base bg-clinical-paper text-clinical-ink border border-clinical-ink p-2.5 sm:p-3 font-bold break-words">
                     DADO REGISTRADO: {obs.valueString}
                   </p>
                 )}
 
                 {/* MECANISMO DE EXCLUSÃO INLINE SEM MODAL */}
-                <div className="pt-2 border-t border-black">
+                <div className="pt-2 border-t border-clinical-ink">
                   {deleteId === obs.id ? (
-                    <div className="border-2 border-black bg-[#7C2D3A] text-[#F4F4EB] p-3 space-y-2">
+                    <div className="border-2 border-clinical-ink bg-clinical-alert text-white p-3 space-y-2">
                       <div className="font-mono text-xs sm:text-sm font-bold uppercase break-words">
                         ATENÇÃO: AÇÃO DESTRUTIVA DEFINITIVA. PARA CONFIRMAR, DIGITE &ldquo;EXCLUIR&rdquo;:
                       </div>
@@ -288,12 +288,12 @@ export default function DiarioPage() {
                           value={confirmInput}
                           onChange={(e) => setConfirmInput(e.target.value)}
                           placeholder="DIGITE EXCLUIR"
-                          className="w-full sm:w-auto flex-1 min-h-[44px] sm:min-h-[48px] px-3 border-2 border-black font-mono text-sm sm:text-base uppercase bg-white text-black focus:outline-none"
+                          className="w-full sm:w-auto flex-1 min-h-[44px] sm:min-h-[48px] px-3 border-2 border-clinical-ink font-mono text-sm sm:text-base uppercase bg-white text-clinical-ink focus:outline-none"
                         />
                         <button
                           type="button"
                           onClick={() => handleExecutarExclusao(obs.id)}
-                          className="w-full sm:w-auto min-h-[44px] sm:min-h-[48px] px-4 sm:px-6 bg-black text-[#F4F4EB] font-mono text-xs sm:text-sm font-black uppercase border-2 border-[#F4F4EB] hover:bg-[#F4F4EB] hover:text-black transition-none text-center"
+                          className="w-full sm:w-auto min-h-[44px] sm:min-h-[48px] px-4 sm:px-6 bg-clinical-ink text-white font-mono text-xs sm:text-sm font-black uppercase border-2 border-white hover:bg-white hover:text-clinical-ink transition-none text-center"
                         >
                           CONFIRMAR EXCLUSÃO
                         </button>
@@ -303,7 +303,7 @@ export default function DiarioPage() {
                             setDeleteId(null);
                             setConfirmInput("");
                           }}
-                          className="w-full sm:w-auto min-h-[44px] sm:min-h-[48px] px-4 bg-[#F4F4EB] text-black font-mono text-xs sm:text-sm font-bold uppercase border-2 border-black hover:bg-black hover:text-[#F4F4EB] transition-none text-center"
+                          className="w-full sm:w-auto min-h-[44px] sm:min-h-[48px] px-4 bg-clinical-paper text-clinical-ink font-mono text-xs sm:text-sm font-bold uppercase border-2 border-clinical-ink hover:bg-clinical-surface hover:text-clinical-ink transition-none text-center"
                         >
                           CANCELAR
                         </button>
@@ -317,7 +317,7 @@ export default function DiarioPage() {
                           setDeleteId(obs.id);
                           setConfirmInput("");
                         }}
-                        className="w-full sm:w-auto min-h-[44px] sm:min-h-[48px] px-4 bg-transparent text-black font-mono text-xs sm:text-sm font-bold uppercase border-2 border-black hover:bg-[#7C2D3A] hover:text-[#F4F4EB] transition-none text-center"
+                        className="w-full sm:w-auto min-h-[44px] sm:min-h-[48px] px-4 bg-transparent text-clinical-ink font-mono text-xs sm:text-sm font-bold uppercase border-2 border-clinical-ink hover:bg-clinical-alert hover:text-white transition-none text-center"
                       >
                         REMOVER REGISTRO
                       </button>

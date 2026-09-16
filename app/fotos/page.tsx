@@ -69,32 +69,32 @@ export default function LinhaDoTempoFotosPage() {
   return (
     <div className="space-y-6">
       {/* Cabeçalho */}
-      <section className="border-b-4 border-black pb-4">
-        <span className="font-mono text-[10px] sm:text-xs uppercase font-bold text-[#1A4331] block">
+      <section className="border-b-4 border-clinical-ink pb-4">
+        <span className="font-mono text-[10px] sm:text-xs uppercase font-bold text-clinical-action block">
           RECURSO OFICIAL: HL7 FHIR R4 // DOCUMENTREFERENCE
         </span>
-        <h1 className="font-serif text-2xl sm:text-3xl font-black uppercase break-words">
+        <h1 className="font-serif text-2xl sm:text-3xl font-black uppercase break-words text-clinical-ink">
           LINHA DO TEMPO CLÍNICA // REGISTRO VISUAL
         </h1>
-        <p className="font-mono text-xs sm:text-sm uppercase text-black font-bold mt-1 break-words">
+        <p className="font-mono text-xs sm:text-sm uppercase text-clinical-ink font-bold mt-1 break-words">
           MONITORAMENTO FOTOGRÁFICO DE RECONSTRUÇÃO MAMÁRIA, CICATRIZES E EDEMA LINFÁTICO
         </p>
       </section>
 
       {/* Status da Engine */}
-      <div className="border-2 border-black bg-black text-[#F4F4EB] p-2.5 sm:p-3 font-mono text-xs sm:text-sm uppercase flex flex-col sm:flex-row justify-between items-start sm:items-center gap-1">
+      <div className="border-2 border-clinical-ink bg-clinical-ink text-white p-2.5 sm:p-3 font-mono text-xs sm:text-sm uppercase flex flex-col sm:flex-row justify-between items-start sm:items-center gap-1">
         <span>STATUS DO STORAGE CRIPTOGRAFADO:</span>
-        <span className="text-[#B8860B] font-bold break-words">{statusLog}</span>
+        <span className="text-clinical-surface font-bold break-words">{statusLog}</span>
       </div>
 
       {/* Formulário de Upload / Registro do DocumentReference */}
-      <section className="border-2 border-black bg-[#F4F4EB] p-4 sm:p-5 space-y-4">
-        <h2 className="font-serif text-lg sm:text-xl font-black uppercase border-b-2 border-black pb-2">
+      <section className="border-2 border-clinical-ink bg-clinical-paper p-4 sm:p-5 space-y-4">
+        <h2 className="font-serif text-lg sm:text-xl font-black uppercase border-b-2 border-clinical-ink pb-2 text-clinical-ink">
           ARQUIVAR NOVO REGISTRO VISUAL
         </h2>
         <form onSubmit={handleSalvarFoto} className="space-y-4">
           <div>
-            <label htmlFor="url-attachment" className="block font-mono text-xs sm:text-sm font-bold uppercase mb-1">
+            <label htmlFor="url-attachment" className="block font-mono text-xs sm:text-sm font-bold uppercase mb-1 text-clinical-ink">
               LOCALIZADOR DE OBJETO CRIPTOGRAFADO (S3/R2 URL OU PATH LOCAL):
             </label>
             <input
@@ -103,12 +103,12 @@ export default function LinhaDoTempoFotosPage() {
               value={novaUrl}
               onChange={(e) => setNovaUrl(e.target.value)}
               placeholder="HTTPS://ENCRYPTED-BUCKET.TRILHA.SAUDE.GOV.BR/PATIENT/REGISTRO.JPG"
-              className="w-full min-h-[48px] px-3 border-2 border-black font-mono text-sm sm:text-base bg-white text-black focus:outline-none focus:bg-white"
+              className="w-full min-h-[48px] px-3 border-2 border-clinical-ink font-mono text-sm sm:text-base bg-white text-clinical-ink focus:outline-none focus:bg-white"
               required
             />
           </div>
           <div>
-            <label htmlFor="desc-attachment" className="block font-mono text-xs sm:text-sm font-bold uppercase mb-1">
+            <label htmlFor="desc-attachment" className="block font-mono text-xs sm:text-sm font-bold uppercase mb-1 text-clinical-ink">
               DESCRITIVO CLÍNICO E OBSERVAÇÕES MÉDICAS:
             </label>
             <input
@@ -117,13 +117,13 @@ export default function LinhaDoTempoFotosPage() {
               value={novaDescricao}
               onChange={(e) => setNovaDescricao(e.target.value)}
               placeholder="EX: MEDIÇÃO DE EDEMA NO ANTEBRAÇO ESQUERDO. PERÍMETRO: 24.5 CM."
-              className="w-full min-h-[48px] px-3 border-2 border-black font-mono text-sm sm:text-base bg-white text-black focus:outline-none focus:bg-white"
+              className="w-full min-h-[48px] px-3 border-2 border-clinical-ink font-mono text-sm sm:text-base bg-white text-clinical-ink focus:outline-none focus:bg-white"
               required
             />
           </div>
           <button
             type="submit"
-            className="w-full sm:w-auto min-h-[48px] px-6 bg-[#1A4331] text-[#F4F4EB] font-mono text-sm sm:text-base font-black uppercase border-2 border-black hover:bg-black hover:text-[#F4F4EB] active:bg-[#F4F4EB] active:text-[#1A4331] transition-none text-center"
+            className="w-full sm:w-auto min-h-[48px] px-6 bg-clinical-action text-white font-mono text-sm sm:text-base font-black uppercase border-2 border-clinical-ink hover:bg-clinical-ink hover:text-white transition-none text-center"
           >
             VINCULAR FOTO AO PRONTUÁRIO
           </button>
@@ -132,12 +132,12 @@ export default function LinhaDoTempoFotosPage() {
 
       {/* Lista de Registros Cronológicos */}
       <section className="space-y-4">
-        <h2 className="font-serif text-xl sm:text-2xl font-black uppercase border-b-2 border-black pb-2">
+        <h2 className="font-serif text-xl sm:text-2xl font-black uppercase border-b-2 border-clinical-ink pb-2 text-clinical-ink">
           REGISTROS VISUAIS VINCULADOS
         </h2>
 
         {fotos.length === 0 ? (
-          <div className="border-4 border-black p-6 sm:p-8 bg-white text-center font-mono text-base sm:text-lg font-black uppercase">
+          <div className="border-4 border-clinical-ink p-6 sm:p-8 bg-white text-center font-mono text-base sm:text-lg font-black uppercase text-clinical-ink">
             [NENHUM REGISTRO VISUAL ARQUIVADO NESTA COMPETÊNCIA]
           </div>
         ) : (
@@ -152,31 +152,31 @@ export default function LinhaDoTempoFotosPage() {
             return (
               <article
                 key={item.id}
-                className="border-2 border-black bg-white p-3.5 sm:p-5 space-y-4"
+                className="border-2 border-clinical-ink bg-white p-3.5 sm:p-5 space-y-4"
               >
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b-2 border-black pb-2 gap-2">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b-2 border-clinical-ink pb-2 gap-2">
                   <div>
-                    <span className="font-mono text-[10px] sm:text-xs font-bold uppercase block text-black/70">
+                    <span className="font-mono text-[10px] sm:text-xs font-bold uppercase block text-clinical-ink/70">
                       IDENTIFICADOR: {item.id} // TIPO: {item.typeCode.toUpperCase()}
                     </span>
-                    <h3 className="font-serif text-lg sm:text-xl font-black uppercase text-[#1A4331] break-words">
+                    <h3 className="font-serif text-lg sm:text-xl font-black uppercase text-clinical-action break-words">
                       {item.description}
                     </h3>
                   </div>
-                  <div className="font-mono text-xs sm:text-sm font-black bg-black text-[#F4F4EB] px-2.5 py-1 self-start md:self-auto shrink-0">
+                  <div className="font-mono text-xs sm:text-sm font-black bg-clinical-ink text-white px-2.5 py-1 border border-clinical-ink self-start md:self-auto shrink-0">
                     DATA: {dataFormatada}
                   </div>
                 </div>
 
-                <div className="border-2 border-black p-2.5 sm:p-3 bg-[#F4F4EB] font-mono text-xs sm:text-sm break-all overflow-hidden">
+                <div className="border-2 border-clinical-ink p-2.5 sm:p-3 bg-clinical-paper text-clinical-ink font-mono text-xs sm:text-sm break-all overflow-hidden">
                   <span className="font-bold block uppercase text-[10px] sm:text-xs mb-1">LOCALIZADOR ENCRIPTADO (URL):</span>
                   {item.contentAttachmentUrl}
                 </div>
 
                 {/* Exclusão Inline Estrita */}
-                <div className="pt-2 border-t border-black">
+                <div className="pt-2 border-t border-clinical-ink">
                   {deleteId === item.id ? (
-                    <div className="border-2 border-black bg-[#7C2D3A] text-[#F4F4EB] p-3 space-y-2">
+                    <div className="border-2 border-clinical-ink bg-clinical-alert text-white p-3 space-y-2">
                       <div className="font-mono text-xs sm:text-sm font-bold uppercase break-words">
                         ATENÇÃO: AÇÃO DESTRUTIVA IRREVERSÍVEL. DIGITE &ldquo;EXCLUIR&rdquo; PARA PURGAR A REFERÊNCIA:
                       </div>
@@ -186,12 +186,12 @@ export default function LinhaDoTempoFotosPage() {
                           value={confirmInput}
                           onChange={(e) => setConfirmInput(e.target.value)}
                           placeholder="DIGITE EXCLUIR"
-                          className="w-full sm:w-auto flex-1 min-h-[44px] sm:min-h-[48px] px-3 border-2 border-black font-mono text-sm sm:text-base uppercase bg-white text-black focus:outline-none"
+                          className="w-full sm:w-auto flex-1 min-h-[44px] sm:min-h-[48px] px-3 border-2 border-clinical-ink font-mono text-sm sm:text-base uppercase bg-white text-clinical-ink focus:outline-none"
                         />
                         <button
                           type="button"
                           onClick={() => handleExecutarExclusao(item.id)}
-                          className="w-full sm:w-auto min-h-[44px] sm:min-h-[48px] px-4 sm:px-6 bg-black text-[#F4F4EB] font-mono text-xs sm:text-sm font-black uppercase border-2 border-[#F4F4EB] hover:bg-[#F4F4EB] hover:text-black transition-none text-center"
+                          className="w-full sm:w-auto min-h-[44px] sm:min-h-[48px] px-4 sm:px-6 bg-clinical-ink text-white font-mono text-xs sm:text-sm font-black uppercase border-2 border-white hover:bg-white hover:text-clinical-ink transition-none text-center"
                         >
                           CONFIRMAR PURGAÇÃO
                         </button>
@@ -201,7 +201,7 @@ export default function LinhaDoTempoFotosPage() {
                             setDeleteId(null);
                             setConfirmInput("");
                           }}
-                          className="w-full sm:w-auto min-h-[44px] sm:min-h-[48px] px-4 bg-[#F4F4EB] text-black font-mono text-xs sm:text-sm font-bold uppercase border-2 border-black hover:bg-black hover:text-[#F4F4EB] transition-none text-center"
+                          className="w-full sm:w-auto min-h-[44px] sm:min-h-[48px] px-4 bg-clinical-paper text-clinical-ink font-mono text-xs sm:text-sm font-bold uppercase border-2 border-clinical-ink hover:bg-clinical-surface hover:text-clinical-ink transition-none text-center"
                         >
                           CANCELAR
                         </button>
@@ -215,7 +215,7 @@ export default function LinhaDoTempoFotosPage() {
                           setDeleteId(item.id);
                           setConfirmInput("");
                         }}
-                        className="w-full sm:w-auto min-h-[44px] sm:min-h-[48px] px-4 bg-transparent text-black font-mono text-xs sm:text-sm font-bold uppercase border-2 border-black hover:bg-[#7C2D3A] hover:text-[#F4F4EB] transition-none text-center"
+                        className="w-full sm:w-auto min-h-[44px] sm:min-h-[48px] px-4 bg-transparent text-clinical-ink font-mono text-xs sm:text-sm font-bold uppercase border-2 border-clinical-ink hover:bg-clinical-alert hover:text-white transition-none text-center"
                       >
                         EXCLUIR REFERÊNCIA DO PRONTUÁRIO
                       </button>

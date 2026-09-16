@@ -155,36 +155,36 @@ export default function PapoPrivadoPage() {
   return (
     <div className="space-y-6">
       {/* Cabeçalho */}
-      <section className="border-b-4 border-black pb-4">
+      <section className="border-b-4 border-clinical-ink pb-4">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
           <div>
-            <span className="font-mono text-[10px] sm:text-xs uppercase font-bold text-[#1A4331] block">
+            <span className="font-mono text-[10px] sm:text-xs uppercase font-bold text-clinical-action block">
               MÓDULO DE SUPORTE ENTRE PARES // DESACOPLAMENTO TOTAL DE PRONTUÁRIO
             </span>
-            <h1 className="font-serif text-2xl sm:text-3xl font-black uppercase break-words">
+            <h1 className="font-serif text-2xl sm:text-3xl font-black uppercase break-words text-clinical-ink">
               PAPO PRIVADO // COMUNIDADE ANÔNIMA
             </h1>
           </div>
-          <div className="border-2 border-black bg-black text-[#F4F4EB] p-2 font-mono text-xs sm:text-sm uppercase self-start md:self-auto shrink-0">
-            SEU ALIAS BOTÂNICO: <span className="text-[#B8860B] font-bold">{meuAliasBotanico}</span>
+          <div className="border-2 border-clinical-ink bg-clinical-ink text-white p-2 font-mono text-xs sm:text-sm uppercase self-start md:self-auto shrink-0">
+            SEU ALIAS BOTÂNICO: <span className="text-clinical-surface font-bold">{meuAliasBotanico}</span>
           </div>
         </div>
-        <p className="font-mono text-xs sm:text-sm uppercase text-black font-bold mt-1 break-words">
+        <p className="font-mono text-xs sm:text-sm uppercase text-clinical-ink font-bold mt-1 break-words">
           REDE LINEAR SEM ALGORITMOS DE RECOMENDAÇÃO, SEM BOTÕES DE CURTIR E SEM FOTOS DE PERFIL
         </p>
       </section>
 
       {/* Status Bar */}
-      <div className="border-2 border-black bg-black text-[#F4F4EB] p-2.5 sm:p-3 font-mono text-xs sm:text-sm uppercase flex flex-col sm:flex-row justify-between items-start sm:items-center gap-1">
+      <div className="border-2 border-clinical-ink bg-clinical-ink text-white p-2.5 sm:p-3 font-mono text-xs sm:text-sm uppercase flex flex-col sm:flex-row justify-between items-start sm:items-center gap-1">
         <span>ESTADO DA REDE:</span>
-        <span className="text-[#B8860B] font-bold break-words">{pollingStatus}</span>
+        <span className="text-clinical-surface font-bold break-words">{pollingStatus}</span>
       </div>
 
       {/* Alerta de Segurança / Sanitização Regex */}
       {alertaSeguranca && (
         <div
           role="alert"
-          className="border-4 border-black bg-[#7C2D3A] text-[#F4F4EB] p-3 sm:p-4 font-mono text-xs sm:text-sm font-bold uppercase break-words"
+          className="border-4 border-clinical-ink bg-clinical-alert text-white p-3 sm:p-4 font-mono text-xs sm:text-sm font-bold uppercase break-words"
         >
           {alertaSeguranca}
         </div>
@@ -192,7 +192,7 @@ export default function PapoPrivadoPage() {
 
       {/* Seleção de Salas Temáticas Pré-Aprovadas (48px Min Target) */}
       <section className="flex flex-wrap gap-1.5 sm:gap-2 items-center">
-        <span className="font-mono text-xs sm:text-sm font-black uppercase w-full sm:w-auto mb-1 sm:mb-0">
+        <span className="font-mono text-xs sm:text-sm font-black uppercase w-full sm:w-auto mb-1 sm:mb-0 text-clinical-ink">
           SALA TEMÁTICA:
         </span>
         {(["HORMONIOTERAPIA", "LINFEDEMA", "RECONSTRUCAO", "EMOCIONAL"] as const).map((sala) => (
@@ -203,10 +203,10 @@ export default function PapoPrivadoPage() {
               setSalaAtiva(sala);
               setThreadSelecionadaId(null);
             }}
-            className={`flex-1 sm:flex-none min-h-[44px] sm:min-h-[48px] px-3 sm:px-4 font-mono text-xs sm:text-sm font-black uppercase border-2 border-black transition-none text-center ${
+            className={`flex-1 sm:flex-none min-h-[44px] sm:min-h-[48px] px-3 sm:px-4 font-mono text-xs sm:text-sm font-black uppercase border-2 border-clinical-ink transition-none text-center ${
               salaAtiva === sala
-                ? "bg-black text-[#F4F4EB]"
-                : "bg-[#F4F4EB] text-black hover:bg-black hover:text-[#F4F4EB]"
+                ? "bg-clinical-action text-white"
+                : "bg-clinical-paper text-clinical-ink hover:bg-clinical-surface hover:text-clinical-ink"
             }`}
           >
             {sala}
@@ -219,13 +219,13 @@ export default function PapoPrivadoPage() {
         {/* Coluna 1: Lista de Tópicos e Formulário */}
         <div className="space-y-6">
           {/* Formulário de Novo Tópico */}
-          <section className="border-2 border-black bg-white p-3.5 sm:p-4 space-y-3">
-            <h2 className="font-serif text-base sm:text-lg font-black uppercase border-b-2 border-black pb-1 break-words">
+          <section className="border-2 border-clinical-ink bg-white p-3.5 sm:p-4 space-y-3">
+            <h2 className="font-serif text-base sm:text-lg font-black uppercase border-b-2 border-clinical-ink pb-1 break-words text-clinical-ink">
               CRIAR NOVO TÓPICO NA SALA: {salaAtiva}
             </h2>
             <form onSubmit={handleCriarTopico} className="space-y-3">
               <div>
-                <label htmlFor="topico-titulo" className="block font-mono text-xs font-bold uppercase mb-1">
+                <label htmlFor="topico-titulo" className="block font-mono text-xs font-bold uppercase mb-1 text-clinical-ink">
                   TÍTULO DO TÓPICO (OBJETIVO E CLARO):
                 </label>
                 <input
@@ -234,12 +234,12 @@ export default function PapoPrivadoPage() {
                   value={novoTitulo}
                   onChange={(e) => setNovoTitulo(e.target.value)}
                   placeholder="EX: MANEJO DE DORES ARTICULARES COM ANASTROZOL"
-                  className="w-full min-h-[48px] px-3 border-2 border-black font-mono text-sm sm:text-base bg-[#F4F4EB] text-black focus:outline-none focus:bg-white"
+                  className="w-full min-h-[48px] px-3 border-2 border-clinical-ink font-mono text-sm sm:text-base bg-clinical-paper text-clinical-ink focus:outline-none focus:bg-white"
                   required
                 />
               </div>
               <div>
-                <label htmlFor="topico-corpo" className="block font-mono text-xs font-bold uppercase mb-1">
+                <label htmlFor="topico-corpo" className="block font-mono text-xs font-bold uppercase mb-1 text-clinical-ink">
                   CONTEÚDO DO TÓPICO (SEM IDENTIFICAÇÃO PESSOAL OU NOMES REAIS):
                 </label>
                 <textarea
@@ -247,13 +247,13 @@ export default function PapoPrivadoPage() {
                   value={novoTexto}
                   onChange={(e) => setNovoTexto(e.target.value)}
                   placeholder="DIGITE SEU RELATO OU DÚVIDA LOGÍSTICA..."
-                  className="w-full min-h-[96px] p-3 border-2 border-black font-mono text-sm sm:text-base bg-[#F4F4EB] text-black focus:outline-none focus:bg-white"
+                  className="w-full min-h-[96px] p-3 border-2 border-clinical-ink font-mono text-sm sm:text-base bg-clinical-paper text-clinical-ink focus:outline-none focus:bg-white"
                   required
                 />
               </div>
               <button
                 type="submit"
-                className="w-full sm:w-auto min-h-[48px] px-6 bg-[#1A4331] text-[#F4F4EB] font-mono text-xs sm:text-sm font-black uppercase border-2 border-black hover:bg-black hover:text-[#F4F4EB] transition-none text-center"
+                className="w-full sm:w-auto min-h-[48px] px-6 bg-clinical-action text-white font-mono text-xs sm:text-sm font-black uppercase border-2 border-clinical-ink hover:bg-clinical-ink hover:text-white transition-none text-center"
               >
                 PUBLICAR TÓPICO ANÔNIMO
               </button>
@@ -262,11 +262,11 @@ export default function PapoPrivadoPage() {
 
           {/* Lista Linear de Tópicos */}
           <section className="space-y-3">
-            <h2 className="font-serif text-lg sm:text-xl font-black uppercase border-b-2 border-black pb-1">
+            <h2 className="font-serif text-lg sm:text-xl font-black uppercase border-b-2 border-clinical-ink pb-1 text-clinical-ink">
               TÓPICOS ATIVOS DA SALA
             </h2>
             {threadsDaSala.length === 0 ? (
-              <div className="border-2 border-black p-5 sm:p-6 bg-white font-mono text-sm sm:text-base uppercase text-center font-bold">
+              <div className="border-2 border-clinical-ink p-5 sm:p-6 bg-white font-mono text-sm sm:text-base uppercase text-center font-bold text-clinical-ink">
                 [NENHUM EVENTO CLÍNICO OU TÓPICO REGISTRADO NESTA SALA]
               </div>
             ) : (
@@ -280,10 +280,10 @@ export default function PapoPrivadoPage() {
                       document.getElementById("painel-conversa")?.scrollIntoView({ behavior: "smooth" });
                     }
                   }}
-                  className={`border-2 border-black p-3.5 sm:p-4 cursor-pointer transition-none ${
+                  className={`border-2 border-clinical-ink p-3.5 sm:p-4 cursor-pointer transition-none ${
                     threadSelecionadaId === t.id
-                      ? "bg-black text-[#F4F4EB]"
-                      : "bg-white text-black hover:bg-[#F4F4EB]"
+                      ? "bg-clinical-ink text-white"
+                      : "bg-white text-clinical-ink hover:bg-clinical-paper"
                   }`}
                 >
                   <div className="flex justify-between items-start gap-2 border-b border-current pb-2 mb-2 font-mono text-[10px] sm:text-xs font-bold uppercase">
@@ -305,37 +305,37 @@ export default function PapoPrivadoPage() {
         {/* Coluna 2: Tópico Aberto e Respostas */}
         <div id="painel-conversa">
           {threadAtual ? (
-            <div className="border-4 border-black bg-white p-4 sm:p-5 space-y-4">
-              <div className="border-b-2 border-black pb-3">
-                <div className="flex justify-between items-center font-mono text-[10px] sm:text-xs font-bold uppercase text-black/70 mb-1">
+            <div className="border-4 border-clinical-ink bg-white p-4 sm:p-5 space-y-4">
+              <div className="border-b-2 border-clinical-ink pb-3">
+                <div className="flex justify-between items-center font-mono text-[10px] sm:text-xs font-bold uppercase text-clinical-ink/70 mb-1">
                   <span>AUTOR: {threadAtual.authorBotanyAlias}</span>
                   <span>SALA: {threadAtual.category}</span>
                 </div>
-                <h2 className="font-serif text-xl sm:text-2xl font-black uppercase text-[#1A4331] break-words">
+                <h2 className="font-serif text-xl sm:text-2xl font-black uppercase text-clinical-action break-words">
                   {threadAtual.title}
                 </h2>
-                <p className="font-sans text-sm sm:text-base mt-2 font-normal break-words">
+                <p className="font-sans text-sm sm:text-base mt-2 font-normal break-words text-clinical-ink">
                   {threadAtual.body}
                 </p>
               </div>
 
               {/* Respostas */}
               <div className="space-y-3">
-                <h3 className="font-serif text-base sm:text-lg font-black uppercase border-b border-black pb-1">
+                <h3 className="font-serif text-base sm:text-lg font-black uppercase border-b border-clinical-ink pb-1 text-clinical-ink">
                   RESPOSTAS LINEARES ({respostasAtuais.length})
                 </h3>
 
                 {respostasAtuais.length === 0 ? (
-                  <div className="p-3 bg-[#F4F4EB] font-mono text-xs sm:text-sm uppercase">
+                  <div className="p-3 bg-clinical-paper font-mono text-xs sm:text-sm uppercase text-clinical-ink">
                     [NENHUMA RESPOSTA REGISTRADA ATÉ O MOMENTO]
                   </div>
                 ) : (
                   respostasAtuais.map((rep) => (
-                    <div key={rep.id} className="border-2 border-black p-3 bg-[#F4F4EB] space-y-1">
-                      <div className="font-mono text-[10px] sm:text-xs font-bold uppercase text-[#7C2D3A]">
+                    <div key={rep.id} className="border-2 border-clinical-ink p-3 bg-clinical-paper space-y-1">
+                      <div className="font-mono text-[10px] sm:text-xs font-bold uppercase text-clinical-action">
                         AUTOR: {rep.authorBotanyAlias}
                       </div>
-                      <p className="font-sans text-sm sm:text-base break-words">
+                      <p className="font-sans text-sm sm:text-base break-words text-clinical-ink">
                         {rep.body}
                       </p>
                     </div>
@@ -344,8 +344,8 @@ export default function PapoPrivadoPage() {
               </div>
 
               {/* Formulário de Resposta */}
-              <form onSubmit={handleEnviarResposta} className="pt-2 border-t-2 border-black space-y-2">
-                <label htmlFor="resp-corpo" className="block font-mono text-xs font-bold uppercase">
+              <form onSubmit={handleEnviarResposta} className="pt-2 border-t-2 border-clinical-ink space-y-2">
+                <label htmlFor="resp-corpo" className="block font-mono text-xs font-bold uppercase text-clinical-ink">
                   SUA RESPOSTA ({meuAliasBotanico}):
                 </label>
                 <textarea
@@ -353,19 +353,19 @@ export default function PapoPrivadoPage() {
                   value={novaRespostaTexto}
                   onChange={(e) => setNovaRespostaTexto(e.target.value)}
                   placeholder="DIGITE SUA RESPOSTA BASEADA EM EXPERIÊNCIA DE VIDA OU APOIO MÚTUO..."
-                  className="w-full min-h-[80px] p-3 border-2 border-black font-mono text-sm sm:text-base bg-[#F4F4EB] text-black focus:outline-none focus:bg-white"
+                  className="w-full min-h-[80px] p-3 border-2 border-clinical-ink font-mono text-sm sm:text-base bg-clinical-paper text-clinical-ink focus:outline-none focus:bg-white"
                   required
                 />
                 <button
                   type="submit"
-                  className="w-full sm:w-auto min-h-[48px] px-6 bg-black text-[#F4F4EB] font-mono text-xs sm:text-sm font-black uppercase border-2 border-black hover:bg-[#1A4331] transition-none text-center"
+                  className="w-full sm:w-auto min-h-[48px] px-6 bg-clinical-action text-white font-mono text-xs sm:text-sm font-black uppercase border-2 border-clinical-ink hover:bg-clinical-ink hover:text-white transition-none text-center"
                 >
                   ENVIAR RESPOSTA
                 </button>
               </form>
             </div>
           ) : (
-            <div className="border-2 border-black p-6 sm:p-8 bg-white text-center font-mono text-sm sm:text-base uppercase font-bold">
+            <div className="border-2 border-clinical-ink p-6 sm:p-8 bg-white text-center font-mono text-sm sm:text-base uppercase font-bold text-clinical-ink">
               [SELECIONE UM TÓPICO NA COLUNA AO LADO PARA VISUALIZAR AS INTERAÇÕES]
             </div>
           )}

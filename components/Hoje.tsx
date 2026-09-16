@@ -78,11 +78,11 @@ export default function PainelHoje() {
   return (
     <div className="space-y-6">
       {/* Banner de Estado do Prontuário / Sistema */}
-      <section className="bg-black text-[#F4F4EB] p-3 border-2 border-black flex flex-col md:flex-row justify-between items-start md:items-center font-mono text-xs sm:text-sm md:text-base gap-2 break-words">
+      <section className="bg-clinical-ink text-white p-3 border-2 border-clinical-ink flex flex-col md:flex-row justify-between items-start md:items-center font-mono text-xs sm:text-sm md:text-base gap-2 break-words">
         <div className="font-bold uppercase tracking-wider">
           COMPETÊNCIA ATUAL: {new Date().toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" }).toUpperCase()}
         </div>
-        <div className="text-[#B8860B] font-bold break-words">
+        <div className="text-clinical-surface font-bold break-words">
           {statusLog}
         </div>
       </section>
@@ -92,19 +92,19 @@ export default function PainelHoje() {
         <section
           role="alert"
           aria-live="assertive"
-          className="bg-[#B8860B] text-black border-4 border-black p-4 sm:p-5"
+          className="bg-clinical-alert text-white border-4 border-clinical-ink p-4 sm:p-5"
         >
           <div className="flex flex-col gap-3">
-            <div className="font-mono text-[10px] sm:text-xs font-black uppercase tracking-widest bg-black text-[#F4F4EB] px-2 py-1 max-w-full inline-block">
+            <div className="font-mono text-[10px] sm:text-xs font-black uppercase tracking-widest bg-clinical-ink text-white px-2 py-1 max-w-full inline-block">
               PRIORIDADE MÁXIMA // MOTOR LOGÍSTICO (D-5)
             </div>
-            <h2 className="font-serif text-xl sm:text-2xl font-black uppercase break-words">
+            <h2 className="font-serif text-xl sm:text-2xl font-black uppercase break-words text-white">
               ESTOQUE CRÍTICO: RESTAM APENAS {motorState.motor3SupplyDaysLeft} DIAS DE MEDICAMENTO
             </h2>
-            <p className="text-sm sm:text-base font-bold font-sans">
+            <p className="text-sm sm:text-base font-bold font-sans text-white">
               O suprimento de Tamoxifeno 20mg atingiu o limiar de risco de descontinuidade. É obrigatório providenciar a renovação da receita médica e o levantamento de nova caixa no centro de dispensação oncológica (SUS / Farmácia de Alto Custo).
             </p>
-            <div className="font-mono text-xs sm:text-sm font-bold border-2 border-black p-2 bg-[#F4F4EB] w-full sm:w-auto max-w-full break-words block sm:inline-block">
+            <div className="font-mono text-xs sm:text-sm font-bold border-2 border-clinical-ink p-2 bg-clinical-paper text-clinical-ink w-full sm:w-auto max-w-full break-words block sm:inline-block">
               CÁLCULO MATEMÁTICO: ({motorState.motor3TotalSupply} TOTAL - {motorState.motor3DosesTaken} TOMADAS) / 1 PÍLULA/DIA = {motorState.motor3SupplyDaysLeft} DIAS
             </div>
           </div>
@@ -113,21 +113,21 @@ export default function PainelHoje() {
 
       {/* MOTOR 4: CHECK-IN PREVENTIVO DE ANSIEDADE CLÍNICA (SCANXIETY - D-3) */}
       {motorState.motor4ScanxietyActive && (
-        <section className="border-4 border-[#7C2D3A] bg-[#F4F4EB] p-4 sm:p-5">
+        <section className="border-4 border-clinical-action bg-clinical-paper p-4 sm:p-5">
           <div className="flex flex-col gap-3">
-            <div className="bg-[#7C2D3A] text-[#F4F4EB] font-mono text-[10px] sm:text-xs font-black uppercase px-2 py-1 max-w-full inline-block">
+            <div className="bg-clinical-action text-white font-mono text-[10px] sm:text-xs font-black uppercase px-2 py-1 max-w-full inline-block">
               MOTOR 4 // INTERVENÇÃO EMOCIONAL: SCANXIETY (D-{motorState.motor4ExamDaysLeft})
             </div>
-            <h2 className="font-serif text-xl sm:text-2xl font-black uppercase text-[#7C2D3A] break-words">
+            <h2 className="font-serif text-xl sm:text-2xl font-black uppercase text-clinical-action break-words">
               CONTROLE CLÍNICO PRÓXIMO: {motorState.motor4ExamType} EM {motorState.motor4ExamDaysLeft} DIAS
             </h2>
-            <p className="text-sm sm:text-base font-sans">
+            <p className="text-sm sm:text-base font-sans text-clinical-ink">
               A proximidade de exames de imagem e controle frequentemente induz o fenômeno documentado de <strong>ansiedade antecipatória (scanxiety)</strong>. Este é um processo fisiológico e psicológico esperado no seguimento oncológico.
             </p>
 
             {!scanxietyRegistrado ? (
-              <div className="border-2 border-black p-3 sm:p-4 bg-white space-y-3">
-                <label htmlFor="scanxiety-input" className="block font-mono text-xs sm:text-sm font-bold uppercase">
+              <div className="border-2 border-clinical-ink p-3 sm:p-4 bg-white space-y-3">
+                <label htmlFor="scanxiety-input" className="block font-mono text-xs sm:text-sm font-bold uppercase text-clinical-ink">
                   REGISTRO DE TENSÃO SOMÁTICA OU PENSAMENTOS INTRUSIVOS (OPCIONAL):
                 </label>
                 <textarea
@@ -135,7 +135,7 @@ export default function PainelHoje() {
                   value={scanxietyNota}
                   onChange={(e) => setScanxietyNota(e.target.value)}
                   placeholder="DIGITE AQUI SUAS PERCEPÇÕES CORPÓREAS OU NÍVEL DE APREENSÃO..."
-                  className="w-full p-3 border-2 border-black font-mono text-sm sm:text-base min-h-[96px] bg-[#F4F4EB] text-black focus:outline-none focus:bg-white"
+                  className="w-full p-3 border-2 border-clinical-ink font-mono text-sm sm:text-base min-h-[96px] bg-clinical-paper text-clinical-ink focus:outline-none focus:bg-white"
                 />
                 <button
                   type="button"
@@ -143,13 +143,13 @@ export default function PainelHoje() {
                     setScanxietyRegistrado(true);
                     setStatusLog("[OBSERVAÇÃO ARQUIVADA: CHECK-IN SCANXIETY CONCLUÍDO]");
                   }}
-                  className="w-full sm:w-auto min-h-[48px] px-4 sm:px-6 bg-[#7C2D3A] text-[#F4F4EB] font-mono text-xs sm:text-sm font-bold uppercase border-2 border-black hover:bg-black hover:text-[#F4F4EB] active:bg-[#F4F4EB] active:text-black transition-none text-center"
+                  className="w-full sm:w-auto min-h-[48px] px-4 sm:px-6 bg-clinical-action text-white font-mono text-xs sm:text-sm font-bold uppercase border-2 border-clinical-ink hover:bg-clinical-ink hover:text-white transition-none text-center"
                 >
                   ARQUIVAR CHECK-IN DE DESCOMPRESSÃO
                 </button>
               </div>
             ) : (
-              <div className="border-2 border-black p-3 bg-[#2E7D32] text-[#F4F4EB] font-mono text-xs sm:text-sm font-bold uppercase break-words">
+              <div className="border-2 border-clinical-ink p-3 bg-clinical-success text-white font-mono text-xs sm:text-sm font-bold uppercase break-words">
                 [CHECK-IN DE SCANXIETY REGISTRADO NO PRONTUÁRIO INDIVIDUAL]
               </div>
             )}
@@ -159,22 +159,22 @@ export default function PainelHoje() {
 
       {/* MOTOR 1: GATILHO DE RELATÓRIO AUTOMÁTICO DE CONSULTA (D-7) */}
       {motorState.motor1ReportReady && (
-        <section className="border-4 border-[#1A4331] bg-[#F4F4EB] p-4 sm:p-5">
+        <section className="border-4 border-clinical-action bg-clinical-paper p-4 sm:p-5">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div className="space-y-1">
-              <div className="bg-[#1A4331] text-[#F4F4EB] font-mono text-[10px] sm:text-xs font-black uppercase px-2 py-1 max-w-full inline-block">
+              <div className="bg-clinical-action text-white font-mono text-[10px] sm:text-xs font-black uppercase px-2 py-1 max-w-full inline-block">
                 MOTOR 1 // PROTOCOLO DE CONSULTA ONCOLÓGICA (D-{motorState.motor1NextEncounterDays})
               </div>
-              <h2 className="font-serif text-xl sm:text-2xl font-black uppercase text-[#1A4331] break-words">
+              <h2 className="font-serif text-xl sm:text-2xl font-black uppercase text-clinical-action break-words">
                 CONSULTA MÉDICA PROGRAMADA PARA {motorState.motor1NextEncounterDate}
               </h2>
-              <p className="text-sm sm:text-base font-sans">
+              <p className="text-sm sm:text-base font-sans text-clinical-ink">
                 O compilador agregou todas as observações, sintomas e histórico de adesão farmacológica acumulados desde o último retorno. O relatório impresso A4 está pronto para o médico oncologista.
               </p>
             </div>
             <Link
               href="/relatorio-print"
-              className="w-full md:w-auto flex-shrink-0 min-h-[48px] px-4 sm:px-6 py-3 bg-[#1A4331] text-[#F4F4EB] font-mono text-xs sm:text-sm md:text-base font-black uppercase border-2 border-black inline-flex items-center justify-center hover:bg-black hover:text-[#F4F4EB] active:bg-[#F4F4EB] active:text-[#1A4331] transition-none text-center"
+              className="w-full md:w-auto flex-shrink-0 min-h-[48px] px-4 sm:px-6 py-3 bg-clinical-action text-white font-mono text-xs sm:text-sm md:text-base font-black uppercase border-2 border-clinical-ink inline-flex items-center justify-center hover:bg-clinical-ink hover:text-white transition-none text-center"
             >
               VISUALIZAR / IMPRIMIR RELATÓRIO A4
             </Link>
@@ -183,31 +183,31 @@ export default function PainelHoje() {
       )}
 
       {/* MÓDULO PRIMÁRIO: GESTÃO DIÁRIA DE HORMONIOTERAPIA (MEDICATIONSTATEMENT) */}
-      <section className="border-2 border-black bg-[#F4F4EB] p-4 sm:p-5 space-y-4">
-        <div className="border-b-2 border-black pb-2 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+      <section className="border-2 border-clinical-ink bg-clinical-paper p-4 sm:p-5 space-y-4">
+        <div className="border-b-2 border-clinical-ink pb-2 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
           <div>
-            <span className="font-mono text-xs uppercase text-black font-bold">RECURSO: FHIR MedicationStatement</span>
-            <h2 className="font-serif text-xl sm:text-2xl font-black uppercase">
+            <span className="font-mono text-xs uppercase text-clinical-ink font-bold">RECURSO: FHIR MedicationStatement</span>
+            <h2 className="font-serif text-xl sm:text-2xl font-black uppercase text-clinical-ink">
               HORMONIOTERAPIA // DOSE DIÁRIA
             </h2>
           </div>
-          <div className="font-mono text-xs sm:text-sm uppercase bg-black text-[#F4F4EB] px-3 py-1 self-start sm:self-auto shrink-0">
+          <div className="font-mono text-xs sm:text-sm uppercase bg-clinical-ink text-white px-3 py-1 self-start sm:self-auto shrink-0">
             TAMOXIFENO 20MG • VIA ORAL
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 font-mono text-sm sm:text-base">
-          <div className="border-2 border-black p-3 bg-white">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 font-mono text-sm sm:text-base text-clinical-ink">
+          <div className="border-2 border-clinical-ink p-3 bg-white">
             <span className="text-xs uppercase block font-bold">POSOLOGIA PRESCRITA:</span>
             <span className="text-base sm:text-lg font-black">1 COMPRIMIDO / DIA</span>
           </div>
-          <div className="border-2 border-black p-3 bg-white">
+          <div className="border-2 border-clinical-ink p-3 bg-white">
             <span className="text-xs uppercase block font-bold">TOTAL DA CAIXA:</span>
             <span className="text-base sm:text-lg font-black">{motorState.motor3TotalSupply} COMPRIMIDOS</span>
           </div>
-          <div className="border-2 border-black p-3 bg-white">
+          <div className="border-2 border-clinical-ink p-3 bg-white">
             <span className="text-xs uppercase block font-bold">SALDO RESTANTE:</span>
-            <span className={`text-base sm:text-lg font-black ${motorState.motor3CriticalAlert ? "text-[#7C2D3A]" : "text-black"}`}>
+            <span className={`text-base sm:text-lg font-black ${motorState.motor3CriticalAlert ? "text-clinical-alert" : "text-clinical-ink"}`}>
               {motorState.motor3SupplyDaysLeft} DIAS DE TRATAMENTO
             </span>
           </div>
@@ -218,16 +218,16 @@ export default function PainelHoje() {
           <button
             type="button"
             onClick={handleToggleDose}
-            className={`w-full min-h-[56px] p-3 sm:p-4 border-4 border-black text-left flex items-center gap-3 sm:gap-4 transition-none cursor-pointer ${
+            className={`w-full min-h-[56px] p-3 sm:p-4 border-4 border-clinical-ink text-left flex items-center gap-3 sm:gap-4 transition-none cursor-pointer ${
               doseIngeridaHoje
-                ? "bg-[#2E7D32] text-[#F4F4EB]"
-                : "bg-white text-black hover:bg-black hover:text-[#F4F4EB]"
+                ? "bg-clinical-success text-white"
+                : "bg-white text-clinical-ink hover:bg-clinical-ink hover:text-white"
             }`}
             aria-pressed={doseIngeridaHoje}
           >
             <div
-              className={`w-9 h-9 sm:w-10 sm:h-10 shrink-0 border-4 border-black flex items-center justify-center font-mono text-xl sm:text-2xl font-black ${
-                doseIngeridaHoje ? "bg-[#F4F4EB] text-[#2E7D32]" : "bg-[#F4F4EB] text-transparent"
+              className={`w-9 h-9 sm:w-10 sm:h-10 shrink-0 border-4 border-clinical-ink flex items-center justify-center font-mono text-xl sm:text-2xl font-black ${
+                doseIngeridaHoje ? "bg-clinical-paper text-clinical-success" : "bg-clinical-paper text-transparent"
               }`}
             >
               ✓
@@ -247,45 +247,45 @@ export default function PainelHoje() {
       </section>
 
       {/* MOTOR 2: SUGESTÃO PROATIVA DE PERGUNTAS (NLP BASEADO EM REGRAS, FREQ >= 3 EM 90 DIAS) */}
-      <section className="border-2 border-black bg-[#F4F4EB] p-4 sm:p-5 space-y-4">
-        <div className="border-b-2 border-black pb-2">
-          <div className="bg-black text-[#F4F4EB] font-mono text-[10px] sm:text-xs font-bold uppercase px-2 py-0.5 max-w-full inline-block">
+      <section className="border-2 border-clinical-ink bg-clinical-paper p-4 sm:p-5 space-y-4">
+        <div className="border-b-2 border-clinical-ink pb-2">
+          <div className="bg-clinical-ink text-white font-mono text-[10px] sm:text-xs font-bold uppercase px-2 py-0.5 max-w-full inline-block">
             MOTOR 2 // ANÁLISE RECORRENTE DE SINTOMAS (LOINC / SNOMED-CT)
           </div>
-          <h2 className="font-serif text-xl sm:text-2xl font-black uppercase mt-1 break-words">
+          <h2 className="font-serif text-xl sm:text-2xl font-black uppercase mt-1 break-words text-clinical-ink">
             PAUTA AUTOMÁTICA PARA O ONCOLOGISTA (PREVENÇÃO DE ESQUECIMENTO)
           </h2>
         </div>
 
         {motorState.motor2SuggestedQuestions.length === 0 && perguntasPauta.length === 0 ? (
-          <div className="border-2 border-black p-3 sm:p-4 bg-white font-mono text-sm sm:text-base uppercase">
+          <div className="border-2 border-clinical-ink p-3 sm:p-4 bg-white font-mono text-sm sm:text-base uppercase text-clinical-ink">
             [NENHUMA RECORRÊNCIA CLÍNICA COM FREQUÊNCIA SUPERIOR A 3 REGISTROS NESTA COMPETÊNCIA]
           </div>
         ) : (
           <div className="space-y-4">
             {motorState.motor2SuggestedQuestions.map((pergunta, idx) => (
-              <div key={idx} className="border-2 border-black p-3 sm:p-4 bg-white space-y-3">
-                <div className="font-mono text-xs font-bold uppercase text-[#7C2D3A]">
+              <div key={idx} className="border-2 border-clinical-ink p-3 sm:p-4 bg-white space-y-3">
+                <div className="font-mono text-xs font-bold uppercase text-clinical-action">
                   PADRÃO IDENTIFICADO PELO ALGORITMO (OCORRÊNCIAS &gt;= 3 NOS ÚLTIMOS 90 DIAS):
                 </div>
-                <div className="font-serif text-base sm:text-lg font-bold break-words">
+                <div className="font-serif text-base sm:text-lg font-bold break-words text-clinical-ink">
                   &ldquo;{pergunta}&rdquo;
                 </div>
-                <div className="font-sans text-sm sm:text-base font-bold">
+                <div className="font-sans text-sm sm:text-base font-bold text-clinical-ink">
                   Deseja adicionar este tópico diretamente ao resumo da sua próxima consulta médica?
                 </div>
                 <div className="flex flex-col sm:flex-row flex-wrap gap-2 pt-1">
                   <button
                     type="button"
                     onClick={() => handleAdicionarPauta(pergunta)}
-                    className="w-full sm:w-auto min-h-[44px] sm:min-h-[48px] px-4 sm:px-5 bg-[#1A4331] text-[#F4F4EB] font-mono text-xs sm:text-sm font-bold uppercase border-2 border-black hover:bg-black hover:text-[#F4F4EB] transition-none text-center"
+                    className="w-full sm:w-auto min-h-[44px] sm:min-h-[48px] px-4 sm:px-5 bg-clinical-action text-white font-mono text-xs sm:text-sm font-bold uppercase border-2 border-clinical-ink hover:bg-clinical-ink hover:text-white transition-none text-center"
                   >
                     SIM // ADICIONAR À PAUTA
                   </button>
                   <button
                     type="button"
                     onClick={() => handleRecusarPauta(pergunta)}
-                    className="w-full sm:w-auto min-h-[44px] sm:min-h-[48px] px-4 sm:px-5 bg-[#F4F4EB] text-black font-mono text-xs sm:text-sm font-bold uppercase border-2 border-black hover:bg-black hover:text-[#F4F4EB] transition-none text-center"
+                    className="w-full sm:w-auto min-h-[44px] sm:min-h-[48px] px-4 sm:px-5 bg-clinical-surface text-clinical-ink font-mono text-xs sm:text-sm font-bold uppercase border-2 border-clinical-ink hover:bg-clinical-ink hover:text-white transition-none text-center"
                   >
                     IGNORAR TÓPICO
                   </button>
@@ -294,11 +294,11 @@ export default function PainelHoje() {
             ))}
 
             {perguntasPauta.length > 0 && (
-              <div className="border-2 border-black p-3 sm:p-4 bg-[#1A4331] text-[#F4F4EB] space-y-2">
-                <span className="font-mono text-xs uppercase font-bold tracking-widest block">
+              <div className="border-2 border-clinical-ink p-3 sm:p-4 bg-clinical-action text-white space-y-2">
+                <span className="font-mono text-xs uppercase font-bold tracking-widest block text-white">
                   ITENS CONFIRMADOS NA PAUTA MÉDICA:
                 </span>
-                <ul className="list-disc pl-5 font-mono text-sm sm:text-base space-y-1 break-words">
+                <ul className="list-disc pl-5 font-mono text-sm sm:text-base space-y-1 break-words text-white">
                   {perguntasPauta.map((item, i) => (
                     <li key={i} className="font-bold">{item}</li>
                   ))}
@@ -313,21 +313,21 @@ export default function PainelHoje() {
       <section className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
         <Link
           href="/diario"
-          className="min-h-[52px] sm:min-h-[64px] p-3 sm:p-4 bg-[#7C2D3A] text-[#F4F4EB] font-serif text-base sm:text-lg font-black uppercase border-2 border-black flex items-center justify-between hover:bg-black hover:text-[#F4F4EB] transition-none"
+          className="min-h-[52px] sm:min-h-[64px] p-3 sm:p-4 bg-clinical-action text-white font-serif text-base sm:text-lg font-black uppercase border-2 border-clinical-ink flex items-center justify-between hover:bg-clinical-ink hover:text-white transition-none"
         >
           <span>MEU DIÁRIO // REGISTRAR SINTOMA</span>
           <span className="font-mono text-xl ml-2">→</span>
         </Link>
         <Link
           href="/agenda"
-          className="min-h-[52px] sm:min-h-[64px] p-3 sm:p-4 bg-[#1A4331] text-[#F4F4EB] font-serif text-base sm:text-lg font-black uppercase border-2 border-black flex items-center justify-between hover:bg-black hover:text-[#F4F4EB] transition-none"
+          className="min-h-[52px] sm:min-h-[64px] p-3 sm:p-4 bg-clinical-surface text-clinical-ink font-serif text-base sm:text-lg font-black uppercase border-2 border-clinical-ink flex items-center justify-between hover:bg-clinical-ink hover:text-white transition-none"
         >
           <span>MINHA AGENDA // ENCOUNTERS</span>
           <span className="font-mono text-xl ml-2">→</span>
         </Link>
         <Link
           href="/comunidade"
-          className="min-h-[52px] sm:min-h-[64px] p-3 sm:p-4 bg-black text-[#F4F4EB] font-serif text-base sm:text-lg font-black uppercase border-2 border-black flex items-center justify-between hover:bg-[#F4F4EB] hover:text-black transition-none"
+          className="min-h-[52px] sm:min-h-[64px] p-3 sm:p-4 bg-clinical-ink text-white font-serif text-base sm:text-lg font-black uppercase border-2 border-clinical-ink flex items-center justify-between hover:bg-clinical-surface hover:text-clinical-ink transition-none"
         >
           <span>PAPO PRIVADO // SALAS DE APOIO</span>
           <span className="font-mono text-xl ml-2">→</span>
