@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { CommunityThread, CommunityReply } from "@/types/clinical";
 
 // Regex de Sanitização Médica de Segurança
@@ -13,7 +13,8 @@ function getBotanyAvatar(alias: string) {
     return {
       icon: "🌸",
       nome: "Jacarandá",
-      codigo: alias.replace(/[^0-9]/g, "") || "892",
+      handle: "@jacaranda892",
+      codigo: "892",
       badgeClass: "bg-pink-100 text-pink-900 border-pink-200",
     };
   }
@@ -21,7 +22,8 @@ function getBotanyAvatar(alias: string) {
     return {
       icon: "🌿",
       nome: "Bromélia",
-      codigo: alias.replace(/[^0-9]/g, "") || "304",
+      handle: "@bromelia304",
+      codigo: "304",
       badgeClass: "bg-emerald-100 text-emerald-900 border-emerald-200",
     };
   }
@@ -29,7 +31,8 @@ function getBotanyAvatar(alias: string) {
     return {
       icon: "🌺",
       nome: "Ipê Roxo",
-      codigo: alias.replace(/[^0-9]/g, "") || "112",
+      handle: "@iperoxo112",
+      codigo: "112",
       badgeClass: "bg-purple-100 text-purple-900 border-purple-200",
     };
   }
@@ -37,7 +40,8 @@ function getBotanyAvatar(alias: string) {
     return {
       icon: "🍃",
       nome: "Embaúba",
-      codigo: alias.replace(/[^0-9]/g, "") || "405",
+      handle: "@embauba405",
+      codigo: "405",
       badgeClass: "bg-teal-100 text-teal-900 border-teal-200",
     };
   }
@@ -45,13 +49,15 @@ function getBotanyAvatar(alias: string) {
     return {
       icon: "🪴",
       nome: "Samambaia",
-      codigo: alias.replace(/[^0-9]/g, "") || "714",
+      handle: "@samambaia714",
+      codigo: "714",
       badgeClass: "bg-lime-100 text-lime-900 border-lime-200",
     };
   }
   return {
     icon: "🌼",
     nome: "Margarida",
+    handle: `@flor${alias.replace(/[^0-9]/g, "") || "101"}`,
     codigo: alias.replace(/[^0-9]/g, "") || "101",
     badgeClass: "bg-amber-100 text-amber-900 border-amber-200",
   };
@@ -59,7 +65,7 @@ function getBotanyAvatar(alias: string) {
 
 export default function PapoPrivadoPage() {
   const [meuAliasBotanico] = useState("JACARANDA-892");
-  const [salaAtiva, setSalaAtiva] = useState<CommunityThread["category"]>("HORMONIOTERAPIA");
+  const [abaAtiva, setAbaAtiva] = useState<"TODOS" | CommunityThread["category"]>("TODOS");
 
   const [threads, setThreads] = useState<CommunityThread[]>([
     {
@@ -85,7 +91,7 @@ export default function PapoPrivadoPage() {
       category: "EMOCIONAL",
       authorBotanyAlias: "EMBAUBA-405",
       title: "O silêncio após o último dia de radioterapia",
-      body: "A transição de ir ao hospital todos os dias para voltar para casa sem consultas semanais gerou um vazio esquisito. A sensação de abandono da rotina médica é real. Como vocês lidaram no primeiro mês?",
+      body: "A transição de ir ao hospital todos os dias para voltar para casa sem consultas semanais gerou um vazio esquisito. A sensação de abandono da rotina de cuidado é real. Como vocês lidaram no primeiro mês?",
       createdAt: "2026-09-08T11:00:00-03:00",
       replyCount: 3,
     },
@@ -110,55 +116,112 @@ export default function PapoPrivadoPage() {
     ],
   });
 
-  const [threadSelecionadaId, setThreadSelecionadaId] = useState<string | null>("thread-01");
-  const [novoTitulo, setNovoTitulo] = useState("");
-  const [novoTexto, setNovoTexto] = useState("");
+  // Estado de Apoio/Curtidas estilo Twitter
+  const [apoios, setApoios] = useState<Record<string, { count: number; active: boolean }>>({
+    "thread-01": { count: 8, active: true },
+    "thread-02": { count: 14, active: false },
+    "thread-03": { count: 21, active: false },
+  });
+
+  const [salvos, setSalvos] = useState<Record<string, boolean>>({
+    "thread-02": true,
+  });
+
+  const [threadAbertaId, setThreadAbertaId] = useState<string | null>("thread-01");
+  const [novoTweetTexto, setNovoTweetTexto] = useState("");
+  const [categoriaNovoTweet, setCategoriaNovoTweet] = useState<CommunityThread["category"]>("HORMONIOTERAPIA");
   const [novaRespostaTexto, setNovaRespostaTexto] = useState("");
   const [alertaSeguranca, setAlertaSeguranca] = useState<string | null>(null);
-  const [statusFeedback, setStatusFeedback] = useState<string | null>(null);
+  const [toastMensagem, setToastMensagem] = useState<string | null>(null);
 
-  const handleCriarTopico = (e: React.FormEvent) => {
+  const meuAvatar = getBotanyAvatar(meuAliasBotanico);
+
+  const salasNomes: Record<CommunityThread["category"], string> = {
+    HORMONIOTERAPIA: "Hormonioterapia",
+    LINFEDEMA: "Linfedema",
+    RECONSTRUCAO: "Reconstrução",
+    EMOCIONAL: "Apoio Emocional",
+  };
+
+  const abasDisponiveis = [
+    { id: "TODOS", label: "Para você" },
+    { id: "HORMONIOTERAPIA", label: "Hormonioterapia" },
+    { id: "LINFEDEMA", label: "Linfedema" },
+    { id: "EMOCIONAL", label: "Emocional" },
+    { id: "RECONSTRUCAO", label: "Reconstrução" },
+  ] as const;
+
+  const handleToggleApoio = (threadId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setApoios((prev) => {
+      const atual = prev[threadId] || { count: 0, active: false };
+      const novoActive = !atual.active;
+      return {
+        ...prev,
+        [threadId]: {
+          active: novoActive,
+          count: novoActive ? atual.count + 1 : Math.max(0, atual.count - 1),
+        },
+      };
+    });
+  };
+
+  const handleToggleSalvo = (threadId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setSalvos((prev) => {
+      const novo = !prev[threadId];
+      setToastMensagem(novo ? "Publicação salva nos seus itens guardados" : "Removido dos salvos");
+      setTimeout(() => setToastMensagem(null), 3000);
+      return { ...prev, [threadId]: novo };
+    });
+  };
+
+  const handleCriarPublicacao = (e: React.FormEvent) => {
     e.preventDefault();
     setAlertaSeguranca(null);
 
-    const conteudoCompleto = `${novoTitulo} ${novoTexto}`;
-    if (REGEX_RESTRICOES_MEDICAS.test(conteudoCompleto)) {
+    if (REGEX_RESTRICOES_MEDICAS.test(novoTweetTexto)) {
       setAlertaSeguranca(
-        "Por segurança médica de todas nós, não são permitidas publicações com sugestões de alteração de doses ou tratamentos não comprovados."
+        "Por proteção de todos, não são permitidas publicações com sugestões de alteração de doses ou tratamentos não orientados pela equipe médica."
       );
       return;
     }
 
-    if (!novoTitulo.trim() || !novoTexto.trim()) {
-      setAlertaSeguranca("Por favor, preencha o título e o texto da sua mensagem.");
+    if (!novoTweetTexto.trim()) {
+      setAlertaSeguranca("Escreva algo para compartilhar com a comunidade.");
       return;
     }
 
-    const nova: CommunityThread = {
+    const linhas = novoTweetTexto.trim().split("\n");
+    const titulo = linhas[0].slice(0, 70);
+    const corpo = linhas.length > 1 ? linhas.slice(1).join("\n").trim() : novoTweetTexto.trim();
+
+    const novoPost: CommunityThread = {
       id: `thread-${Date.now()}`,
-      category: salaAtiva,
+      category: categoriaNovoTweet,
       authorBotanyAlias: meuAliasBotanico,
-      title: novoTitulo.trim(),
-      body: novoTexto.trim(),
+      title: titulo,
+      body: corpo,
       createdAt: new Date().toISOString(),
       replyCount: 0,
     };
 
-    setThreads([nova, ...threads]);
-    setThreadSelecionadaId(nova.id);
-    setNovoTitulo("");
-    setNovoTexto("");
+    setThreads([novoPost, ...threads]);
+    setApoios((prev) => ({ ...prev, [novoPost.id]: { count: 0, active: false } }));
+    setThreadAbertaId(novoPost.id);
+    setNovoTweetTexto("");
     setAlertaSeguranca(null);
-    setStatusFeedback("Sua conversa foi iniciada com carinho na comunidade!");
+    setToastMensagem("Publicado com carinho no feed!");
+    setTimeout(() => setToastMensagem(null), 3000);
   };
 
   const handleEnviarResposta = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!threadSelecionadaId) return;
+    if (!threadAbertaId) return;
 
     if (REGEX_RESTRICOES_MEDICAS.test(novaRespostaTexto)) {
       setAlertaSeguranca(
-        "Por segurança médica de todas nós, não são permitidas mensagens com sugestão de alteração de doses ou tratamentos não comprovados."
+        "Por proteção de todos, não são permitidas respostas com sugestão de alteração de doses ou tratamentos não orientados pela equipe médica."
       );
       return;
     }
@@ -167,326 +230,367 @@ export default function PapoPrivadoPage() {
 
     const novaRep: CommunityReply = {
       id: `rep-${Date.now()}`,
-      threadId: threadSelecionadaId,
+      threadId: threadAbertaId,
       authorBotanyAlias: meuAliasBotanico,
       body: novaRespostaTexto.trim(),
       createdAt: new Date().toISOString(),
     };
 
-    const listaAtual = respostas[threadSelecionadaId] || [];
+    const listaAtual = respostas[threadAbertaId] || [];
     setRespostas({
       ...respostas,
-      [threadSelecionadaId]: [...listaAtual, novaRep],
+      [threadAbertaId]: [...listaAtual, novaRep],
     });
 
     setThreads(
       threads.map((t) =>
-        t.id === threadSelecionadaId ? { ...t, replyCount: t.replyCount + 1 } : t
+        t.id === threadAbertaId ? { ...t, replyCount: t.replyCount + 1 } : t
       )
     );
 
     setNovaRespostaTexto("");
     setAlertaSeguranca(null);
-    setStatusFeedback("Sua resposta acolhedora foi enviada com sucesso!");
+    setToastMensagem("Sua resposta acolhedora foi enviada!");
+    setTimeout(() => setToastMensagem(null), 3000);
   };
 
-  const threadsDaSala = threads.filter((t) => t.category === salaAtiva);
-  const threadAtual = threads.find((t) => t.id === threadSelecionadaId);
-  const respostasAtuais = threadSelecionadaId ? respostas[threadSelecionadaId] || [] : [];
-
-  const salasNomes: Record<CommunityThread["category"], string> = {
-    HORMONIOTERAPIA: "Hormonioterapia",
-    LINFEDEMA: "Linfedema e Cuidados",
-    RECONSTRUCAO: "Reconstrução",
-    EMOCIONAL: "Apoio Emocional",
-  };
-
-  const meuAvatar = getBotanyAvatar(meuAliasBotanico);
+  const threadsFiltradas =
+    abaAtiva === "TODOS" ? threads : threads.filter((t) => t.category === abaAtiva);
+  const threadAtual = threads.find((t) => t.id === threadAbertaId);
+  const respostasDaThreadAtual = threadAbertaId ? respostas[threadAbertaId] || [] : [];
 
   return (
-    <div className="space-y-6">
-      {/* Cabeçalho Acolhedor */}
-      <section className="bg-clinical-paper border border-clinical-surface/40 rounded-3xl p-5 sm:p-6 shadow-sm">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+    <div className="max-w-4xl mx-auto space-y-4">
+      {/* Toast Notificação Suave */}
+      {toastMensagem && (
+        <div className="fixed top-16 left-1/2 -translate-x-1/2 z-50 bg-clinical-ink text-white px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold shadow-lg animate-bounce">
+          ✓ {toastMensagem}
+        </div>
+      )}
+
+      {/* Header Estilo Twitter: Limpo com "Papo Privado" */}
+      <header className="bg-white rounded-3xl border border-clinical-surface/30 shadow-sm overflow-hidden sticky top-14 z-20">
+        <div className="px-5 py-3.5 flex items-center justify-between border-b border-clinical-surface/20">
           <div>
-            <span className="font-sans text-xs sm:text-sm font-semibold text-clinical-action block">
-              Comunidade anônima e acolhedora
-            </span>
-            <h1 className="font-serif text-2xl sm:text-3xl font-bold text-clinical-ink mt-0.5">
-              Papo Privado entre Mulheres
+            <h1 className="font-serif text-xl sm:text-2xl font-bold text-clinical-ink leading-tight">
+              Papo Privado
             </h1>
-            <p className="font-sans text-sm sm:text-base text-clinical-ink/80 mt-1 leading-relaxed">
-              Troque vivências com outras mulheres na mesma etapa. Para proteger você, todos os nomes são mantidos sob avatares botânicos ilustrados.
+            <p className="font-sans text-[11px] sm:text-xs text-clinical-ink/65">
+              Compartilhe pensamentos e apoio com total privacidade
             </p>
           </div>
 
-          {/* Badge do Meu Avatar Botânico */}
-          <div className={`rounded-2xl border px-3.5 py-2 shrink-0 flex items-center gap-2.5 shadow-xs ${meuAvatar.badgeClass}`}>
-            <span className="text-2xl">{meuAvatar.icon}</span>
-            <div>
-              <span className="text-[10px] font-sans uppercase font-bold tracking-wider block opacity-75">
-                Seu perfil anônimo
-              </span>
-              <span className="font-serif font-bold text-xs sm:text-sm block leading-none">
-                {meuAvatar.nome} #{meuAvatar.codigo}
-              </span>
-            </div>
+          {/* Avatar da Conta Atual */}
+          <div className={`rounded-full border px-3 py-1 flex items-center gap-2 shadow-2xs ${meuAvatar.badgeClass}`}>
+            <span className="text-base">{meuAvatar.icon}</span>
+            <span className="font-serif font-bold text-xs text-clinical-ink">
+              {meuAvatar.nome}
+            </span>
           </div>
         </div>
-      </section>
 
-      {/* Alertas Empáticos */}
+        {/* Abas Superiores Estilo Twitter (Feed Tabs) */}
+        <nav className="flex overflow-x-auto no-scrollbar border-b border-clinical-surface/15 bg-white">
+          {abasDisponiveis.map((aba) => {
+            const isSelected = abaAtiva === aba.id;
+            return (
+              <button
+                key={aba.id}
+                type="button"
+                onClick={() => setAbaAtiva(aba.id as typeof abaAtiva)}
+                className="flex-1 min-w-max px-4 py-3 text-xs sm:text-sm font-sans font-semibold transition-all relative flex flex-col items-center justify-center select-none"
+              >
+                <span className={isSelected ? "text-clinical-action font-bold" : "text-clinical-ink/60 hover:text-clinical-ink"}>
+                  {aba.label}
+                </span>
+                {isSelected && (
+                  <span className="absolute bottom-0 w-8 sm:w-12 h-1 bg-clinical-action rounded-full" />
+                )}
+              </button>
+            );
+          })}
+        </nav>
+      </header>
+
+      {/* Alerta de Segurança se disparado */}
       {alertaSeguranca && (
         <div
           role="alert"
-          className="rounded-2xl border border-clinical-alert/30 bg-clinical-alert text-white p-4 font-sans text-xs sm:text-sm font-medium shadow-md leading-relaxed"
+          className="rounded-2xl bg-clinical-alert text-white p-4 font-sans text-xs sm:text-sm font-medium shadow-sm leading-relaxed"
         >
           {alertaSeguranca}
         </div>
       )}
 
-      {statusFeedback && (
-        <div className="p-3 rounded-2xl bg-clinical-success text-white font-sans text-xs sm:text-sm font-bold shadow-sm text-center">
-          ✓ {statusFeedback}
-        </div>
-      )}
+      {/* Tweet Composer: "O que você gostaria de compartilhar?" */}
+      <section className="bg-white rounded-3xl border border-clinical-surface/30 p-4 sm:p-5 shadow-sm space-y-3">
+        <form onSubmit={handleCriarPublicacao} className="space-y-3">
+          <div className="flex gap-3 items-start">
+            <div className={`w-10 h-10 rounded-full flex items-center justify-center text-xl shrink-0 border ${meuAvatar.badgeClass}`}>
+              {meuAvatar.icon}
+            </div>
 
-      {/* Seleção de Salas Temáticas com Touch Targets >= 48dp */}
-      <section className="space-y-2">
-        <span className="font-sans text-xs sm:text-sm font-bold text-clinical-ink block">
-          Escolha uma sala para conversar:
-        </span>
-        <div className="flex flex-wrap gap-2">
-          {(["HORMONIOTERAPIA", "LINFEDEMA", "RECONSTRUCAO", "EMOCIONAL"] as const).map((sala) => (
-            <button
-              key={sala}
-              type="button"
-              onClick={() => {
-                setSalaAtiva(sala);
-                setThreadSelecionadaId(null);
-              }}
-              className={`min-h-[48px] px-4 rounded-2xl font-sans text-xs sm:text-sm font-semibold transition-all select-none active:scale-95 ${
-                salaAtiva === sala
-                  ? "bg-clinical-action text-white shadow-sm font-bold"
-                  : "bg-white text-clinical-ink border border-clinical-surface/30 hover:bg-clinical-paper shadow-xs"
-              }`}
-            >
-              {salasNomes[sala]}
-            </button>
-          ))}
-        </div>
+            <div className="flex-1 space-y-2">
+              <textarea
+                value={novoTweetTexto}
+                onChange={(e) => setNovoTweetTexto(e.target.value)}
+                placeholder="Como você está se sentindo hoje? Compartilhe um momento ou dúvida..."
+                className="w-full min-h-[72px] resize-none border-0 p-1 font-sans text-sm sm:text-base text-clinical-ink placeholder:text-clinical-ink/40 focus:outline-none focus:ring-0 bg-transparent"
+                rows={2}
+              />
+
+              <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-clinical-surface/15">
+                {/* Seleção de Tópico / Hashtag */}
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  <span className="text-[11px] font-sans font-semibold text-clinical-ink/60">
+                    Assunto:
+                  </span>
+                  {(["HORMONIOTERAPIA", "LINFEDEMA", "EMOCIONAL", "RECONSTRUCAO"] as const).map((cat) => (
+                    <button
+                      key={cat}
+                      type="button"
+                      onClick={() => setCategoriaNovoTweet(cat)}
+                      className={`px-2.5 py-1 rounded-full text-[11px] font-sans font-medium transition-all ${
+                        categoriaNovoTweet === cat
+                          ? "bg-clinical-surface/20 text-clinical-action font-bold border border-clinical-action/30"
+                          : "text-clinical-ink/60 hover:bg-clinical-paper border border-transparent"
+                      }`}
+                    >
+                      #{salasNomes[cat]}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Botão Publicar estilo Twitter */}
+                <button
+                  type="submit"
+                  className="min-h-[44px] px-6 rounded-full bg-clinical-action text-white font-sans text-xs sm:text-sm font-bold hover:bg-clinical-action/90 active:scale-95 transition-all shadow-sm"
+                >
+                  Publicar
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
       </section>
 
-      {/* Grid de Fórum em Cards com Drop Shadow Suave */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
-        {/* Coluna 1: Criar Tópico & Lista de Cards */}
-        <div className="space-y-5">
-          {/* Card de Criação */}
-          <section className="rounded-3xl border border-clinical-surface/30 bg-white p-5 shadow-sm space-y-3.5">
-            <h2 className="font-serif text-lg sm:text-xl font-bold text-clinical-ink border-b border-clinical-surface/20 pb-2">
-              Iniciar conversa em {salasNomes[salaAtiva]}
-            </h2>
-            <form onSubmit={handleCriarTopico} className="space-y-3">
-              <div>
-                <label htmlFor="topico-titulo" className="block font-sans text-xs sm:text-sm font-bold text-clinical-ink mb-1">
-                  Título da sua dúvida ou relato:
-                </label>
-                <input
-                  id="topico-titulo"
-                  type="text"
-                  value={novoTitulo}
-                  onChange={(e) => setNovoTitulo(e.target.value)}
-                  placeholder="Ex: Alguém conseguiu amenizar os fogachos noturnos?"
-                  className="w-full min-h-[48px] px-3.5 rounded-xl border border-clinical-ink/20 font-sans text-sm bg-clinical-paper text-clinical-ink focus:outline-none focus:bg-white focus:ring-2 focus:ring-clinical-action/30"
-                  required
-                />
-              </div>
-              <div>
-                <label htmlFor="topico-corpo" className="block font-sans text-xs sm:text-sm font-bold text-clinical-ink mb-1">
-                  Conte sua experiência com tranquilidade:
-                </label>
-                <textarea
-                  id="topico-corpo"
-                  value={novoTexto}
-                  onChange={(e) => setNovoTexto(e.target.value)}
-                  placeholder="Compartilhe seus pensamentos ou dúvidas..."
-                  className="w-full min-h-[88px] p-3.5 rounded-xl border border-clinical-ink/20 font-sans text-sm bg-clinical-paper text-clinical-ink focus:outline-none focus:bg-white focus:ring-2 focus:ring-clinical-action/30"
-                  required
-                />
-              </div>
-              <button
-                type="submit"
-                className="w-full sm:w-auto min-h-[48px] px-6 rounded-2xl bg-clinical-action text-white font-sans text-xs sm:text-sm font-bold hover:bg-clinical-action/90 transition-all shadow-sm active:scale-95"
+      {/* Feed Principal Estilo Linha do Tempo do Twitter */}
+      <div className="space-y-3">
+        {threadsFiltradas.length === 0 ? (
+          <div className="bg-white rounded-3xl border border-clinical-surface/30 p-8 text-center text-clinical-ink/60 font-sans text-sm">
+            Nenhuma publicação nesta aba ainda. Que tal começar a conversa?
+          </div>
+        ) : (
+          threadsFiltradas.map((post) => {
+            const autor = getBotanyAvatar(post.authorBotanyAlias);
+            const isAberta = threadAbertaId === post.id;
+            const apoioAtual = apoios[post.id] || { count: 0, active: false };
+            const isSalvo = Boolean(salvos[post.id]);
+
+            return (
+              <article
+                key={post.id}
+                onClick={() => setThreadAbertaId(isAberta ? null : post.id)}
+                className={`bg-white rounded-3xl border transition-all cursor-pointer overflow-hidden shadow-sm ${
+                  isAberta
+                    ? "border-clinical-action ring-2 ring-clinical-action/15"
+                    : "border-clinical-surface/30 hover:border-clinical-action/40 hover:shadow-md"
+                }`}
               >
-                Publicar com meu apelido botânico
-              </button>
-            </form>
-          </section>
+                {/* Tweet Card */}
+                <div className="p-4 sm:p-5 flex gap-3 sm:gap-4 items-start">
+                  {/* Coluna da Esquerda: Avatar Circular Botânico */}
+                  <div className={`w-11 h-11 rounded-full flex items-center justify-center text-xl shrink-0 border shadow-2xs ${autor.badgeClass}`}>
+                    {autor.icon}
+                  </div>
 
-          {/* Lista de Cards de Fórum com Drop Shadow */}
-          <section className="space-y-3">
-            <h2 className="font-serif text-lg sm:text-xl font-bold text-clinical-ink">
-              Conversas na sala ({threadsDaSala.length})
-            </h2>
-
-            {threadsDaSala.length === 0 ? (
-              <div className="rounded-3xl border border-clinical-surface/30 p-8 bg-white font-sans text-sm text-center text-clinical-ink/70 shadow-sm">
-                Ainda não há conversas nesta sala. Que tal começar a primeira?
-              </div>
-            ) : (
-              threadsDaSala.map((t) => {
-                const avatar = getBotanyAvatar(t.authorBotanyAlias);
-                const isSelected = threadSelecionadaId === t.id;
-
-                return (
-                  <article
-                    key={t.id}
-                    onClick={() => {
-                      setThreadSelecionadaId(t.id);
-                      if (window.innerWidth < 1024) {
-                        document.getElementById("painel-conversa")?.scrollIntoView({ behavior: "smooth" });
-                      }
-                    }}
-                    className={`rounded-3xl border p-5 cursor-pointer transition-all shadow-sm select-none ${
-                      isSelected
-                        ? "border-clinical-action bg-clinical-paper/80 ring-2 ring-clinical-action/20 shadow-md"
-                        : "border-clinical-surface/30 bg-white hover:border-clinical-action/40 hover:shadow-md"
-                    }`}
-                  >
-                    {/* Cabeçalho do Card com Avatar Ilustrado */}
-                    <div className="flex justify-between items-center gap-2 border-b border-clinical-surface/20 pb-2.5 mb-3">
-                      <div className="flex items-center gap-2.5">
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center text-base border shadow-2xs ${avatar.badgeClass}`}>
-                          {avatar.icon}
-                        </div>
-                        <div>
-                          <span className="font-serif font-bold text-xs sm:text-sm text-clinical-ink block leading-none">
-                            {avatar.nome}
-                          </span>
-                          <span className="font-mono text-[10px] text-clinical-ink/60">
-                            #{avatar.codigo}
-                          </span>
-                        </div>
+                  {/* Coluna da Direita: Conteúdo do Tweet */}
+                  <div className="flex-1 min-w-0 space-y-1.5">
+                    {/* Header do Tweet: Nome, Handle, Horário, Tag */}
+                    <div className="flex flex-wrap items-center justify-between gap-1">
+                      <div className="flex items-center gap-1.5 flex-wrap min-w-0">
+                        <span className="font-serif font-bold text-sm sm:text-base text-clinical-ink truncate">
+                          {autor.nome}
+                        </span>
+                        <span className="font-mono text-xs text-clinical-ink/50 truncate">
+                          {autor.handle}
+                        </span>
+                        <span className="text-clinical-ink/40 text-xs">·</span>
+                        <span className="text-[11px] font-sans text-clinical-ink/60">
+                          {new Date(post.createdAt).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" })}
+                        </span>
                       </div>
 
-                      <span className="rounded-full bg-clinical-paper px-3 py-1 text-[11px] font-sans font-semibold text-clinical-ink/80 border border-clinical-surface/30">
-                        💬 {t.replyCount} {t.replyCount === 1 ? "resposta" : "respostas"}
+                      <span className="text-[10px] font-sans font-semibold px-2.5 py-0.5 rounded-full bg-clinical-paper text-clinical-action border border-clinical-surface/30">
+                        #{salasNomes[post.category]}
                       </span>
                     </div>
 
-                    <h3 className="font-serif text-base sm:text-lg font-bold text-clinical-ink mb-1.5 break-words">
-                      {t.title}
-                    </h3>
-                    <p className="font-sans text-xs sm:text-sm text-clinical-ink/80 line-clamp-2 leading-relaxed">
-                      {t.body}
+                    {/* Título opcional como destaque da conversa */}
+                    {post.title && (
+                      <h2 className="font-serif font-bold text-sm sm:text-base text-clinical-ink leading-snug">
+                        {post.title}
+                      </h2>
+                    )}
+
+                    {/* Texto do Post / Tweet */}
+                    <p className="font-sans text-sm sm:text-[15px] text-clinical-ink/85 leading-relaxed break-words">
+                      {post.body}
                     </p>
-                  </article>
-                );
-              })
-            )}
-          </section>
-        </div>
 
-        {/* Coluna 2: Tópico Selecionado & Respostas (Thumb Zone) */}
-        <div id="painel-conversa" className="space-y-4">
-          {threadAtual ? (
-            <div className="rounded-3xl border border-clinical-surface/30 bg-white p-5 sm:p-6 space-y-5 shadow-sm">
-              <div className="border-b border-clinical-surface/20 pb-4">
-                <div className="flex justify-between items-center mb-3">
-                  {(() => {
-                    const autorAvatar = getBotanyAvatar(threadAtual.authorBotanyAlias);
-                    return (
-                      <div className="flex items-center gap-2.5">
-                        <div className={`w-9 h-9 rounded-full flex items-center justify-center text-lg border shadow-xs ${autorAvatar.badgeClass}`}>
-                          {autorAvatar.icon}
-                        </div>
-                        <div>
-                          <span className="font-serif font-bold text-sm text-clinical-ink block leading-none">
-                            {autorAvatar.nome}
-                          </span>
-                          <span className="font-mono text-[11px] text-clinical-ink/60">
-                            #{autorAvatar.codigo}
-                          </span>
-                        </div>
-                      </div>
-                    );
-                  })()}
+                    {/* Twitter Action Bar (💬 Respostas, ❤️ Curtir/Apoiar, 🔖 Salvar) */}
+                    <div className="pt-2 flex items-center justify-between max-w-sm text-xs text-clinical-ink/60 font-sans">
+                      {/* Respostas */}
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setThreadAbertaId(post.id);
+                        }}
+                        className="inline-flex items-center gap-1.5 hover:text-clinical-action transition-colors p-1.5 rounded-full hover:bg-clinical-paper"
+                        aria-label="Ver respostas"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                        </svg>
+                        <span>{post.replyCount}</span>
+                      </button>
 
-                  <span className="rounded-full bg-clinical-surface/20 text-clinical-action px-3 py-1 text-xs font-bold">
-                    {salasNomes[threadAtual.category]}
-                  </span>
+                      {/* Apoio / Coração */}
+                      <button
+                        type="button"
+                        onClick={(e) => handleToggleApoio(post.id, e)}
+                        className={`inline-flex items-center gap-1.5 transition-colors p-1.5 rounded-full hover:bg-pink-50 ${
+                          apoioAtual.active
+                            ? "text-rose-600 font-bold"
+                            : "hover:text-rose-600 text-clinical-ink/60"
+                        }`}
+                        aria-label="Apoiar publicação"
+                      >
+                        <svg
+                          className={`w-4 h-4 transition-transform ${apoioAtual.active ? "scale-115 fill-current" : ""}`}
+                          fill={apoioAtual.active ? "currentColor" : "none"}
+                          stroke="currentColor"
+                          strokeWidth="1.8"
+                          viewBox="0 0 24 24"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                        <span>{apoioAtual.count}</span>
+                      </button>
+
+                      {/* Salvar nos Favoritos */}
+                      <button
+                        type="button"
+                        onClick={(e) => handleToggleSalvo(post.id, e)}
+                        className={`inline-flex items-center gap-1.5 transition-colors p-1.5 rounded-full hover:bg-clinical-paper ${
+                          isSalvo ? "text-clinical-action font-bold" : "hover:text-clinical-action"
+                        }`}
+                        aria-label="Salvar publicação"
+                      >
+                        <svg
+                          className={`w-4 h-4 ${isSalvo ? "fill-current" : ""}`}
+                          fill={isSalvo ? "currentColor" : "none"}
+                          stroke="currentColor"
+                          strokeWidth="1.8"
+                          viewBox="0 0 24 24"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                        </svg>
+                      </button>
+
+                      {/* Compartilhar */}
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setToastMensagem("Link da conversa copiado com segurança!");
+                          setTimeout(() => setToastMensagem(null), 3000);
+                        }}
+                        className="inline-flex items-center gap-1.5 hover:text-clinical-action transition-colors p-1.5 rounded-full hover:bg-clinical-paper"
+                        aria-label="Compartilhar"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
                 </div>
 
-                <h2 className="font-serif text-xl sm:text-2xl font-bold text-clinical-ink break-words">
-                  {threadAtual.title}
-                </h2>
-                <p className="font-sans text-sm sm:text-base mt-2.5 text-clinical-ink/90 leading-relaxed break-words">
-                  {threadAtual.body}
-                </p>
-              </div>
+                {/* Linha de Conversa / Thread Aberta com Respostas Aninhadas */}
+                {isAberta && (
+                  <div
+                    onClick={(e) => e.stopPropagation()}
+                    className="border-t border-clinical-surface/20 bg-clinical-paper/40 p-4 sm:p-5 space-y-4 cursor-default"
+                  >
+                    <h3 className="font-serif text-sm font-bold text-clinical-ink">
+                      Respostas nesta conversa ({respostasDaThreadAtual.length})
+                    </h3>
 
-              {/* Lista de Respostas com Avatares Ilustrados */}
-              <div className="space-y-3">
-                <h3 className="font-serif text-base font-bold text-clinical-ink">
-                  Acolhimento da comunidade ({respostasAtuais.length})
-                </h3>
-
-                {respostasAtuais.length === 0 ? (
-                  <div className="p-4 rounded-2xl bg-clinical-paper font-sans text-xs sm:text-sm text-clinical-ink/70">
-                    Ainda não há respostas nesta conversa. Que tal enviar uma mensagem de carinho?
-                  </div>
-                ) : (
-                  respostasAtuais.map((rep) => {
-                    const repAvatar = getBotanyAvatar(rep.authorBotanyAlias);
-                    return (
-                      <div
-                        key={rep.id}
-                        className="rounded-2xl border border-clinical-surface/30 p-3.5 bg-clinical-paper space-y-2 shadow-2xs"
-                      >
-                        <div className="flex items-center gap-2">
-                          <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs border ${repAvatar.badgeClass}`}>
-                            {repAvatar.icon}
-                          </div>
-                          <span className="font-serif font-bold text-xs text-clinical-ink">
-                            {repAvatar.nome} #{repAvatar.codigo}
-                          </span>
-                        </div>
-                        <p className="font-sans text-xs sm:text-sm text-clinical-ink leading-relaxed break-words pl-9">
-                          {rep.body}
+                    {/* Respostas com linha conectora vertical estilo Twitter */}
+                    <div className="space-y-3 relative">
+                      {respostasDaThreadAtual.length === 0 ? (
+                        <p className="text-xs text-clinical-ink/60 font-sans italic py-2">
+                          Seja a primeira pessoa a responder com carinho...
                         </p>
-                      </div>
-                    );
-                  })
-                )}
-              </div>
+                      ) : (
+                        respostasDaThreadAtual.map((rep) => {
+                          const repAutor = getBotanyAvatar(rep.authorBotanyAlias);
+                          return (
+                            <div key={rep.id} className="flex gap-3 items-start relative">
+                              {/* Avatar de quem respondeu */}
+                              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm shrink-0 border ${repAutor.badgeClass}`}>
+                                {repAutor.icon}
+                              </div>
 
-              {/* Caixa de Resposta Ergonômica (Thumb Zone) */}
-              <form onSubmit={handleEnviarResposta} className="pt-3 border-t border-clinical-surface/20 space-y-3">
-                <label htmlFor="resp-corpo" className="block font-sans text-xs sm:text-sm font-bold text-clinical-ink">
-                  Deixe uma mensagem de apoio ({meuAvatar.nome}):
-                </label>
-                <textarea
-                  id="resp-corpo"
-                  value={novaRespostaTexto}
-                  onChange={(e) => setNovaRespostaTexto(e.target.value)}
-                  placeholder="Escreva palavras de incentivo ou conte como você superou esse momento..."
-                  className="w-full min-h-[84px] p-3.5 rounded-2xl border border-clinical-ink/20 font-sans text-sm bg-clinical-paper text-clinical-ink focus:outline-none focus:bg-white focus:ring-2 focus:ring-clinical-action/30"
-                  required
-                />
-                <button
-                  type="submit"
-                  className="w-full sm:w-auto min-h-[48px] px-6 rounded-2xl bg-clinical-action text-white font-sans text-xs sm:text-sm font-bold hover:bg-clinical-action/90 transition-all shadow-sm active:scale-95"
-                >
-                  Enviar mensagem de apoio
-                </button>
-              </form>
-            </div>
-          ) : (
-            <div className="rounded-3xl border border-clinical-surface/30 p-8 sm:p-12 bg-white text-center font-sans text-sm text-clinical-ink/70 shadow-sm">
-              👈 Toque em uma das conversas ao lado para ler e participar.
-            </div>
-          )}
-        </div>
+                              <div className="flex-1 bg-white p-3.5 rounded-2xl border border-clinical-surface/25 shadow-2xs space-y-1">
+                                <div className="flex items-center gap-1.5">
+                                  <span className="font-serif font-bold text-xs text-clinical-ink">
+                                    {repAutor.nome}
+                                  </span>
+                                  <span className="font-mono text-[10px] text-clinical-ink/50">
+                                    {repAutor.handle}
+                                  </span>
+                                </div>
+                                <p className="font-sans text-xs sm:text-sm text-clinical-ink/85 leading-relaxed break-words">
+                                  {rep.body}
+                                </p>
+                              </div>
+                            </div>
+                          );
+                        })
+                      )}
+                    </div>
+
+                    {/* Caixa de Resposta Embutida */}
+                    <form onSubmit={handleEnviarResposta} className="pt-2 flex gap-2.5 items-end">
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm shrink-0 border ${meuAvatar.badgeClass}`}>
+                        {meuAvatar.icon}
+                      </div>
+
+                      <div className="flex-1 flex gap-2">
+                        <input
+                          type="text"
+                          value={novaRespostaTexto}
+                          onChange={(e) => setNovaRespostaTexto(e.target.value)}
+                          placeholder={`Responder para ${autor.handle}...`}
+                          className="flex-1 min-h-[44px] px-4 rounded-full border border-clinical-surface/40 font-sans text-xs sm:text-sm bg-white text-clinical-ink focus:outline-none focus:ring-2 focus:ring-clinical-action/20"
+                        />
+                        <button
+                          type="submit"
+                          className="min-h-[44px] px-5 rounded-full bg-clinical-action text-white font-sans text-xs font-bold hover:bg-clinical-action/90 active:scale-95 transition-all shadow-xs shrink-0"
+                        >
+                          Responder
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                )}
+              </article>
+            );
+          })
+        )}
       </div>
     </div>
   );
