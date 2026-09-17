@@ -318,31 +318,20 @@ export default function PapoPrivadoPage() {
         </div>
       )}
 
-      {/* HEADER REESTRUTURADO: 1. Avatar Afetivo | 2. Barra de Busca Central | 3. Ações Rápidas */}
-      <header className="bg-white rounded-3xl border border-clinical-surface/30 shadow-sm overflow-hidden sticky top-14 z-20">
+      {/* HEADER REESTRUTURADO: 1. Avatar da Planta | 2. Barra de Busca Central | 3. Ações Rápidas */}
+      <header className="bg-white rounded-3xl border border-clinical-surface/30 shadow-sm overflow-hidden sticky top-2 z-20">
         {/* Barra Superior */}
         <div className="px-3.5 sm:px-5 py-3 flex items-center gap-2.5 sm:gap-4 border-b border-clinical-surface/15">
-          {/* 1. O Avatar Afetivo (Heurística do Afeto) com Badge de Novidade */}
+          {/* 1. O Avatar da Planta (Exclusivamente a Planta equivalente ao Nome) com Badge de Novidade */}
           <button
             type="button"
             onClick={() => setModalPerfilAberto(true)}
             className="relative focus:outline-none focus:ring-2 focus:ring-clinical-action/30 rounded-full group select-none shrink-0"
-            title="Meu perfil anônimo e mascote acolhedor"
-            aria-label="Perfil do usuário"
+            title={`Meu perfil botânico: ${meuAvatar.nome} #${meuAvatar.codigo}`}
+            aria-label={`Perfil do usuário: ${meuAvatar.nome}`}
           >
-            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-neutral-900 border-2 border-pink-100 shadow-sm flex items-center justify-center overflow-hidden group-hover:scale-105 transition-transform">
-              {/* Mascote Gatinho Preto e Branco Minimalista */}
-              <svg viewBox="0 0 36 36" className="w-9 h-9 sm:w-10 sm:h-10" fill="none">
-                <path d="M7 6L12 14H24L29 6L28 17C28 24 23.5 29 18 29C12.5 29 8 24 8 17L7 6Z" fill="#262626" />
-                <path d="M9 8.5L12.5 14H10L9 8.5Z" fill="#FDA4AF" />
-                <path d="M27 8.5L23.5 14H26L27 8.5Z" fill="#FDA4AF" />
-                <path d="M14 18C14 15.5 16 14 18 14C20 14 22 15.5 22 18C22 23 18 28 18 28C18 28 14 23 14 18Z" fill="#FFFFFF" />
-                <circle cx="13.5" cy="18.5" r="1.5" fill="#FFFFFF" />
-                <circle cx="22.5" cy="18.5" r="1.5" fill="#FFFFFF" />
-                <circle cx="13.5" cy="18.5" r="0.8" fill="#1C1917" />
-                <circle cx="22.5" cy="18.5" r="0.8" fill="#1C1917" />
-                <polygon points="17.2,20.5 18.8,20.5 18,21.5" fill="#FB7185" />
-              </svg>
+            <div className={`w-10 h-10 sm:w-11 sm:h-11 rounded-full border-2 flex items-center justify-center text-xl sm:text-2xl shadow-xs group-hover:scale-105 transition-transform ${meuAvatar.badgeClass}`}>
+              {meuAvatar.icon}
             </div>
             {/* Bolinha vermelha de notificação (badge sutil de novidades) */}
             {temNotificacaoNova && (
@@ -541,28 +530,18 @@ export default function PapoPrivadoPage() {
         </div>
       )}
 
-      {/* MODAL / GAVETA DO PERFIL AFETIVO (MASCOTE & ALIAS BOTÂNICO) */}
+      {/* MODAL / GAVETA DO PERFIL AFETIVO (ALIAS BOTÂNICO) */}
       {modalPerfilAberto && (
         <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="w-full max-w-sm bg-white rounded-3xl p-6 shadow-2xl space-y-4 text-center animate-in fade-in zoom-in-95 duration-150">
-            {/* Mascote Gatinho Grande */}
-            <div className="w-20 h-20 mx-auto rounded-full bg-neutral-900 border-4 border-pink-100 shadow-md flex items-center justify-center overflow-hidden">
-              <svg viewBox="0 0 36 36" className="w-18 h-18" fill="none">
-                <path d="M7 6L12 14H24L29 6L28 17C28 24 23.5 29 18 29C12.5 29 8 24 8 17L7 6Z" fill="#262626" />
-                <path d="M9 8.5L12.5 14H10L9 8.5Z" fill="#FDA4AF" />
-                <path d="M27 8.5L23.5 14H26L27 8.5Z" fill="#FDA4AF" />
-                <path d="M14 18C14 15.5 16 14 18 14C20 14 22 15.5 22 18C22 23 18 28 18 28C18 28 14 23 14 18Z" fill="#FFFFFF" />
-                <circle cx="13.5" cy="18.5" r="1.5" fill="#FFFFFF" />
-                <circle cx="22.5" cy="18.5" r="1.5" fill="#FFFFFF" />
-                <circle cx="13.5" cy="18.5" r="0.8" fill="#1C1917" />
-                <circle cx="22.5" cy="18.5" r="0.8" fill="#1C1917" />
-                <polygon points="17.2,20.5 18.8,20.5 18,21.5" fill="#FB7185" />
-              </svg>
+            {/* Avatar Botânico Grande */}
+            <div className={`w-20 h-20 mx-auto rounded-full border-4 shadow-sm flex items-center justify-center text-4xl ${meuAvatar.badgeClass}`}>
+              {meuAvatar.icon}
             </div>
 
             <div className="space-y-1">
               <span className="text-xs uppercase font-bold text-clinical-action tracking-wider block">
-                Mascote Acolhedor &bull; Perfil Seguro
+                Identidade Botânica &bull; Perfil Seguro
               </span>
               <h3 className="font-serif text-xl font-bold text-clinical-ink">
                 {meuAvatar.nome} #{meuAvatar.codigo}

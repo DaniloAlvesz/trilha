@@ -90,11 +90,14 @@ export default function HeaderNavigation() {
     },
   ];
 
+  const isComunidade = pathname?.startsWith("/comunidade");
+
   return (
     <>
-      {/* Top Header Acolhedor & Limpo */}
-      <header className="w-full bg-clinical-action text-white shadow-sm no-print sticky top-0 z-30">
-        <div className="w-full max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+      {/* Top Header Acolhedor & Limpo (Removido do Papo Privado a pedido da usuária) */}
+      {!isComunidade && (
+        <header className="w-full bg-clinical-action text-white shadow-sm no-print sticky top-0 z-30">
+          <div className="w-full max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 group">
             <span className="w-9 h-9 rounded-full bg-white/15 flex items-center justify-center text-lg shadow-inner group-hover:scale-105 transition-transform">
               🌸
@@ -122,6 +125,7 @@ export default function HeaderNavigation() {
           </div>
         </div>
       </header>
+      )}
 
       {/* Bottom Tab Bar Ergonômica (Thumb Zone) */}
       <nav
