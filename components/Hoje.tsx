@@ -77,102 +77,171 @@ export default function PainelHoje() {
 
   return (
     <div className="space-y-6">
-      {/* Saudação e Estado Geral */}
-      <section className="bg-clinical-paper border border-clinical-ink/20 rounded-2xl p-4 sm:p-5 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
-        <div>
+      {/* Cabeçalho Acolhedor */}
+      <section className="bg-clinical-paper border border-clinical-surface/40 rounded-2xl p-4 sm:p-5 shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+        <div className="space-y-0.5">
           <span className="font-sans text-xs sm:text-sm text-clinical-ink/70 block capitalize">
             {new Date().toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "long", year: "numeric" })}
           </span>
-          <h2 className="font-serif text-xl sm:text-2xl font-bold text-clinical-ink mt-0.5">
-            Olá! Como você está se sentindo hoje?
+          <h2 className="font-serif text-2xl sm:text-3xl font-bold text-clinical-action">
+            Bom dia. Como você está?
           </h2>
+          <p className="font-sans text-xs sm:text-sm text-clinical-ink/80">
+            Estamos com você em cada etapa do seu caminho.
+          </p>
         </div>
-        <div className="rounded-full bg-clinical-surface/20 text-clinical-ink font-sans text-xs sm:text-sm font-semibold px-3.5 py-1.5 border border-clinical-ink/20 shrink-0">
+        <div className="rounded-full bg-clinical-surface/20 text-clinical-ink font-sans text-xs font-semibold px-3.5 py-1.5 border border-clinical-ink/10 shrink-0">
           {statusLog.replace(/^\[|\]$/g, "")}
         </div>
       </section>
 
-      {/* JORNADA VISUAL DE SUPERAÇÃO (GAMIFICAÇÃO & CUSTO AFUNDADO) */}
-      <section className="rounded-2xl border border-clinical-ink/20 bg-white p-5 sm:p-6 shadow-sm space-y-4">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-          <div>
-            <span className="text-xs font-bold uppercase tracking-wider text-clinical-action">
-              Sua jornada de força e superação
-            </span>
-            <h3 className="font-serif text-xl sm:text-2xl font-bold text-clinical-ink mt-0.5">
-              14 de 60 meses completados com sucesso
+      {/* CARD DE PROGRESSO: ANEL CIRCULAR (EFEITO DE ENQUADRAMENTO & CUSTO AFUNDADO) */}
+      <section className="rounded-3xl border border-clinical-surface/30 bg-white p-5 sm:p-6 shadow-sm space-y-4">
+        <div className="flex flex-col sm:flex-row items-center gap-5 sm:gap-6">
+          {/* Anel de Progresso Circular SVG */}
+          <div className="relative w-36 h-36 shrink-0 flex items-center justify-center">
+            <svg className="w-full h-full transform -rotate-90" viewBox="0 0 120 120">
+              {/* Círculo de fundo */}
+              <circle
+                cx="60"
+                cy="60"
+                r="50"
+                fill="none"
+                stroke="#FDF8F9"
+                strokeWidth="10"
+                className="stroke-clinical-paper"
+              />
+              {/* Anel de preenchimento */}
+              <circle
+                cx="60"
+                cy="60"
+                r="50"
+                fill="none"
+                stroke="#801A3D"
+                strokeWidth="10"
+                strokeLinecap="round"
+                strokeDasharray={314.16}
+                strokeDashoffset={314.16 * (1 - 14 / 60)}
+                className="transition-all duration-1000 ease-out"
+              />
+            </svg>
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-center select-none">
+              <span className="font-serif text-2xl sm:text-3xl font-bold text-clinical-action leading-none">
+                14/60
+              </span>
+              <span className="text-[11px] font-sans font-semibold text-clinical-ink/70 uppercase tracking-wider mt-0.5">
+                Meses
+              </span>
+            </div>
+          </div>
+
+          {/* Textos Motivacionais e Reforço Positivo */}
+          <div className="space-y-2 text-center sm:text-left flex-1">
+            <div className="inline-flex items-center gap-1.5 rounded-full bg-clinical-success/15 text-clinical-ink border border-clinical-success/40 px-3 py-1 text-xs font-bold">
+              <span className="w-2 h-2 rounded-full bg-clinical-success animate-pulse" />
+              96,7% de adesão contínua
+            </div>
+            <h3 className="font-serif text-xl sm:text-2xl font-bold text-clinical-ink">
+              Mês 14 de 60 concluídos
             </h3>
-          </div>
-          <div className="rounded-xl bg-clinical-success text-white px-3.5 py-1.5 font-sans font-bold text-sm shadow-sm self-start sm:self-auto">
-            96,7% de constância
-          </div>
-        </div>
-
-        {/* Barra gráfica de progresso */}
-        <div className="space-y-1.5">
-          <div className="w-full bg-clinical-paper h-4 rounded-full overflow-hidden p-0.5 border border-clinical-ink/20 shadow-inner">
-            <div
-              className="bg-clinical-action h-full rounded-full transition-all duration-500"
-              style={{ width: `${(14 / 60) * 100}%` }}
-            />
-          </div>
-          <div className="flex justify-between text-xs text-clinical-ink/70 font-sans">
-            <span>Início do tratamento</span>
-            <span className="font-semibold text-clinical-action">Você já venceu mais de 1 ano completo!</span>
-            <span>Meta: 5 anos</span>
+            <p className="text-sm font-sans text-clinical-ink/85 leading-relaxed">
+              Você já superou mais de 1 ano completo de tratamento! Cada comprimido tomado e cada dia vencido fortalecem sua proteção a longo prazo. O seu empenho diário está gerando frutos admiráveis.
+            </p>
           </div>
         </div>
-
-        <p className="text-sm sm:text-base font-sans text-clinical-ink/90 leading-relaxed">
-          Cada dose tomada e cada dia superado fortalecem a sua saúde e a sua proteção. Ter chegado até aqui demonstra imensa dedicação e cuidado com você mesma. Continue firme nesse caminho!
-        </p>
       </section>
 
-      {/* LEMBRETE POSITIVO DE RENOVAÇÃO DE RECEITA (REENQUADRAMENTO DE ALERTA) */}
-      {motorState.motor3CriticalAlert && (
-        <section
-          role="alert"
-          aria-live="assertive"
-          className="rounded-2xl bg-clinical-alert text-white p-5 sm:p-6 shadow-md space-y-3"
-        >
-          <div className="inline-block rounded-full bg-white/20 text-white px-3 py-1 font-sans text-xs font-bold uppercase tracking-wider">
-            Lembrete de cuidado
+      {/* AÇÃO DO MEDICAMENTO: BOTÃO GRANDE NA ZONA DO POLEGAR (THUMB ZONE) */}
+      <section className="rounded-3xl border border-clinical-surface/30 bg-white p-5 sm:p-6 shadow-sm space-y-4">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-clinical-surface/20 pb-3">
+          <div>
+            <span className="font-sans text-xs text-clinical-ink/70 font-semibold block">
+              Medicamento de Uso Contínuo
+            </span>
+            <h2 className="font-serif text-xl sm:text-2xl font-bold text-clinical-ink">
+              Tamoxifeno 20mg
+            </h2>
           </div>
-          <h2 className="font-serif text-xl sm:text-2xl font-bold text-white">
-            Faltam 4 dias para concluir esta caixa. Vamos renovar a receita?
-          </h2>
-          <p className="text-sm sm:text-base font-sans text-white/95 leading-relaxed">
-            Você tem mantido sua rotina com excelente regularidade! Como restam {motorState.motor3SupplyDaysLeft} comprimidos de Tamoxifeno 20mg na sua caixa atual, é uma boa hora para solicitar a nova receita ao seu oncologista ou preparar a retirada no posto.
-          </p>
-          <div className="pt-1 flex flex-wrap gap-2">
-            <Link
-              href="/agenda"
-              className="rounded-xl bg-white text-clinical-ink px-4 py-2.5 font-sans text-xs sm:text-sm font-bold shadow-sm hover:bg-clinical-paper transition-all"
-            >
-              Consultar minhas próximas datas
-            </Link>
+          <div className="text-xs sm:text-sm font-sans text-clinical-ink/80 bg-clinical-paper px-3 py-1.5 rounded-full border border-clinical-surface/30 font-medium">
+            1 comprimido ao dia pela manhã
           </div>
-        </section>
-      )}
+        </div>
 
-      {/* CHECK-IN PREVENTIVO DE ANSIEDADE PRÉ-EXAME (SCANXIETY) */}
+        {/* Lembrete amigável de renovação de receita */}
+        {motorState.motor3CriticalAlert && (
+          <div className="rounded-2xl bg-clinical-paper border border-clinical-alert/30 p-4 flex items-start gap-3 text-clinical-ink">
+            <span className="text-2xl shrink-0">💌</span>
+            <div className="text-xs sm:text-sm leading-relaxed space-y-1">
+              <p className="font-bold text-clinical-action">
+                Faltam 4 dias para concluir esta caixa. Vamos renovar a receita?
+              </p>
+              <p className="text-clinical-ink/80">
+                Você tem mantido sua rotina com ótima regularidade! Como restam {motorState.motor3SupplyDaysLeft} comprimidos, é o momento perfeito para agendar a retirada ou solicitar ao médico.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Botão Grande de Ação Rápida (Thumb Zone - Min 56px altura) */}
+        <div className="pt-1">
+          <button
+            type="button"
+            onClick={handleToggleDose}
+            className={`w-full min-h-[60px] p-4 rounded-2xl border-2 text-left flex items-center justify-between gap-4 transition-all duration-200 cursor-pointer shadow-sm active:scale-[0.99] select-none ${
+              doseIngeridaHoje
+                ? "bg-clinical-success text-white border-clinical-success"
+                : "bg-clinical-action text-white border-clinical-action hover:bg-clinical-action/95"
+            }`}
+            aria-pressed={doseIngeridaHoje}
+          >
+            <div className="flex items-center gap-3.5 min-w-0">
+              <div
+                className={`w-11 h-11 shrink-0 rounded-xl flex items-center justify-center font-sans text-2xl font-bold transition-all ${
+                  doseIngeridaHoje
+                    ? "bg-white text-clinical-success shadow-sm"
+                    : "bg-white/20 text-white"
+                }`}
+              >
+                {doseIngeridaHoje ? "✓" : "💊"}
+              </div>
+              <div className="min-w-0">
+                <span className="font-sans text-xs block font-semibold opacity-90">
+                  {doseIngeridaHoje ? "Dose do dia confirmada!" : "Ação diária recomendada"}
+                </span>
+                <span className="font-serif text-lg sm:text-xl font-bold break-words block leading-snug">
+                  {doseIngeridaHoje
+                    ? "Dose de hoje concluída com sucesso!"
+                    : "Tomei minha dose hoje"}
+                </span>
+              </div>
+            </div>
+
+            <span className="text-xs font-sans font-bold underline shrink-0 opacity-85 hidden sm:inline">
+              {doseIngeridaHoje ? "Alterar" : "Confirmar"}
+            </span>
+          </button>
+        </div>
+      </section>
+
+      {/* GESTÃO DE ANSIEDADE PRÉ-EXAME (SCANXIETY): REENQUADRAR O MEDO EM CONTROLE */}
       {motorState.motor4ScanxietyActive && (
-        <section className="rounded-2xl border border-clinical-action/30 bg-clinical-paper p-5 sm:p-6 shadow-sm space-y-4">
+        <section className="rounded-3xl border border-clinical-action/25 bg-white p-5 sm:p-6 shadow-sm space-y-4">
           <div className="space-y-2">
-            <div className="inline-block rounded-full bg-clinical-action text-white px-3 py-1 font-sans text-xs font-bold uppercase tracking-wider">
-              Acolhimento pré-exame
+            <div className="inline-flex items-center gap-1.5 rounded-full bg-clinical-surface/20 text-clinical-action px-3 py-1 font-sans text-xs font-bold">
+              <span>🩺</span>
+              Acolhimento Pré-Exame
             </div>
             <h2 className="font-serif text-xl sm:text-2xl font-bold text-clinical-action break-words">
-              Seu próximo exame está se aproximando: {motorState.motor4ExamType?.toLowerCase() || "exame"} em {motorState.motor4ExamDaysLeft} dias
+              Sua {motorState.motor4ExamType?.toLowerCase() || "mamografia"} é em {motorState.motor4ExamDaysLeft} dias. Quer anotar alguma dúvida para não esquecer de perguntar ao médico?
             </h2>
-            <p className="text-sm sm:text-base font-sans text-clinical-ink/90 leading-relaxed">
-              Sentir frio na barriga, ansiedade ou apreensão antes de exames de rotina é uma reação muito natural e compreensível. Reconhecer essas emoções ajuda a tirar o peso dos pensamentos.
+            <p className="text-sm font-sans text-clinical-ink/85 leading-relaxed">
+              Sentir apreensão antes de exames de rotina é uma reação muito natural e compreensível. Anotar suas perguntas traz calma e coloca você no comando da conversa com seu médico.
             </p>
 
             {!scanxietyRegistrado ? (
-              <div className="rounded-xl border border-clinical-ink/20 p-4 sm:p-5 bg-white space-y-3.5 mt-3 shadow-sm">
+              <div className="rounded-2xl border border-clinical-surface/30 p-4 sm:p-5 bg-clinical-paper space-y-3.5 mt-3 shadow-inner">
                 <label className="block font-sans text-xs sm:text-sm font-bold text-clinical-ink">
-                  Como você está se sentindo em relação a esse exame? (Toque para selecionar):
+                  Como está seu coração hoje? Toque em um sentimento para registrar:
                 </label>
 
                 {/* Seletores rápidos de humor / sentimento */}
@@ -188,7 +257,7 @@ export default function PainelHoje() {
                       key={sensacao}
                       type="button"
                       onClick={() => setScanxietyNota((prev) => prev ? `${prev} • ${sensacao}` : sensacao)}
-                      className="rounded-lg px-3 py-1.5 text-xs sm:text-sm font-sans font-medium bg-clinical-surface/20 text-clinical-ink border border-clinical-ink/20 hover:bg-clinical-action hover:text-white transition-all"
+                      className="min-h-[44px] rounded-xl px-3.5 py-2 text-xs sm:text-sm font-sans font-medium bg-white text-clinical-ink border border-clinical-surface/40 hover:bg-clinical-action hover:text-white transition-all active:scale-95 shadow-xs"
                     >
                       + {sensacao}
                     </button>
@@ -196,15 +265,15 @@ export default function PainelHoje() {
                 </div>
 
                 <div>
-                  <label htmlFor="scanxiety-input" className="block font-sans text-xs text-clinical-ink/70 mt-2 mb-1">
-                    Quer deixar um pensamento ou desabafo por escrito? (opcional):
+                  <label htmlFor="scanxiety-input" className="block font-sans text-xs text-clinical-ink/80 mt-2 mb-1">
+                    Dúvidas ou anotações que você quer lembrar na hora do exame:
                   </label>
                   <textarea
                     id="scanxiety-input"
                     value={scanxietyNota}
                     onChange={(e) => setScanxietyNota(e.target.value)}
-                    placeholder="Escreva livremente o que estiver em seu coração..."
-                    className="w-full p-3 rounded-lg border border-clinical-ink/30 font-sans text-sm sm:text-base min-h-[80px] bg-clinical-paper text-clinical-ink focus:outline-none focus:ring-2 focus:ring-clinical-action/30"
+                    placeholder="Ex: Perguntar sobre o inchaço leve no braço ou se preciso repetir o ultrassom..."
+                    className="w-full p-3 rounded-xl border border-clinical-ink/20 font-sans text-sm min-h-[84px] bg-white text-clinical-ink focus:outline-none focus:ring-2 focus:ring-clinical-action/30"
                   />
                 </div>
 
@@ -214,109 +283,62 @@ export default function PainelHoje() {
                     setScanxietyRegistrado(true);
                     setStatusLog("Check-in de acolhimento salvo com carinho");
                   }}
-                  className="rounded-xl px-5 py-2.5 bg-clinical-action text-white font-sans text-xs sm:text-sm font-bold hover:bg-clinical-ink transition-all shadow-sm"
+                  className="w-full sm:w-auto min-h-[48px] rounded-xl px-6 py-3 bg-clinical-action text-white font-sans text-xs sm:text-sm font-bold hover:bg-clinical-ink transition-all shadow-sm active:scale-95"
                 >
-                  Guardar este momento de autocuidado
+                  Salvar anotações para a consulta
                 </button>
               </div>
             ) : (
-              <div className="rounded-xl border border-clinical-success/30 p-4 bg-clinical-success text-white font-sans text-xs sm:text-sm font-semibold shadow-sm">
-                ✓ Seu check-in de autocuidado foi salvo. Respire fundo: você é forte e está cuidando muito bem de si mesma.
+              <div className="rounded-2xl border border-clinical-success/30 p-4 bg-clinical-success text-white font-sans text-xs sm:text-sm font-semibold shadow-sm flex items-center gap-2">
+                <span className="text-xl">✓</span>
+                <span>Suas anotações foram salvas com carinho. Respire fundo: você está cuidando perfeitamente de si mesma.</span>
               </div>
             )}
           </div>
         </section>
       )}
 
-      {/* LEMBRETE DE RELATÓRIO PRONTO PARA A CONSULTA */}
-      {motorState.motor1ReportReady && (
-        <section className="rounded-2xl border border-clinical-ink/20 bg-white p-5 sm:p-6 shadow-sm">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div className="space-y-1.5">
-              <div className="inline-block rounded-full bg-clinical-surface text-clinical-ink px-3 py-1 font-sans text-xs font-bold uppercase tracking-wider">
-                Próxima consulta em {motorState.motor1NextEncounterDays} dias
-              </div>
-              <h2 className="font-serif text-xl sm:text-2xl font-bold text-clinical-ink break-words">
-                Seu resumo para a consulta está pronto
-              </h2>
-              <p className="text-sm sm:text-base font-sans text-clinical-ink/80">
-                Organizamos seus registros diários, sintomas e regularidade do tratamento para você levar impresso ou abrir no celular durante a conversa com o médico.
-              </p>
-            </div>
-            <Link
-              href="/relatorio-print"
-              className="w-full md:w-auto flex-shrink-0 px-5 py-3 rounded-xl bg-clinical-action text-white font-sans text-xs sm:text-sm md:text-base font-bold inline-flex items-center justify-center hover:bg-clinical-ink transition-all shadow-sm text-center"
-            >
-              Ver relatório para consulta
-            </Link>
+      {/* ATALHOS RÁPIDOS INTEGRADOS: CONSULTAS & RELATÓRIO DO MÉDICO */}
+      <section className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <Link
+          href="/agenda"
+          className="group rounded-3xl border border-clinical-surface/30 bg-white p-5 shadow-sm hover:shadow-md transition-all flex items-start gap-4 active:scale-[0.99]"
+        >
+          <div className="w-12 h-12 rounded-2xl bg-clinical-surface/20 text-clinical-action flex items-center justify-center text-2xl shrink-0 group-hover:scale-105 transition-transform">
+            📅
           </div>
-        </section>
-      )}
-
-      {/* GESTÃO DIÁRIA DO MEDICAMENTO */}
-      <section className="rounded-2xl border border-clinical-ink/20 bg-white p-5 sm:p-6 shadow-sm space-y-4">
-        <div className="border-b border-clinical-ink/15 pb-3 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-          <div>
-            <span className="font-sans text-xs text-clinical-ink/70 font-semibold block">Tratamento Contínuo</span>
-            <h2 className="font-serif text-xl sm:text-2xl font-bold text-clinical-ink">
-              Dose diária de Tamoxifeno
-            </h2>
-          </div>
-          <div className="rounded-lg font-sans text-xs sm:text-sm bg-clinical-paper text-clinical-ink px-3 py-1.5 border border-clinical-ink/20 font-semibold shrink-0">
-            20mg • 1 comprimido por dia
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 font-sans text-sm sm:text-base text-clinical-ink">
-          <div className="rounded-xl border border-clinical-ink/15 p-3.5 bg-clinical-paper">
-            <span className="text-xs block font-bold text-clinical-ink/70">Posologia:</span>
-            <span className="text-base sm:text-lg font-bold">1 comprimido ao dia</span>
-          </div>
-          <div className="rounded-xl border border-clinical-ink/15 p-3.5 bg-clinical-paper">
-            <span className="text-xs block font-bold text-clinical-ink/70">Total da caixa:</span>
-            <span className="text-base sm:text-lg font-bold">{motorState.motor3TotalSupply} comprimidos</span>
-          </div>
-          <div className="rounded-xl border border-clinical-ink/15 p-3.5 bg-clinical-paper">
-            <span className="text-xs block font-bold text-clinical-ink/70">Comprimidos restantes:</span>
-            <span className={`text-base sm:text-lg font-bold ${motorState.motor3CriticalAlert ? "text-clinical-alert" : "text-clinical-ink"}`}>
-              {motorState.motor3SupplyDaysLeft} dias restantes
+          <div className="space-y-1 min-w-0 flex-1">
+            <span className="text-[11px] font-sans font-bold uppercase tracking-wider text-clinical-action block">
+              Agenda de Saúde
             </span>
+            <h3 className="font-serif text-lg font-bold text-clinical-ink group-hover:text-clinical-action transition-colors">
+              Minhas Consultas e Exames
+            </h3>
+            <p className="text-xs font-sans text-clinical-ink/75 leading-relaxed">
+              Próximo: Mamografia em {motorState.motor4ExamDaysLeft} dias. Toque para ver ou agendar.
+            </p>
           </div>
-        </div>
+        </Link>
 
-        {/* BOTÃO PRINCIPAL DE CONFIRMAÇÃO DA DOSE */}
-        <div className="pt-2">
-          <button
-            type="button"
-            onClick={handleToggleDose}
-            className={`w-full min-h-[58px] p-4 rounded-xl border-2 text-left flex items-center gap-4 transition-all duration-200 cursor-pointer shadow-sm ${
-              doseIngeridaHoje
-                ? "bg-clinical-success text-white border-clinical-success"
-                : "bg-clinical-paper text-clinical-ink border-clinical-ink/30 hover:border-clinical-action hover:bg-white"
-            }`}
-            aria-pressed={doseIngeridaHoje}
-          >
-            <div
-              className={`w-10 h-10 shrink-0 rounded-lg border-2 flex items-center justify-center font-sans text-xl font-bold transition-all ${
-                doseIngeridaHoje
-                  ? "bg-white text-clinical-success border-white"
-                  : "bg-white text-transparent border-clinical-ink/30"
-              }`}
-            >
-              ✓
-            </div>
-            <div className="min-w-0">
-              <span className="font-sans text-xs block font-semibold tracking-wide">
-                {doseIngeridaHoje ? "Dose do dia confirmada!" : "Aguardando confirmação de hoje"}
-              </span>
-              <span className="font-serif text-base sm:text-lg font-bold break-words block">
-                {doseIngeridaHoje
-                  ? "Parabéns! Você já tomou o comprimido de hoje."
-                  : "Toque aqui para registrar a tomada de hoje (20mg)"}
-              </span>
-            </div>
-          </button>
-        </div>
+        <Link
+          href="/relatorio-print"
+          className="group rounded-3xl border border-clinical-surface/30 bg-white p-5 shadow-sm hover:shadow-md transition-all flex items-start gap-4 active:scale-[0.99]"
+        >
+          <div className="w-12 h-12 rounded-2xl bg-clinical-action text-white flex items-center justify-center text-2xl shrink-0 group-hover:scale-105 transition-transform">
+            📋
+          </div>
+          <div className="space-y-1 min-w-0 flex-1">
+            <span className="text-[11px] font-sans font-bold uppercase tracking-wider text-clinical-action block">
+              Pronto para Levar
+            </span>
+            <h3 className="font-serif text-lg font-bold text-clinical-ink group-hover:text-clinical-action transition-colors">
+              Relatório para Consulta
+            </h3>
+            <p className="text-xs font-sans text-clinical-ink/75 leading-relaxed">
+              Resumo completo de sintomas e adesão para apresentar ao seu médico oncologista.
+            </p>
+          </div>
+        </Link>
       </section>
 
       {/* SUGESTÕES PROATIVAS DE PAUTA PARA O ONCOLOGISTA */}
@@ -351,14 +373,14 @@ export default function PainelHoje() {
                   <button
                     type="button"
                     onClick={() => handleAdicionarPauta(pergunta)}
-                    className="w-full sm:w-auto px-4 py-2 rounded-lg bg-clinical-action text-white font-sans text-xs sm:text-sm font-bold hover:bg-clinical-ink transition-all shadow-sm text-center"
+                    className="w-full sm:w-auto min-h-[48px] px-5 py-2.5 rounded-xl bg-clinical-action text-white font-sans text-xs sm:text-sm font-bold hover:bg-clinical-ink transition-all shadow-sm text-center"
                   >
                     Sim, adicionar à lista
                   </button>
                   <button
                     type="button"
                     onClick={() => handleRecusarPauta(pergunta)}
-                    className="w-full sm:w-auto px-4 py-2 rounded-lg bg-clinical-surface text-clinical-ink font-sans text-xs sm:text-sm font-semibold hover:bg-clinical-ink hover:text-white transition-all text-center"
+                    className="w-full sm:w-auto min-h-[48px] px-5 py-2.5 rounded-xl bg-clinical-surface text-clinical-ink font-sans text-xs sm:text-sm font-semibold hover:bg-clinical-ink hover:text-white transition-all text-center"
                   >
                     Não precisa lembrar
                   </button>
