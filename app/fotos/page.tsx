@@ -68,163 +68,164 @@ export default function LinhaDoTempoFotosPage() {
 
   return (
     <div className="space-y-6">
-      {/* Cabeçalho */}
-      <section className="border-b-4 border-clinical-ink pb-4">
-        <span className="font-mono text-[10px] sm:text-xs uppercase font-bold text-clinical-action block">
-          RECURSO OFICIAL: HL7 FHIR R4 // DOCUMENTREFERENCE
+      {/* Cabeçalho Acolhedor */}
+      <section className="bg-clinical-paper border border-clinical-ink/20 rounded-2xl p-5 sm:p-6 shadow-sm">
+        <span className="font-sans text-xs sm:text-sm font-semibold text-clinical-action block">
+          Acompanhamento visual da sua recuperação
         </span>
-        <h1 className="font-serif text-2xl sm:text-3xl font-black uppercase break-words text-clinical-ink">
-          LINHA DO TEMPO CLÍNICA // REGISTRO VISUAL
+        <h1 className="font-serif text-2xl sm:text-3xl font-bold text-clinical-ink mt-0.5">
+          Linha do Tempo Visual
         </h1>
-        <p className="font-mono text-xs sm:text-sm uppercase text-clinical-ink font-bold mt-1 break-words">
-          MONITORAMENTO FOTOGRÁFICO DE RECONSTRUÇÃO MAMÁRIA, CICATRIZES E EDEMA LINFÁTICO
+        <p className="font-sans text-sm sm:text-base text-clinical-ink/80 mt-1 leading-relaxed">
+          Guarde fotos de acompanhamento das suas cicatrizes, da reconstrução mamária ou da simetria do seu braço. Acompanhar as mudanças mês a mês ajuda a valorizar cada etapa do processo de cicatrização.
         </p>
+        <div className="mt-3 inline-flex items-center gap-2 rounded-full bg-clinical-surface/20 text-clinical-ink px-3 py-1 text-xs font-medium border border-clinical-ink/15">
+          <span>🔒</span> Suas fotos e anotações são confidenciais e protegidas com criptografia.
+        </div>
       </section>
 
-      {/* Status da Engine */}
-      <div className="border-2 border-clinical-ink bg-clinical-ink text-white p-2.5 sm:p-3 font-mono text-xs sm:text-sm uppercase flex flex-col sm:flex-row justify-between items-start sm:items-center gap-1">
-        <span>STATUS DO STORAGE CRIPTOGRAFADO:</span>
-        <span className="text-clinical-surface font-bold break-words">{statusLog}</span>
-      </div>
-
-      {/* Formulário de Upload / Registro do DocumentReference */}
-      <section className="border-2 border-clinical-ink bg-clinical-paper p-4 sm:p-5 space-y-4">
-        <h2 className="font-serif text-lg sm:text-xl font-black uppercase border-b-2 border-clinical-ink pb-2 text-clinical-ink">
-          ARQUIVAR NOVO REGISTRO VISUAL
+      {/* Formulário Acolhedor para Adicionar Nova Imagem */}
+      <section className="rounded-2xl border border-clinical-ink/20 bg-white p-5 sm:p-6 shadow-sm space-y-4">
+        <h2 className="font-serif text-xl sm:text-2xl font-bold text-clinical-ink">
+          Adicionar uma nova foto ou registro visual
         </h2>
         <form onSubmit={handleSalvarFoto} className="space-y-4">
           <div>
-            <label htmlFor="url-attachment" className="block font-mono text-xs sm:text-sm font-bold uppercase mb-1 text-clinical-ink">
-              LOCALIZADOR DE OBJETO CRIPTOGRAFADO (S3/R2 URL OU PATH LOCAL):
+            <label htmlFor="url-attachment" className="block font-sans text-xs sm:text-sm font-bold text-clinical-ink mb-1">
+              Endereço ou identificador da imagem:
             </label>
             <input
               id="url-attachment"
               type="text"
               value={novaUrl}
               onChange={(e) => setNovaUrl(e.target.value)}
-              placeholder="HTTPS://ENCRYPTED-BUCKET.TRILHA.SAUDE.GOV.BR/PATIENT/REGISTRO.JPG"
-              className="w-full min-h-[48px] px-3 border-2 border-clinical-ink font-mono text-sm sm:text-base bg-white text-clinical-ink focus:outline-none focus:bg-white"
+              placeholder="Cole aqui o link seguro ou nome do arquivo da foto..."
+              className="w-full min-h-[48px] px-3.5 rounded-xl border border-clinical-ink/30 font-sans text-sm sm:text-base bg-clinical-paper text-clinical-ink focus:outline-none focus:bg-white focus:ring-2 focus:ring-clinical-action/30"
               required
             />
           </div>
           <div>
-            <label htmlFor="desc-attachment" className="block font-mono text-xs sm:text-sm font-bold uppercase mb-1 text-clinical-ink">
-              DESCRITIVO CLÍNICO E OBSERVAÇÕES MÉDICAS:
+            <label htmlFor="desc-attachment" className="block font-sans text-xs sm:text-sm font-bold text-clinical-ink mb-1">
+              O que você gostaria de anotar sobre esta foto?
             </label>
             <input
               id="desc-attachment"
               type="text"
               value={novaDescricao}
               onChange={(e) => setNovaDescricao(e.target.value)}
-              placeholder="EX: MEDIÇÃO DE EDEMA NO ANTEBRAÇO ESQUERDO. PERÍMETRO: 24.5 CM."
-              className="w-full min-h-[48px] px-3 border-2 border-clinical-ink font-mono text-sm sm:text-base bg-white text-clinical-ink focus:outline-none focus:bg-white"
+              placeholder="Ex: Medição do inchaço no antebraço após sessão de drenagem..."
+              className="w-full min-h-[48px] px-3.5 rounded-xl border border-clinical-ink/30 font-sans text-sm sm:text-base bg-clinical-paper text-clinical-ink focus:outline-none focus:bg-white focus:ring-2 focus:ring-clinical-action/30"
               required
             />
           </div>
           <button
             type="submit"
-            className="w-full sm:w-auto min-h-[48px] px-6 bg-clinical-action text-white font-mono text-sm sm:text-base font-black uppercase border-2 border-clinical-ink hover:bg-clinical-ink hover:text-white transition-none text-center"
+            className="w-full sm:w-auto min-h-[48px] px-7 rounded-xl bg-clinical-action text-white font-sans text-sm sm:text-base font-bold hover:bg-clinical-ink transition-all shadow-sm text-center"
           >
-            VINCULAR FOTO AO PRONTUÁRIO
+            Salvar foto na minha linha do tempo
           </button>
         </form>
       </section>
 
-      {/* Lista de Registros Cronológicos */}
+      {/* Galeria Visual em Grade */}
       <section className="space-y-4">
-        <h2 className="font-serif text-xl sm:text-2xl font-black uppercase border-b-2 border-clinical-ink pb-2 text-clinical-ink">
-          REGISTROS VISUAIS VINCULADOS
+        <h2 className="font-serif text-xl sm:text-2xl font-bold text-clinical-ink">
+          Sua galeria de evolução
         </h2>
 
         {fotos.length === 0 ? (
-          <div className="border-4 border-clinical-ink p-6 sm:p-8 bg-white text-center font-mono text-base sm:text-lg font-black uppercase text-clinical-ink">
-            [NENHUM REGISTRO VISUAL ARQUIVADO NESTA COMPETÊNCIA]
+          <div className="rounded-2xl border border-clinical-ink/20 p-6 sm:p-8 bg-white text-center font-sans text-base font-medium text-clinical-ink/70 shadow-sm">
+            Nenhuma foto adicionada ainda. Quando quiser, você pode registrar sua primeira imagem acima.
           </div>
         ) : (
-          fotos.map((item) => {
-            const dataObj = new Date(item.created);
-            const dataFormatada = dataObj.toLocaleDateString("pt-BR", {
-              day: "2-digit",
-              month: "2-digit",
-              year: "numeric",
-            });
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {fotos.map((item) => {
+              const dataObj = new Date(item.created);
+              const dataFormatada = dataObj.toLocaleDateString("pt-BR", {
+                day: "2-digit",
+                month: "long",
+                year: "numeric",
+              });
 
-            return (
-              <article
-                key={item.id}
-                className="border-2 border-clinical-ink bg-white p-3.5 sm:p-5 space-y-4"
-              >
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b-2 border-clinical-ink pb-2 gap-2">
-                  <div>
-                    <span className="font-mono text-[10px] sm:text-xs font-bold uppercase block text-clinical-ink/70">
-                      IDENTIFICADOR: {item.id} // TIPO: {item.typeCode.toUpperCase()}
+              return (
+                <article
+                  key={item.id}
+                  className="rounded-2xl border border-clinical-ink/20 bg-white overflow-hidden shadow-sm flex flex-col justify-between"
+                >
+                  {/* Container Visual da Foto (Placeholder Visual Elegante) */}
+                  <div className="bg-clinical-paper border-b border-clinical-ink/15 p-8 flex flex-col items-center justify-center text-center space-y-2 min-h-[160px]">
+                    <div className="w-14 h-14 rounded-full bg-clinical-surface/20 flex items-center justify-center text-2xl text-clinical-action">
+                      📷
+                    </div>
+                    <span className="font-sans text-xs text-clinical-ink/60 font-semibold">
+                      Registro fotográfico seguro
                     </span>
-                    <h3 className="font-serif text-lg sm:text-xl font-black uppercase text-clinical-action break-words">
-                      {item.description}
-                    </h3>
                   </div>
-                  <div className="font-mono text-xs sm:text-sm font-black bg-clinical-ink text-white px-2.5 py-1 border border-clinical-ink self-start md:self-auto shrink-0">
-                    DATA: {dataFormatada}
+
+                  <div className="p-5 space-y-3 flex-1 flex flex-col justify-between">
+                    <div>
+                      <span className="font-sans text-xs text-clinical-action font-semibold block">
+                        {dataFormatada}
+                      </span>
+                      <h3 className="font-serif text-base sm:text-lg font-bold text-clinical-ink mt-0.5 break-words">
+                        {item.description}
+                      </h3>
+                    </div>
+
+                    {/* Exclusão Inline Empática */}
+                    <div className="pt-3 border-t border-clinical-ink/15">
+                      {deleteId === item.id ? (
+                        <div className="rounded-xl border border-clinical-alert/30 bg-clinical-alert text-white p-4 space-y-3 shadow-sm">
+                          <div className="font-sans text-xs sm:text-sm font-semibold leading-relaxed">
+                            Tem certeza que deseja apagar esta foto? Digite <strong>EXCLUIR</strong> para confirmar:
+                          </div>
+                          <div className="flex flex-col sm:flex-row flex-wrap gap-2 items-stretch sm:items-center">
+                            <input
+                              type="text"
+                              value={confirmInput}
+                              onChange={(e) => setConfirmInput(e.target.value)}
+                              placeholder="Digite EXCLUIR"
+                              className="w-full sm:w-auto flex-1 min-h-[44px] px-3 rounded-lg font-sans text-sm uppercase bg-white text-clinical-ink focus:outline-none"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => handleExecutarExclusao(item.id)}
+                              className="w-full sm:w-auto min-h-[44px] px-5 rounded-lg bg-clinical-ink text-white font-sans text-xs sm:text-sm font-bold hover:bg-white hover:text-clinical-ink transition-all shadow-sm text-center"
+                            >
+                              Confirmar exclusão
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setDeleteId(null);
+                                setConfirmInput("");
+                              }}
+                              className="w-full sm:w-auto min-h-[44px] px-4 rounded-lg bg-white/20 text-white font-sans text-xs sm:text-sm font-semibold hover:bg-white/30 transition-all text-center"
+                            >
+                              Cancelar
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="flex justify-end">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setDeleteId(item.id);
+                              setConfirmInput("");
+                            }}
+                            className="text-clinical-ink/70 hover:text-clinical-alert font-sans text-xs sm:text-sm font-semibold transition-all"
+                          >
+                            Excluir este registro
+                          </button>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-
-                <div className="border-2 border-clinical-ink p-2.5 sm:p-3 bg-clinical-paper text-clinical-ink font-mono text-xs sm:text-sm break-all overflow-hidden">
-                  <span className="font-bold block uppercase text-[10px] sm:text-xs mb-1">LOCALIZADOR ENCRIPTADO (URL):</span>
-                  {item.contentAttachmentUrl}
-                </div>
-
-                {/* Exclusão Inline Estrita */}
-                <div className="pt-2 border-t border-clinical-ink">
-                  {deleteId === item.id ? (
-                    <div className="border-2 border-clinical-ink bg-clinical-alert text-white p-3 space-y-2">
-                      <div className="font-mono text-xs sm:text-sm font-bold uppercase break-words">
-                        ATENÇÃO: AÇÃO DESTRUTIVA IRREVERSÍVEL. DIGITE &ldquo;EXCLUIR&rdquo; PARA PURGAR A REFERÊNCIA:
-                      </div>
-                      <div className="flex flex-col sm:flex-row flex-wrap gap-2 items-stretch sm:items-center">
-                        <input
-                          type="text"
-                          value={confirmInput}
-                          onChange={(e) => setConfirmInput(e.target.value)}
-                          placeholder="DIGITE EXCLUIR"
-                          className="w-full sm:w-auto flex-1 min-h-[44px] sm:min-h-[48px] px-3 border-2 border-clinical-ink font-mono text-sm sm:text-base uppercase bg-white text-clinical-ink focus:outline-none"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => handleExecutarExclusao(item.id)}
-                          className="w-full sm:w-auto min-h-[44px] sm:min-h-[48px] px-4 sm:px-6 bg-clinical-ink text-white font-mono text-xs sm:text-sm font-black uppercase border-2 border-white hover:bg-white hover:text-clinical-ink transition-none text-center"
-                        >
-                          CONFIRMAR PURGAÇÃO
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setDeleteId(null);
-                            setConfirmInput("");
-                          }}
-                          className="w-full sm:w-auto min-h-[44px] sm:min-h-[48px] px-4 bg-clinical-paper text-clinical-ink font-mono text-xs sm:text-sm font-bold uppercase border-2 border-clinical-ink hover:bg-clinical-surface hover:text-clinical-ink transition-none text-center"
-                        >
-                          CANCELAR
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="flex justify-end">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setDeleteId(item.id);
-                          setConfirmInput("");
-                        }}
-                        className="w-full sm:w-auto min-h-[44px] sm:min-h-[48px] px-4 bg-transparent text-clinical-ink font-mono text-xs sm:text-sm font-bold uppercase border-2 border-clinical-ink hover:bg-clinical-alert hover:text-white transition-none text-center"
-                      >
-                        EXCLUIR REFERÊNCIA DO PRONTUÁRIO
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </article>
-            );
-          })
+                </article>
+              );
+            })}
+          </div>
         )}
       </section>
     </div>

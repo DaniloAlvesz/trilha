@@ -152,48 +152,51 @@ export default function PapoPrivadoPage() {
   const threadAtual = threads.find((t) => t.id === threadSelecionadaId);
   const respostasAtuais = threadSelecionadaId ? respostas[threadSelecionadaId] || [] : [];
 
+  // Mapeamento de nomes amigáveis para as salas
+  const salasNomes: Record<CommunityThread["category"], string> = {
+    HORMONIOTERAPIA: "Hormonioterapia",
+    LINFEDEMA: "Linfedema e Cuidados",
+    RECONSTRUCAO: "Reconstrução",
+    EMOCIONAL: "Apoio Emocional",
+  };
+
   return (
     <div className="space-y-6">
-      {/* Cabeçalho */}
-      <section className="border-b-4 border-clinical-ink pb-4">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
+      {/* Cabeçalho Acolhedor */}
+      <section className="bg-clinical-paper border border-clinical-ink/20 rounded-2xl p-5 sm:p-6 shadow-sm">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
           <div>
-            <span className="font-mono text-[10px] sm:text-xs uppercase font-bold text-clinical-action block">
-              MÓDULO DE SUPORTE ENTRE PARES // DESACOPLAMENTO TOTAL DE PRONTUÁRIO
+            <span className="font-sans text-xs sm:text-sm font-semibold text-clinical-action block">
+              Comunidade anônima de apoio mútuo
             </span>
-            <h1 className="font-serif text-2xl sm:text-3xl font-black uppercase break-words text-clinical-ink">
-              PAPO PRIVADO // COMUNIDADE ANÔNIMA
+            <h1 className="font-serif text-2xl sm:text-3xl font-bold text-clinical-ink mt-0.5">
+              Papo Privado entre Mulheres
             </h1>
           </div>
-          <div className="border-2 border-clinical-ink bg-clinical-ink text-white p-2 font-mono text-xs sm:text-sm uppercase self-start md:self-auto shrink-0">
-            SEU ALIAS BOTÂNICO: <span className="text-clinical-surface font-bold">{meuAliasBotanico}</span>
+          <div className="rounded-xl border border-clinical-ink/20 bg-white text-clinical-ink px-3.5 py-1.5 font-sans text-xs sm:text-sm font-medium self-start md:self-auto shrink-0 shadow-sm flex items-center gap-2">
+            <span>🌸 Seu apelido anônimo:</span>
+            <span className="text-clinical-action font-bold">{meuAliasBotanico}</span>
           </div>
         </div>
-        <p className="font-mono text-xs sm:text-sm uppercase text-clinical-ink font-bold mt-1 break-words">
-          REDE LINEAR SEM ALGORITMOS DE RECOMENDAÇÃO, SEM BOTÕES DE CURTIR E SEM FOTOS DE PERFIL
+        <p className="font-sans text-sm sm:text-base text-clinical-ink/80 mt-2 leading-relaxed">
+          Um espaço seguro para trocar experiências reais sobre o dia a dia do tratamento. Para preservar sua privacidade total, todas nós conversamos usando nomes botânicos protegidos, sem fotos e sem julgamentos.
         </p>
       </section>
 
-      {/* Status Bar */}
-      <div className="border-2 border-clinical-ink bg-clinical-ink text-white p-2.5 sm:p-3 font-mono text-xs sm:text-sm uppercase flex flex-col sm:flex-row justify-between items-start sm:items-center gap-1">
-        <span>ESTADO DA REDE:</span>
-        <span className="text-clinical-surface font-bold break-words">{pollingStatus}</span>
-      </div>
-
-      {/* Alerta de Segurança / Sanitização Regex */}
+      {/* Alerta de Segurança / Sanitização Regex Empático */}
       {alertaSeguranca && (
         <div
           role="alert"
-          className="border-4 border-clinical-ink bg-clinical-alert text-white p-3 sm:p-4 font-mono text-xs sm:text-sm font-bold uppercase break-words"
+          className="rounded-2xl border border-clinical-alert/30 bg-clinical-alert text-white p-4 sm:p-5 font-sans text-xs sm:text-sm font-medium shadow-md leading-relaxed"
         >
           {alertaSeguranca}
         </div>
       )}
 
-      {/* Seleção de Salas Temáticas Pré-Aprovadas (48px Min Target) */}
-      <section className="flex flex-wrap gap-1.5 sm:gap-2 items-center">
-        <span className="font-mono text-xs sm:text-sm font-black uppercase w-full sm:w-auto mb-1 sm:mb-0 text-clinical-ink">
-          SALA TEMÁTICA:
+      {/* Seleção de Salas Temáticas com Cantos Suaves */}
+      <section className="flex flex-wrap gap-2 items-center">
+        <span className="font-sans text-xs sm:text-sm font-bold text-clinical-ink w-full sm:w-auto mb-1 sm:mb-0">
+          Salas de conversa:
         </span>
         {(["HORMONIOTERAPIA", "LINFEDEMA", "RECONSTRUCAO", "EMOCIONAL"] as const).map((sala) => (
           <button
@@ -203,71 +206,71 @@ export default function PapoPrivadoPage() {
               setSalaAtiva(sala);
               setThreadSelecionadaId(null);
             }}
-            className={`flex-1 sm:flex-none min-h-[44px] sm:min-h-[48px] px-3 sm:px-4 font-mono text-xs sm:text-sm font-black uppercase border-2 border-clinical-ink transition-none text-center ${
+            className={`min-h-[44px] px-4 rounded-xl font-sans text-xs sm:text-sm font-semibold transition-all shadow-sm ${
               salaAtiva === sala
-                ? "bg-clinical-action text-white"
-                : "bg-clinical-paper text-clinical-ink hover:bg-clinical-surface hover:text-clinical-ink"
+                ? "bg-clinical-action text-white shadow-sm"
+                : "bg-white text-clinical-ink border border-clinical-ink/20 hover:bg-clinical-paper"
             }`}
           >
-            {sala}
+            {salasNomes[sala]}
           </button>
         ))}
       </section>
 
-      {/* Layout Split: Tópicos e Respostas (Zero Z-Axis) */}
+      {/* Layout Split em Cards com Respiros */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Coluna 1: Lista de Tópicos e Formulário */}
         <div className="space-y-6">
           {/* Formulário de Novo Tópico */}
-          <section className="border-2 border-clinical-ink bg-white p-3.5 sm:p-4 space-y-3">
-            <h2 className="font-serif text-base sm:text-lg font-black uppercase border-b-2 border-clinical-ink pb-1 break-words text-clinical-ink">
-              CRIAR NOVO TÓPICO NA SALA: {salaAtiva}
+          <section className="rounded-2xl border border-clinical-ink/20 bg-white p-5 sm:p-6 shadow-sm space-y-4">
+            <h2 className="font-serif text-lg sm:text-xl font-bold text-clinical-ink border-b border-clinical-ink/15 pb-2">
+              Iniciar conversa em {salasNomes[salaAtiva]}
             </h2>
-            <form onSubmit={handleCriarTopico} className="space-y-3">
+            <form onSubmit={handleCriarTopico} className="space-y-3.5">
               <div>
-                <label htmlFor="topico-titulo" className="block font-mono text-xs font-bold uppercase mb-1 text-clinical-ink">
-                  TÍTULO DO TÓPICO (OBJETIVO E CLARO):
+                <label htmlFor="topico-titulo" className="block font-sans text-xs sm:text-sm font-bold text-clinical-ink mb-1">
+                  Título da sua dúvida ou relato:
                 </label>
                 <input
                   id="topico-titulo"
                   type="text"
                   value={novoTitulo}
                   onChange={(e) => setNovoTitulo(e.target.value)}
-                  placeholder="EX: MANEJO DE DORES ARTICULARES COM ANASTROZOL"
-                  className="w-full min-h-[48px] px-3 border-2 border-clinical-ink font-mono text-sm sm:text-base bg-clinical-paper text-clinical-ink focus:outline-none focus:bg-white"
+                  placeholder="Ex: Como vocês lidam com as ondas de calor?"
+                  className="w-full min-h-[48px] px-3.5 rounded-xl border border-clinical-ink/30 font-sans text-sm sm:text-base bg-clinical-paper text-clinical-ink focus:outline-none focus:bg-white focus:ring-2 focus:ring-clinical-action/30"
                   required
                 />
               </div>
               <div>
-                <label htmlFor="topico-corpo" className="block font-mono text-xs font-bold uppercase mb-1 text-clinical-ink">
-                  CONTEÚDO DO TÓPICO (SEM IDENTIFICAÇÃO PESSOAL OU NOMES REAIS):
+                <label htmlFor="topico-corpo" className="block font-sans text-xs sm:text-sm font-bold text-clinical-ink mb-1">
+                  Escreva seu relato ou pergunta (evite colocar dados pessoais):
                 </label>
                 <textarea
                   id="topico-corpo"
                   value={novoTexto}
                   onChange={(e) => setNovoTexto(e.target.value)}
-                  placeholder="DIGITE SEU RELATO OU DÚVIDA LOGÍSTICA..."
-                  className="w-full min-h-[96px] p-3 border-2 border-clinical-ink font-mono text-sm sm:text-base bg-clinical-paper text-clinical-ink focus:outline-none focus:bg-white"
+                  placeholder="Compartilhe como você está se sentindo ou o que gostaria de saber..."
+                  className="w-full min-h-[96px] p-3.5 rounded-xl border border-clinical-ink/30 font-sans text-sm sm:text-base bg-clinical-paper text-clinical-ink focus:outline-none focus:bg-white focus:ring-2 focus:ring-clinical-action/30"
                   required
                 />
               </div>
               <button
                 type="submit"
-                className="w-full sm:w-auto min-h-[48px] px-6 bg-clinical-action text-white font-mono text-xs sm:text-sm font-black uppercase border-2 border-clinical-ink hover:bg-clinical-ink hover:text-white transition-none text-center"
+                className="w-full sm:w-auto min-h-[48px] px-6 rounded-xl bg-clinical-action text-white font-sans text-xs sm:text-sm font-bold hover:bg-clinical-ink transition-all shadow-sm text-center"
               >
-                PUBLICAR TÓPICO ANÔNIMO
+                Publicar com meu apelido anônimo
               </button>
             </form>
           </section>
 
-          {/* Lista Linear de Tópicos */}
+          {/* Lista de Tópicos da Sala */}
           <section className="space-y-3">
-            <h2 className="font-serif text-lg sm:text-xl font-black uppercase border-b-2 border-clinical-ink pb-1 text-clinical-ink">
-              TÓPICOS ATIVOS DA SALA
+            <h2 className="font-serif text-lg sm:text-xl font-bold text-clinical-ink">
+              Conversas recentes nesta sala
             </h2>
             {threadsDaSala.length === 0 ? (
-              <div className="border-2 border-clinical-ink p-5 sm:p-6 bg-white font-mono text-sm sm:text-base uppercase text-center font-bold text-clinical-ink">
-                [NENHUM EVENTO CLÍNICO OU TÓPICO REGISTRADO NESTA SALA]
+              <div className="rounded-2xl border border-clinical-ink/20 p-6 bg-white font-sans text-sm sm:text-base text-center text-clinical-ink/70 shadow-sm">
+                Ainda não há conversas nesta sala. Que tal ser a primeira a compartilhar?
               </div>
             ) : (
               threadsDaSala.map((t) => (
@@ -275,25 +278,26 @@ export default function PapoPrivadoPage() {
                   key={t.id}
                   onClick={() => {
                     setThreadSelecionadaId(t.id);
-                    // Rola suavemente até a coluna de respostas em dispositivos móveis
                     if (window.innerWidth < 1024) {
                       document.getElementById("painel-conversa")?.scrollIntoView({ behavior: "smooth" });
                     }
                   }}
-                  className={`border-2 border-clinical-ink p-3.5 sm:p-4 cursor-pointer transition-none ${
+                  className={`rounded-2xl border p-4 sm:p-5 cursor-pointer transition-all shadow-sm ${
                     threadSelecionadaId === t.id
-                      ? "bg-clinical-ink text-white"
-                      : "bg-white text-clinical-ink hover:bg-clinical-paper"
+                      ? "border-clinical-action bg-clinical-paper ring-2 ring-clinical-action/20"
+                      : "border-clinical-ink/20 bg-white hover:border-clinical-action/40"
                   }`}
                 >
-                  <div className="flex justify-between items-start gap-2 border-b border-current pb-2 mb-2 font-mono text-[10px] sm:text-xs font-bold uppercase">
-                    <span>AUTOR: {t.authorBotanyAlias}</span>
-                    <span className="shrink-0">{t.replyCount} RESPOSTAS</span>
+                  <div className="flex justify-between items-start gap-2 border-b border-clinical-ink/10 pb-2 mb-2.5 font-sans text-xs font-semibold text-clinical-ink/70">
+                    <span className="text-clinical-action">🌸 {t.authorBotanyAlias}</span>
+                    <span className="rounded-full bg-clinical-paper px-2.5 py-0.5 border border-clinical-ink/10">
+                      {t.replyCount} {t.replyCount === 1 ? "resposta" : "respostas"}
+                    </span>
                   </div>
-                  <h3 className="font-serif text-base sm:text-lg font-black uppercase mb-1 break-words">
+                  <h3 className="font-serif text-base sm:text-lg font-bold text-clinical-ink mb-1 break-words">
                     {t.title}
                   </h3>
-                  <p className="font-sans text-sm sm:text-base line-clamp-2 break-words">
+                  <p className="font-sans text-sm sm:text-base text-clinical-ink/80 line-clamp-2 break-words leading-relaxed">
                     {t.body}
                   </p>
                 </article>
@@ -302,40 +306,42 @@ export default function PapoPrivadoPage() {
           </section>
         </div>
 
-        {/* Coluna 2: Tópico Aberto e Respostas */}
+        {/* Coluna 2: Tópico Aberto e Respostas com Respiro Acolhedor */}
         <div id="painel-conversa">
           {threadAtual ? (
-            <div className="border-4 border-clinical-ink bg-white p-4 sm:p-5 space-y-4">
-              <div className="border-b-2 border-clinical-ink pb-3">
-                <div className="flex justify-between items-center font-mono text-[10px] sm:text-xs font-bold uppercase text-clinical-ink/70 mb-1">
-                  <span>AUTOR: {threadAtual.authorBotanyAlias}</span>
-                  <span>SALA: {threadAtual.category}</span>
+            <div className="rounded-2xl border border-clinical-ink/20 bg-white p-5 sm:p-6 space-y-5 shadow-sm">
+              <div className="border-b border-clinical-ink/15 pb-4">
+                <div className="flex justify-between items-center font-sans text-xs text-clinical-ink/70 mb-2">
+                  <span className="font-bold text-clinical-action">🌸 Publicado por {threadAtual.authorBotanyAlias}</span>
+                  <span className="rounded-full bg-clinical-paper px-2.5 py-0.5 border border-clinical-ink/10 font-medium">
+                    {salasNomes[threadAtual.category]}
+                  </span>
                 </div>
-                <h2 className="font-serif text-xl sm:text-2xl font-black uppercase text-clinical-action break-words">
+                <h2 className="font-serif text-xl sm:text-2xl font-bold text-clinical-ink break-words">
                   {threadAtual.title}
                 </h2>
-                <p className="font-sans text-sm sm:text-base mt-2 font-normal break-words text-clinical-ink">
+                <p className="font-sans text-sm sm:text-base mt-2.5 text-clinical-ink/90 leading-relaxed break-words">
                   {threadAtual.body}
                 </p>
               </div>
 
-              {/* Respostas */}
+              {/* Lista de Respostas */}
               <div className="space-y-3">
-                <h3 className="font-serif text-base sm:text-lg font-black uppercase border-b border-clinical-ink pb-1 text-clinical-ink">
-                  RESPOSTAS LINEARES ({respostasAtuais.length})
+                <h3 className="font-serif text-base sm:text-lg font-bold text-clinical-ink">
+                  Respostas e acolhimento ({respostasAtuais.length})
                 </h3>
 
                 {respostasAtuais.length === 0 ? (
-                  <div className="p-3 bg-clinical-paper font-mono text-xs sm:text-sm uppercase text-clinical-ink">
-                    [NENHUMA RESPOSTA REGISTRADA ATÉ O MOMENTO]
+                  <div className="p-4 rounded-xl bg-clinical-paper font-sans text-xs sm:text-sm text-clinical-ink/70">
+                    Ainda não há respostas nesta conversa. Escreva uma palavra de carinho ou compartilhe como você lida com isso!
                   </div>
                 ) : (
                   respostasAtuais.map((rep) => (
-                    <div key={rep.id} className="border-2 border-clinical-ink p-3 bg-clinical-paper space-y-1">
-                      <div className="font-mono text-[10px] sm:text-xs font-bold uppercase text-clinical-action">
-                        AUTOR: {rep.authorBotanyAlias}
+                    <div key={rep.id} className="rounded-xl border border-clinical-ink/15 p-3.5 bg-clinical-paper space-y-1.5 shadow-sm">
+                      <div className="font-sans text-xs font-bold text-clinical-action">
+                        🌸 {rep.authorBotanyAlias}
                       </div>
-                      <p className="font-sans text-sm sm:text-base break-words text-clinical-ink">
+                      <p className="font-sans text-sm sm:text-base text-clinical-ink leading-relaxed break-words">
                         {rep.body}
                       </p>
                     </div>
@@ -344,29 +350,29 @@ export default function PapoPrivadoPage() {
               </div>
 
               {/* Formulário de Resposta */}
-              <form onSubmit={handleEnviarResposta} className="pt-2 border-t-2 border-clinical-ink space-y-2">
-                <label htmlFor="resp-corpo" className="block font-mono text-xs font-bold uppercase text-clinical-ink">
-                  SUA RESPOSTA ({meuAliasBotanico}):
+              <form onSubmit={handleEnviarResposta} className="pt-3 border-t border-clinical-ink/15 space-y-3">
+                <label htmlFor="resp-corpo" className="block font-sans text-xs sm:text-sm font-bold text-clinical-ink">
+                  Sua resposta de apoio ({meuAliasBotanico}):
                 </label>
                 <textarea
                   id="resp-corpo"
                   value={novaRespostaTexto}
                   onChange={(e) => setNovaRespostaTexto(e.target.value)}
-                  placeholder="DIGITE SUA RESPOSTA BASEADA EM EXPERIÊNCIA DE VIDA OU APOIO MÚTUO..."
-                  className="w-full min-h-[80px] p-3 border-2 border-clinical-ink font-mono text-sm sm:text-base bg-clinical-paper text-clinical-ink focus:outline-none focus:bg-white"
+                  placeholder="Escreva sua experiência ou uma mensagem acolhedora..."
+                  className="w-full min-h-[80px] p-3.5 rounded-xl border border-clinical-ink/30 font-sans text-sm sm:text-base bg-clinical-paper text-clinical-ink focus:outline-none focus:bg-white focus:ring-2 focus:ring-clinical-action/30"
                   required
                 />
                 <button
                   type="submit"
-                  className="w-full sm:w-auto min-h-[48px] px-6 bg-clinical-action text-white font-mono text-xs sm:text-sm font-black uppercase border-2 border-clinical-ink hover:bg-clinical-ink hover:text-white transition-none text-center"
+                  className="w-full sm:w-auto min-h-[44px] px-6 rounded-xl bg-clinical-action text-white font-sans text-xs sm:text-sm font-bold hover:bg-clinical-ink transition-all shadow-sm text-center"
                 >
-                  ENVIAR RESPOSTA
+                  Enviar resposta acolhedora
                 </button>
               </form>
             </div>
           ) : (
-            <div className="border-2 border-clinical-ink p-6 sm:p-8 bg-white text-center font-mono text-sm sm:text-base uppercase font-bold text-clinical-ink">
-              [SELECIONE UM TÓPICO NA COLUNA AO LADO PARA VISUALIZAR AS INTERAÇÕES]
+            <div className="rounded-2xl border border-clinical-ink/20 p-8 sm:p-10 bg-white text-center font-sans text-sm sm:text-base text-clinical-ink/70 shadow-sm">
+              👈 Selecione uma conversa na coluna ao lado para ler e participar.
             </div>
           )}
         </div>

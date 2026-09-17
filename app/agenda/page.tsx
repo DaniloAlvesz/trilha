@@ -41,31 +41,32 @@ export default function AgendaPage() {
   const [novaData, setNovaData] = useState("");
   const [novaNota, setNovaNota] = useState("");
   const [filtroStatus, setFiltroStatus] = useState<"todos" | "planned" | "finished">("todos");
-  const [statusFeedback, setStatusFeedback] = useState<string>("[PRONTUÁRIO ATUALIZADO]");
+  const [statusFeedback, setStatusFeedback] = useState<string>("");
 
   const handleSalvarEncounter = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!novoTipo || !novaData) {
-      setStatusFeedback("[ERRO: PREENCHIMENTO OBRIGATÓRIO DE TIPO E DATA]");
+    if (!novoTipo.trim() || !novaData) {
+      setStatusFeedback("Por favor, preencha o nome do compromisso e a data");
       return;
     }
 
-    const novo: EncounterResource = {
+    const novoId = `enc-${Date.now()}`;
+    const novoEncounter: EncounterResource = {
       resourceType: "Encounter",
-      id: `enc-${Date.now()}`,
+      id: novoId,
+      title: novoTipo.trim(),
       status: "planned",
       class: "ambulatory",
-      type: novoTipo.toUpperCase(),
+      type: novoTipo.trim(),
       periodStart: new Date(novaData).toISOString(),
-      title: novoTipo.toUpperCase(),
-      notes: novaNota ? novaNota.toUpperCase() : undefined,
+      notes: novaNota.trim() || undefined,
     };
 
-    setEncounters([novo, ...encounters]);
+    setEncounters([novoEncounter, ...encounters]);
     setNovoTipo("");
     setNovaData("");
     setNovaNota("");
-    setStatusFeedback("[REGISTRO ARQUIVADO: NOVO ENCOUNTER INSERIDO NO CALENDÁRIO CLÍNICO]");
+    setStatusFeedback("Seu compromisso foi agendado com sucesso!");
   };
 
   const listaFiltrada = encounters.filter((enc) => {
@@ -75,128 +76,128 @@ export default function AgendaPage() {
 
   return (
     <div className="space-y-6">
-      {/* Cabeçalho do Módulo */}
-      <section className="border-b-4 border-clinical-ink pb-4">
-        <span className="font-mono text-[10px] sm:text-xs uppercase font-bold text-clinical-action block">
-          RECURSO OFICIAL: HL7 FHIR R4 // ENCOUNTER
+      {/* Cabeçalho Acolhedor */}
+      <section className="bg-clinical-paper border border-clinical-ink/20 rounded-2xl p-5 sm:p-6 shadow-sm">
+        <span className="font-sans text-xs sm:text-sm font-semibold text-clinical-action block">
+          Organização do seu cuidado médico
         </span>
-        <h1 className="font-serif text-2xl sm:text-3xl font-black uppercase break-words text-clinical-ink">
-          MINHA AGENDA // COMPROMISSOS CLÍNICOS
+        <h1 className="font-serif text-2xl sm:text-3xl font-bold text-clinical-ink mt-0.5">
+          Minhas Consultas e Compromissos
         </h1>
-        <div className="font-mono text-xs sm:text-sm uppercase text-clinical-ink font-bold mt-1 break-words">
-          REGISTRO TEMPORAL IMUTÁVEL DE RETORNOS, EXAMES DE IMAGEM E PROCEDIMENTOS
-        </div>
+        <p className="font-sans text-sm sm:text-base text-clinical-ink/80 mt-1 leading-relaxed">
+          Tenha em mãos suas datas de retorno, sessões de fisioterapia e exames de controle. Estar em dia com os seus compromissos é uma forma importante de cuidar de você.
+        </p>
       </section>
 
-      {/* Barra de Status do Sistema */}
-      <div className="border-2 border-clinical-ink bg-clinical-ink text-white p-2.5 sm:p-3 font-mono text-xs sm:text-sm uppercase flex flex-col sm:flex-row justify-between items-start sm:items-center gap-1">
-        <span>ESTADO DA BASE DE DADOS:</span>
-        <span className="text-clinical-surface font-bold break-words">{statusFeedback}</span>
-      </div>
-
-      {/* Formulário de Novo Encounter (Sem Modais) */}
-      <section className="border-2 border-clinical-ink bg-clinical-paper p-4 sm:p-5 space-y-4">
-        <h2 className="font-serif text-lg sm:text-xl font-black uppercase border-b-2 border-clinical-ink pb-2 text-clinical-ink">
-          INSERIR NOVO EVENTO CLÍNICO (SEM OVERLAYS)
+      {/* Formulário de Novo Compromisso */}
+      <section className="rounded-2xl border border-clinical-ink/20 bg-white p-5 sm:p-6 shadow-sm space-y-4">
+        <h2 className="font-serif text-xl sm:text-2xl font-bold text-clinical-ink border-b border-clinical-ink/15 pb-3">
+          Agendar nova consulta ou exame
         </h2>
         <form onSubmit={handleSalvarEncounter} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="tipo-evento" className="block font-mono text-xs sm:text-sm font-bold uppercase mb-1 text-clinical-ink">
-                TIPO DE ENCOUNTER (LOINC / PROCEDIMENTO):
+              <label htmlFor="tipo-evento" className="block font-sans text-xs sm:text-sm font-bold text-clinical-ink mb-1">
+                Qual é o compromisso?
               </label>
               <input
                 id="tipo-evento"
                 type="text"
                 value={novoTipo}
                 onChange={(e) => setNovoTipo(e.target.value)}
-                placeholder="EX: MAMOGRAFIA, CONSULTA ONCOLÓGICA, EXAME DE SANGUE"
-                className="w-full min-h-[48px] px-3 border-2 border-clinical-ink font-mono text-sm sm:text-base bg-white text-clinical-ink focus:outline-none focus:bg-white"
+                placeholder="Ex: Consulta com oncologista, Mamografia, Fisioterapia..."
+                className="w-full min-h-[48px] px-3.5 rounded-xl border border-clinical-ink/30 font-sans text-sm sm:text-base bg-clinical-paper text-clinical-ink focus:outline-none focus:bg-white focus:ring-2 focus:ring-clinical-action/30"
                 required
               />
             </div>
             <div>
-              <label htmlFor="data-evento" className="block font-mono text-xs sm:text-sm font-bold uppercase mb-1 text-clinical-ink">
-                DATA E HORA DO EVENTO:
+              <label htmlFor="data-evento" className="block font-sans text-xs sm:text-sm font-bold text-clinical-ink mb-1">
+                Data e horário:
               </label>
               <input
                 id="data-evento"
                 type="datetime-local"
                 value={novaData}
                 onChange={(e) => setNovaData(e.target.value)}
-                className="w-full min-h-[48px] px-3 border-2 border-clinical-ink font-mono text-sm sm:text-base bg-white text-clinical-ink focus:outline-none focus:bg-white"
+                className="w-full min-h-[48px] px-3.5 rounded-xl border border-clinical-ink/30 font-sans text-sm sm:text-base bg-clinical-paper text-clinical-ink focus:outline-none focus:bg-white focus:ring-2 focus:ring-clinical-action/30"
                 required
               />
             </div>
           </div>
           <div>
-            <label htmlFor="notas-evento" className="block font-mono text-xs sm:text-sm font-bold uppercase mb-1 text-clinical-ink">
-              OBSERVAÇÕES CLÍNICAS E LOGÍSTICAS (PREPARO, DOCUMENTOS):
+            <label htmlFor="notas-evento" className="block font-sans text-xs sm:text-sm font-bold text-clinical-ink mb-1">
+              Orientações ou lembretes (documentos para levar, preparo - opcional):
             </label>
             <input
               id="notas-evento"
               type="text"
               value={novaNota}
               onChange={(e) => setNovaNota(e.target.value)}
-              placeholder="EX: LEVAR CARTÃO DO SUS, EXAMES ANTERIORES E PROTOCOLO DE MEDICAMENTOS"
-              className="w-full min-h-[48px] px-3 border-2 border-clinical-ink font-mono text-sm sm:text-base bg-white text-clinical-ink focus:outline-none focus:bg-white"
+              placeholder="Ex: Levar cartão do SUS e exames anteriores de sangue..."
+              className="w-full min-h-[48px] px-3.5 rounded-xl border border-clinical-ink/30 font-sans text-sm sm:text-base bg-clinical-paper text-clinical-ink focus:outline-none focus:bg-white focus:ring-2 focus:ring-clinical-action/30"
             />
           </div>
           <button
             type="submit"
-            className="w-full sm:w-auto min-h-[48px] px-6 bg-clinical-action text-white font-mono text-sm sm:text-base font-black uppercase border-2 border-clinical-ink hover:bg-clinical-ink hover:text-white active:bg-clinical-paper active:text-clinical-ink transition-none text-center"
+            className="w-full sm:w-auto min-h-[48px] px-7 rounded-xl bg-clinical-action text-white font-sans text-sm sm:text-base font-bold hover:bg-clinical-ink transition-all shadow-sm text-center"
           >
-            ARQUIVAR EVENTO NO PRONTUÁRIO
+            Salvar compromisso na agenda
           </button>
         </form>
       </section>
 
-      {/* Controles de Filtro de Lista (48px Touch Target) */}
-      <section className="flex flex-wrap gap-1.5 sm:gap-2 items-center">
-        <span className="font-mono text-xs sm:text-sm font-black uppercase w-full sm:w-auto mb-1 sm:mb-0 text-clinical-ink">
-          FILTRAR COMPETÊNCIA:
+      {/* Controles de Filtro de Lista */}
+      <section className="flex flex-wrap gap-2 items-center">
+        <span className="font-sans text-xs sm:text-sm font-bold text-clinical-ink w-full sm:w-auto mb-1 sm:mb-0">
+          Mostrar:
         </span>
         <button
           type="button"
           onClick={() => setFiltroStatus("todos")}
-          className={`flex-1 sm:flex-none min-h-[44px] sm:min-h-[48px] px-3 sm:px-4 font-mono text-xs sm:text-sm font-black uppercase border-2 border-clinical-ink transition-none text-center ${
-            filtroStatus === "todos" ? "bg-clinical-ink text-white" : "bg-clinical-surface text-clinical-ink hover:bg-clinical-ink hover:text-white"
+          className={`min-h-[42px] px-4 rounded-xl font-sans text-xs sm:text-sm font-semibold transition-all shadow-sm ${
+            filtroStatus === "todos"
+              ? "bg-clinical-action text-white"
+              : "bg-white text-clinical-ink border border-clinical-ink/20 hover:bg-clinical-paper"
           }`}
         >
-          TODOS OS REGISTROS
+          Todos os compromissos
         </button>
         <button
           type="button"
           onClick={() => setFiltroStatus("planned")}
-          className={`flex-1 sm:flex-none min-h-[44px] sm:min-h-[48px] px-3 sm:px-4 font-mono text-xs sm:text-sm font-black uppercase border-2 border-clinical-ink transition-none text-center ${
-            filtroStatus === "planned" ? "bg-clinical-ink text-white" : "bg-clinical-surface text-clinical-ink hover:bg-clinical-ink hover:text-white"
+          className={`min-h-[42px] px-4 rounded-xl font-sans text-xs sm:text-sm font-semibold transition-all shadow-sm ${
+            filtroStatus === "planned"
+              ? "bg-clinical-action text-white"
+              : "bg-white text-clinical-ink border border-clinical-ink/20 hover:bg-clinical-paper"
           }`}
         >
-          PROGRAMADOS
+          Agendados
         </button>
         <button
           type="button"
           onClick={() => setFiltroStatus("finished")}
-          className={`flex-1 sm:flex-none min-h-[44px] sm:min-h-[48px] px-3 sm:px-4 font-mono text-xs sm:text-sm font-black uppercase border-2 border-clinical-ink transition-none text-center ${
-            filtroStatus === "finished" ? "bg-clinical-ink text-white" : "bg-clinical-surface text-clinical-ink hover:bg-clinical-ink hover:text-white"
+          className={`min-h-[42px] px-4 rounded-xl font-sans text-xs sm:text-sm font-semibold transition-all shadow-sm ${
+            filtroStatus === "finished"
+              ? "bg-clinical-action text-white"
+              : "bg-white text-clinical-ink border border-clinical-ink/20 hover:bg-clinical-paper"
           }`}
         >
-          CONCLUÍDOS
+          Realizados
         </button>
       </section>
 
-      {/* Lista de Registros Clínicos / Encounters */}
+      {/* Lista de Compromissos Acolhedora */}
       <section className="space-y-4">
         {listaFiltrada.length === 0 ? (
-          <div className="border-4 border-clinical-ink p-6 sm:p-8 bg-white text-center font-mono text-base sm:text-lg font-black uppercase text-clinical-ink">
-            [NENHUM EVENTO CLÍNICO REGISTRADO NESTA COMPETÊNCIA]
+          <div className="rounded-2xl border border-clinical-ink/20 p-6 sm:p-8 bg-white text-center font-sans text-base font-medium text-clinical-ink/70 shadow-sm">
+            Nenhum compromisso encontrado nesta seleção.
           </div>
         ) : (
           listaFiltrada.map((enc) => {
             const dataObj = new Date(enc.periodStart);
             const dataFormatada = dataObj.toLocaleDateString("pt-BR", {
               day: "2-digit",
-              month: "2-digit",
+              month: "long",
               year: "numeric",
             });
             const horaFormatada = dataObj.toLocaleTimeString("pt-BR", {
@@ -207,36 +208,33 @@ export default function AgendaPage() {
             return (
               <article
                 key={enc.id}
-                className="border-2 border-clinical-ink bg-white p-3.5 sm:p-5 space-y-3"
+                className="rounded-2xl border border-clinical-ink/20 bg-white p-4 sm:p-5 space-y-3 shadow-sm"
               >
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b-2 border-clinical-ink pb-2 gap-2">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-clinical-ink/15 pb-2.5 gap-2">
                   <div>
-                    <span className="font-mono text-[10px] sm:text-xs font-bold uppercase block text-clinical-ink/70">
-                      ID: {enc.id} // CLASSE: {enc.class.toUpperCase()}
-                    </span>
-                    <h3 className="font-serif text-lg sm:text-xl font-black uppercase text-clinical-action break-words">
+                    <h3 className="font-serif text-lg sm:text-xl font-bold text-clinical-ink break-words">
                       {enc.type}
                     </h3>
                   </div>
-                  <div className="flex flex-wrap gap-1.5 sm:gap-2 font-mono text-xs sm:text-sm font-black">
-                    <span className={`px-2 py-1 border-2 border-clinical-ink ${
+                  <div className="flex flex-wrap items-center gap-2 font-sans text-xs sm:text-sm">
+                    <span className={`px-3 py-1 rounded-full font-semibold shadow-sm ${
                       enc.status === "finished" ? "bg-clinical-success text-white" : "bg-clinical-surface text-clinical-ink"
                     }`}>
-                      STATUS: {enc.status.toUpperCase()}
+                      {enc.status === "finished" ? "✓ Realizado" : "Agendado"}
                     </span>
-                    <span className="px-2 py-1 bg-clinical-ink text-white border-2 border-clinical-ink">
-                      {dataFormatada} • {horaFormatada}
+                    <span className="px-3 py-1 bg-clinical-paper text-clinical-ink rounded-full border border-clinical-ink/20 font-medium">
+                      📅 {dataFormatada} às {horaFormatada}
                     </span>
                   </div>
                 </div>
 
                 {enc.notes && (
-                  <p className="font-mono text-xs sm:text-base bg-clinical-paper border border-clinical-ink p-2.5 sm:p-3 font-bold break-words text-clinical-ink">
-                    PRESCRIÇÃO / PREPARO: {enc.notes}
+                  <p className="font-sans text-sm sm:text-base bg-clinical-paper rounded-xl p-3 border border-clinical-ink/10 text-clinical-ink leading-relaxed">
+                    <strong className="text-clinical-action">Lembrete:</strong> {enc.notes}
                   </p>
                 )}
 
-                <div className="flex justify-end gap-2 pt-2 border-t border-clinical-ink">
+                <div className="flex justify-end gap-2 pt-2 border-t border-clinical-ink/10">
                   {enc.status === "planned" && (
                     <button
                       type="button"
@@ -246,11 +244,11 @@ export default function AgendaPage() {
                             item.id === enc.id ? { ...item, status: "finished" } : item
                           )
                         );
-                        setStatusFeedback(`[STATUS ATUALIZADO: ENCOUNTER ${enc.id} CONCLUÍDO]`);
+                        setStatusFeedback("Compromisso marcado como realizado!");
                       }}
-                      className="w-full sm:w-auto min-h-[44px] sm:min-h-[48px] px-4 bg-clinical-success text-white font-mono text-xs sm:text-sm font-bold uppercase border-2 border-clinical-ink hover:bg-clinical-ink hover:text-white transition-none text-center"
+                      className="w-full sm:w-auto min-h-[42px] px-5 rounded-xl bg-clinical-success text-white font-sans text-xs sm:text-sm font-bold hover:bg-clinical-ink transition-all shadow-sm text-center"
                     >
-                      MARCAR COMO REALIZADO
+                      Marcar como realizado ✓
                     </button>
                   )}
                 </div>

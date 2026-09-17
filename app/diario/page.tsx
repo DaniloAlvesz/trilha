@@ -45,20 +45,30 @@ export default function DiarioPage() {
   const [confirmInput, setConfirmInput] = useState("");
   const [statusLog, setStatusLog] = useState("[PRONTUÁRIO ATUALIZADO]");
 
-  // Lista de humores puramente funcionais (dados numéricos / categorizados)
+  // Lista de humores com linguagem acolhedora e humana
   const humoresFuncionais = [
-    { code: "1_BAIXO", emoji: "😔", label: "DISFORIA / TRISTEZA" },
-    { code: "2_APREENSIVO", emoji: "😟", label: "APREENSÃO / SCANXIETY" },
-    { code: "3_NEUTRO", emoji: "😐", label: "REGULAR / ESTÁVEL" },
-    { code: "4_BOM", emoji: "🙂", label: "DISPOSTA / ATIVA" },
-    { code: "5_EXCELENTE", emoji: "💪", label: "FORTE / SEM DORES" },
+    { code: "1_BAIXO", emoji: "😔", label: "Triste ou desanimada" },
+    { code: "2_APREENSIVO", emoji: "😟", label: "Apreensiva / Ansiosa" },
+    { code: "3_NEUTRO", emoji: "😐", label: "Estável / Em paz" },
+    { code: "4_BOM", emoji: "🙂", label: "Disposta e ativa" },
+    { code: "5_EXCELENTE", emoji: "💪", label: "Forte e confiante" },
+  ];
+
+  // Sintomas frequentes para seleção com 1 clique (Design Antecipatório)
+  const sintomasFrequentes = [
+    "Fadiga severa matinal",
+    "Inchaço e peso no braço esquerdo",
+    "Ondas de calor (fogachos)",
+    "Dores nas articulações",
+    "Enjoo ou indisposição digestiva",
+    "Sensibilidade ou ressecamento na pele",
   ];
 
   const handleSalvarObservacao = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (categoria === "symptom" && !sintomaNome.trim()) {
-      setStatusLog("[FALHA: NOME DO SINTOMA É OBRIGATÓRIO]");
+      setStatusLog("Por favor, selecione ou digite o sintoma observado");
       return;
     }
 
@@ -71,8 +81,8 @@ export default function DiarioPage() {
       codeSystem: categoria === "symptom" ? "LOINC" : "SNOMED-CT",
       codeValue:
         categoria === "symptom"
-          ? sintomaNome.trim().toUpperCase()
-          : `REGISTRO_HUMOR_${humorSelecionado}`,
+          ? sintomaNome.trim()
+          : `Humor: ${humorSelecionado}`,
       valueString:
         categoria === "symptom"
           ? descricao.trim()
@@ -83,70 +93,69 @@ export default function DiarioPage() {
     setObservations([novaObs, ...observations]);
     setSintomaNome("");
     setDescricao("");
-    setStatusLog("[REGISTRO ARQUIVADO: OBSERVAÇÃO CLÍNICA INSERIDA COM SUCESSO]");
+    setStatusLog("Sua anotação foi guardada com sucesso!");
   };
 
   const handleExecutarExclusao = (id: string) => {
-    if (confirmInput.trim() !== "EXCLUIR") {
-      setStatusLog("[ERRO DE CONFIRMAÇÃO: DIGITAÇÃO INEXATA]");
+    if (confirmInput.trim().toUpperCase() !== "EXCLUIR") {
+      setStatusLog("Para confirmar a exclusão, digite a palavra EXCLUIR");
       return;
     }
 
     setObservations(observations.filter((obs) => obs.id !== id));
     setDeleteId(null);
     setConfirmInput("");
-    setStatusLog("[REGISTRO EXCLUÍDO PERMANENTEMENTE DO PRONTUÁRIO]");
+    setStatusLog("Anotação removida do seu histórico");
   };
 
   return (
     <div className="space-y-6">
-      {/* Cabeçalho */}
-      <section className="border-b-4 border-clinical-ink pb-4">
-        <span className="font-mono text-[10px] sm:text-xs uppercase font-bold text-clinical-action block">
-          RECURSO OFICIAL: HL7 FHIR R4 // OBSERVATION
+      {/* Cabeçalho Acolhedor */}
+      <section className="bg-clinical-paper border border-clinical-ink/20 rounded-2xl p-5 sm:p-6 shadow-sm">
+        <span className="font-sans text-xs sm:text-sm font-semibold text-clinical-action block">
+          Acompanhamento do seu corpo e do seu bem-estar
         </span>
-        <h1 className="font-serif text-2xl sm:text-3xl font-black uppercase break-words text-clinical-ink">
-          MEU DIÁRIO // OBSERVATÓRIO DE SINTOMAS E HUMOR
+        <h1 className="font-serif text-2xl sm:text-3xl font-bold text-clinical-ink mt-0.5">
+          Meu Diário de Cuidados
         </h1>
-        <p className="font-mono text-xs sm:text-sm uppercase text-clinical-ink font-bold mt-1 break-words">
-          REGISTRO RIGOROSO DE SEQUELAS CRÔNICAS, LINFEDEMA, FADIGA E FLUTUAÇÕES HORMONAIS
+        <p className="font-sans text-sm sm:text-base text-clinical-ink/80 mt-1 leading-relaxed">
+          Um espaço calmo para anotar como você está se sentindo a cada dia. Esses registros ajudam você e seu oncologista a ajustarem o tratamento com muito mais precisão e tranquilidade.
         </p>
       </section>
 
-      {/* Log de Estado da Engine */}
-      <div className="border-2 border-clinical-ink bg-clinical-ink text-white p-2.5 sm:p-3 font-mono text-xs sm:text-sm uppercase flex flex-col sm:flex-row justify-between items-start sm:items-center gap-1">
-        <span>ESTADO DA ENGINE:</span>
-        <span className="text-clinical-surface font-bold break-words">{statusLog}</span>
-      </div>
-
-      {/* Formulário de Registro (Sem Modais, Ação Primária em Vinho Terroso) */}
-      <section className="border-4 border-clinical-ink bg-clinical-paper p-4 sm:p-5 space-y-4">
-        <div className="border-b-2 border-clinical-ink pb-2 flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
-          <h2 className="font-serif text-xl sm:text-2xl font-black uppercase text-clinical-action">
-            NOVA OBSERVAÇÃO CLÍNICA
-          </h2>
-          <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+      {/* Formulário Humanizado de Registro */}
+      <section className="rounded-2xl border border-clinical-ink/20 bg-white p-5 sm:p-6 shadow-sm space-y-5">
+        <div className="border-b border-clinical-ink/15 pb-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+          <div>
+            <h2 className="font-serif text-xl sm:text-2xl font-bold text-clinical-ink">
+              Nova anotação de hoje
+            </h2>
+            <span className="font-sans text-xs sm:text-sm text-clinical-ink/70">
+              Escolha o que você gostaria de registrar agora:
+            </span>
+          </div>
+          <div className="flex flex-wrap gap-2 w-full md:w-auto">
             <button
               type="button"
               onClick={() => setCategoria("symptom")}
-              className={`w-full sm:w-auto min-h-[44px] sm:min-h-[48px] px-3 sm:px-4 font-mono text-xs sm:text-sm font-bold uppercase border-2 border-clinical-ink transition-none text-center ${
+              className={`flex-1 md:flex-none min-h-[44px] px-4 rounded-xl font-sans text-xs sm:text-sm font-bold transition-all shadow-sm ${
                 categoria === "symptom"
                   ? "bg-clinical-action text-white"
-                  : "bg-white text-clinical-ink hover:bg-clinical-surface hover:text-clinical-ink"
+                  : "bg-clinical-paper text-clinical-ink hover:bg-clinical-surface hover:text-clinical-ink"
               }`}
             >
-              REGISTRAR SINTOMA FÍSICO
+              Sentindo algo no corpo
             </button>
             <button
               type="button"
               onClick={() => setCategoria("emotional_state")}
-              className={`w-full sm:w-auto min-h-[44px] sm:min-h-[48px] px-3 sm:px-4 font-mono text-xs sm:text-sm font-bold uppercase border-2 border-clinical-ink transition-none text-center ${
+              className={`flex-1 md:flex-none min-h-[44px] px-4 rounded-xl font-sans text-xs sm:text-sm font-bold transition-all shadow-sm ${
                 categoria === "emotional_state"
                   ? "bg-clinical-action text-white"
-                  : "bg-white text-clinical-ink hover:bg-clinical-surface hover:text-clinical-ink"
+                  : "bg-clinical-paper text-clinical-ink hover:bg-clinical-surface hover:text-clinical-ink"
               }`}
             >
-              REGISTRAR ESTADO EMOCIONAL
+              Como está meu emocional
             </button>
           </div>
         </div>
@@ -155,64 +164,87 @@ export default function DiarioPage() {
           {categoria === "symptom" ? (
             <div className="space-y-4">
               <div>
-                <label htmlFor="sintoma-nome" className="block font-mono text-xs sm:text-sm font-bold uppercase mb-1 text-clinical-ink">
-                  SINTOMA OBSERVADO (EX: FADIGA, INCHAÇO NO BRAÇO, DORES ARTICULARES, ONDAS DE CALOR):
+                <label className="block font-sans text-xs sm:text-sm font-bold text-clinical-ink mb-1.5">
+                  Como você está se sentindo fisicamente? (Selecione um atalho rápido ou digite):
                 </label>
+
+                {/* Atalhos Rápidos de Sintomas Frequentes (Design Antecipatório) */}
+                <div className="flex flex-wrap gap-2 mb-3">
+                  {sintomasFrequentes.map((item) => (
+                    <button
+                      key={item}
+                      type="button"
+                      onClick={() => setSintomaNome(item)}
+                      className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm font-sans font-medium border transition-all ${
+                        sintomaNome === item
+                          ? "bg-clinical-action text-white border-clinical-action shadow-sm"
+                          : "bg-clinical-paper text-clinical-ink border-clinical-ink/20 hover:border-clinical-action"
+                      }`}
+                    >
+                      + {item}
+                    </button>
+                  ))}
+                </div>
+
                 <input
                   id="sintoma-nome"
                   type="text"
                   value={sintomaNome}
                   onChange={(e) => setSintomaNome(e.target.value)}
-                  placeholder="DIGITE O SINTOMA..."
-                  className="w-full min-h-[48px] px-3 border-2 border-clinical-ink font-mono text-sm sm:text-base bg-white text-clinical-ink focus:outline-none focus:bg-white"
+                  placeholder="Ou digite o nome do sintoma aqui..."
+                  className="w-full min-h-[48px] px-3.5 rounded-xl border border-clinical-ink/30 font-sans text-sm sm:text-base bg-clinical-paper text-clinical-ink focus:outline-none focus:bg-white focus:ring-2 focus:ring-clinical-action/30"
                   required
                 />
               </div>
+
               <div>
-                <label htmlFor="sintoma-desc" className="block font-mono text-xs sm:text-sm font-bold uppercase mb-1 text-clinical-ink">
-                  DETALHAMENTO SOMÁTICO (HORÁRIO DE PICO, INTENSIDADE, LOCALIZAÇÃO):
+                <label htmlFor="sintoma-desc" className="block font-sans text-xs sm:text-sm font-bold text-clinical-ink mb-1">
+                  Quer contar mais detalhes? (onde sente, em qual horário do dia é mais forte - opcional):
                 </label>
                 <textarea
                   id="sintoma-desc"
                   value={descricao}
                   onChange={(e) => setDescricao(e.target.value)}
-                  placeholder="EX: BRAÇO ESQUERDO COM SENSAÇÃO DE PESO APÓS ESFORÇO REPETITIVO..."
-                  className="w-full min-h-[96px] p-3 border-2 border-clinical-ink font-mono text-sm sm:text-base bg-white text-clinical-ink focus:outline-none focus:bg-white"
+                  placeholder="Ex: Senti o braço mais pesado após carregar sacolas pela manhã..."
+                  className="w-full min-h-[90px] p-3.5 rounded-xl border border-clinical-ink/30 font-sans text-sm sm:text-base bg-clinical-paper text-clinical-ink focus:outline-none focus:bg-white focus:ring-2 focus:ring-clinical-action/30"
                 />
               </div>
             </div>
           ) : (
             <div className="space-y-4">
-              <label className="block font-mono text-xs sm:text-sm font-bold uppercase text-clinical-ink">
-                ESCALA FUNCIONAL DE HUMOR (VALOR ESTATÍSTICO DE DADO):
+              <label className="block font-sans text-xs sm:text-sm font-bold text-clinical-ink mb-1">
+                Como está o seu emocional hoje? (Escolha a opção que mais se aproxima do seu momento):
               </label>
-              <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+              
+              {/* Seletores Visuais de Humor */}
+              <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
                 {humoresFuncionais.map((h) => (
                   <button
                     key={h.code}
                     type="button"
                     onClick={() => setHumorSelecionado(h.emoji)}
-                    className={`min-h-[52px] sm:min-h-[56px] p-2 border-2 border-clinical-ink flex flex-col items-center justify-center font-mono text-xs font-bold transition-none ${
+                    className={`min-h-[64px] p-2.5 rounded-xl border-2 flex flex-col items-center justify-center transition-all ${
                       humorSelecionado === h.emoji
-                        ? "bg-clinical-ink text-white border-clinical-ink"
-                        : "bg-white text-clinical-ink hover:bg-clinical-surface hover:text-clinical-ink"
+                        ? "bg-clinical-action text-white border-clinical-action shadow-sm"
+                        : "bg-clinical-paper text-clinical-ink border-clinical-ink/20 hover:border-clinical-surface"
                     }`}
                   >
-                    <span className="text-xl sm:text-2xl mb-1">{h.emoji}</span>
-                    <span className="text-center text-[10px] sm:text-xs">{h.label}</span>
+                    <span className="text-2xl mb-1">{h.emoji}</span>
+                    <span className="text-center text-[11px] sm:text-xs font-semibold leading-tight">{h.label}</span>
                   </button>
                 ))}
               </div>
+
               <div>
-                <label htmlFor="humor-desc" className="block font-mono text-xs sm:text-sm font-bold uppercase mb-1 text-clinical-ink">
-                  ANOTAÇÃO EMOCIONAL OU CONTEXTO DE ISOLAMENTO:
+                <label htmlFor="humor-desc" className="block font-sans text-xs sm:text-sm font-bold text-clinical-ink mb-1">
+                  Quer deixar um pensamento, desabafo ou momento especial anotado? (opcional):
                 </label>
                 <textarea
                   id="humor-desc"
                   value={descricao}
                   onChange={(e) => setDescricao(e.target.value)}
-                  placeholder="DIGITE SOBRE O ESTADO DE DISPOSIÇÃO OU PENSAMENTOS SOBRE O TRATAMENTO..."
-                  className="w-full min-h-[96px] p-3 border-2 border-clinical-ink font-mono text-sm sm:text-base bg-white text-clinical-ink focus:outline-none focus:bg-white"
+                  placeholder="Escreva livremente sobre o seu dia, sentimentos ou conquistas..."
+                  className="w-full min-h-[90px] p-3.5 rounded-xl border border-clinical-ink/30 font-sans text-sm sm:text-base bg-clinical-paper text-clinical-ink focus:outline-none focus:bg-white focus:ring-2 focus:ring-clinical-action/30"
                 />
               </div>
             </div>
@@ -220,29 +252,29 @@ export default function DiarioPage() {
 
           <button
             type="submit"
-            className="w-full sm:w-auto min-h-[48px] px-6 sm:px-8 bg-clinical-action text-white font-mono text-sm sm:text-base font-black uppercase border-2 border-clinical-ink hover:bg-clinical-ink hover:text-white transition-none text-center"
+            className="w-full sm:w-auto min-h-[48px] px-7 rounded-xl bg-clinical-action text-white font-sans text-sm sm:text-base font-bold hover:bg-clinical-ink transition-all shadow-sm text-center"
           >
-            ARQUIVAR OBSERVAÇÃO NO PRONTUÁRIO
+            Salvar anotação no meu diário
           </button>
         </form>
       </section>
 
-      {/* Histórico Cronológico de Observações */}
+      {/* Histórico Acolhedor de Registros */}
       <section className="space-y-4">
-        <h2 className="font-serif text-xl sm:text-2xl font-black uppercase border-b-2 border-clinical-ink pb-2 text-clinical-ink">
-          HISTÓRICO CRONOLÓGICO DE REGISTROS
+        <h2 className="font-serif text-xl sm:text-2xl font-bold text-clinical-ink">
+          Suas anotações anteriores
         </h2>
 
         {observations.length === 0 ? (
-          <div className="border-4 border-clinical-ink p-6 sm:p-8 bg-white text-center font-mono text-base sm:text-lg font-black uppercase text-clinical-ink">
-            [NENHUM EVENTO CLÍNICO REGISTRADO NESTA COMPETÊNCIA]
+          <div className="rounded-2xl border border-clinical-ink/20 p-6 sm:p-8 bg-white text-center font-sans text-base font-medium text-clinical-ink/70 shadow-sm">
+            Você ainda não tem anotações salvas. Que tal registrar como você está agora?
           </div>
         ) : (
           observations.map((obs) => {
             const dataObj = new Date(obs.effectiveDateTime);
             const dataFormatada = dataObj.toLocaleDateString("pt-BR", {
               day: "2-digit",
-              month: "2-digit",
+              month: "long",
               year: "numeric",
             });
             const horaFormatada = dataObj.toLocaleTimeString("pt-BR", {
@@ -253,49 +285,49 @@ export default function DiarioPage() {
             return (
               <article
                 key={obs.id}
-                className="border-2 border-clinical-ink bg-white p-3.5 sm:p-5 space-y-3"
+                className="rounded-2xl border border-clinical-ink/20 bg-white p-4 sm:p-5 space-y-3 shadow-sm"
               >
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b-2 border-clinical-ink pb-2 gap-2">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-clinical-ink/15 pb-2.5 gap-2">
                   <div>
-                    <span className="font-mono text-[10px] sm:text-xs font-bold uppercase block text-clinical-ink/70">
-                      ID: {obs.id} // SISTEMA: {obs.codeSystem} // CATEGORIA: {obs.categoryCode.toUpperCase()}
+                    <span className="font-sans text-xs font-semibold text-clinical-action block">
+                      {obs.categoryCode === "symptom" ? "Sintoma Físico" : "Estado Emocional"}
                     </span>
-                    <h3 className="font-serif text-lg sm:text-xl font-black uppercase text-clinical-action break-words">
-                      {obs.codeValue}
+                    <h3 className="font-serif text-lg sm:text-xl font-bold text-clinical-ink break-words capitalize">
+                      {obs.codeValue.toLowerCase()}
                     </h3>
                   </div>
-                  <div className="font-mono text-xs sm:text-sm font-black bg-clinical-ink text-white px-2.5 py-1 border border-clinical-ink self-start md:self-auto shrink-0">
-                    {dataFormatada} • {horaFormatada}
+                  <div className="font-sans text-xs font-medium text-clinical-ink/70 bg-clinical-paper px-3 py-1 rounded-full border border-clinical-ink/15 self-start sm:self-auto shrink-0">
+                    {dataFormatada} às {horaFormatada}
                   </div>
                 </div>
 
                 {obs.valueString && (
-                  <p className="font-mono text-xs sm:text-base bg-clinical-paper text-clinical-ink border border-clinical-ink p-2.5 sm:p-3 font-bold break-words">
-                    DADO REGISTRADO: {obs.valueString}
+                  <p className="font-sans text-sm sm:text-base bg-clinical-paper text-clinical-ink rounded-xl p-3 border border-clinical-ink/10 leading-relaxed">
+                    {obs.valueString}
                   </p>
                 )}
 
-                {/* MECANISMO DE EXCLUSÃO INLINE SEM MODAL */}
-                <div className="pt-2 border-t border-clinical-ink">
+                {/* Exclusão Inline Empática */}
+                <div className="pt-2 border-t border-clinical-ink/15">
                   {deleteId === obs.id ? (
-                    <div className="border-2 border-clinical-ink bg-clinical-alert text-white p-3 space-y-2">
-                      <div className="font-mono text-xs sm:text-sm font-bold uppercase break-words">
-                        ATENÇÃO: AÇÃO DESTRUTIVA DEFINITIVA. PARA CONFIRMAR, DIGITE &ldquo;EXCLUIR&rdquo;:
+                    <div className="rounded-xl border border-clinical-alert/30 bg-clinical-alert text-white p-4 space-y-3 shadow-sm">
+                      <div className="font-sans text-xs sm:text-sm font-semibold leading-relaxed">
+                        Tem certeza que deseja apagar esta anotação? Digite <strong>EXCLUIR</strong> abaixo para confirmar:
                       </div>
                       <div className="flex flex-col sm:flex-row flex-wrap gap-2 items-stretch sm:items-center">
                         <input
                           type="text"
                           value={confirmInput}
                           onChange={(e) => setConfirmInput(e.target.value)}
-                          placeholder="DIGITE EXCLUIR"
-                          className="w-full sm:w-auto flex-1 min-h-[44px] sm:min-h-[48px] px-3 border-2 border-clinical-ink font-mono text-sm sm:text-base uppercase bg-white text-clinical-ink focus:outline-none"
+                          placeholder="Digite EXCLUIR"
+                          className="w-full sm:w-auto flex-1 min-h-[44px] px-3 rounded-lg font-sans text-sm uppercase bg-white text-clinical-ink focus:outline-none"
                         />
                         <button
                           type="button"
                           onClick={() => handleExecutarExclusao(obs.id)}
-                          className="w-full sm:w-auto min-h-[44px] sm:min-h-[48px] px-4 sm:px-6 bg-clinical-ink text-white font-mono text-xs sm:text-sm font-black uppercase border-2 border-white hover:bg-white hover:text-clinical-ink transition-none text-center"
+                          className="w-full sm:w-auto min-h-[44px] px-5 rounded-lg bg-clinical-ink text-white font-sans text-xs sm:text-sm font-bold hover:bg-white hover:text-clinical-ink transition-all shadow-sm text-center"
                         >
-                          CONFIRMAR EXCLUSÃO
+                          Confirmar exclusão
                         </button>
                         <button
                           type="button"
@@ -303,9 +335,9 @@ export default function DiarioPage() {
                             setDeleteId(null);
                             setConfirmInput("");
                           }}
-                          className="w-full sm:w-auto min-h-[44px] sm:min-h-[48px] px-4 bg-clinical-paper text-clinical-ink font-mono text-xs sm:text-sm font-bold uppercase border-2 border-clinical-ink hover:bg-clinical-surface hover:text-clinical-ink transition-none text-center"
+                          className="w-full sm:w-auto min-h-[44px] px-4 rounded-lg bg-white/20 text-white font-sans text-xs sm:text-sm font-semibold hover:bg-white/30 transition-all text-center"
                         >
-                          CANCELAR
+                          Cancelar
                         </button>
                       </div>
                     </div>
@@ -317,9 +349,9 @@ export default function DiarioPage() {
                           setDeleteId(obs.id);
                           setConfirmInput("");
                         }}
-                        className="w-full sm:w-auto min-h-[44px] sm:min-h-[48px] px-4 bg-transparent text-clinical-ink font-mono text-xs sm:text-sm font-bold uppercase border-2 border-clinical-ink hover:bg-clinical-alert hover:text-white transition-none text-center"
+                        className="text-clinical-ink/70 hover:text-clinical-alert font-sans text-xs sm:text-sm font-semibold transition-all"
                       >
-                        REMOVER REGISTRO
+                        Excluir esta anotação
                       </button>
                     </div>
                   )}

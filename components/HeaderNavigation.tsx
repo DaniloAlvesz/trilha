@@ -7,45 +7,45 @@ export default function HeaderNavigation() {
   const pathname = usePathname();
 
   const links = [
-    { href: "/", label: "HOJE" },
-    { href: "/agenda", label: "MINHA AGENDA" },
-    { href: "/diario", label: "MEU DIÁRIO" },
-    { href: "/fotos", label: "LINHA DO TEMPO" },
-    { href: "/comunidade", label: "PAPO PRIVADO" },
-    { href: "/relatorio-print", label: "IMPRIMIR RELATÓRIO" },
+    { href: "/", label: "Hoje" },
+    { href: "/agenda", label: "Minhas consultas" },
+    { href: "/diario", label: "Meu diário" },
+    { href: "/fotos", label: "Fotos e evolução" },
+    { href: "/comunidade", label: "Papo privado" },
+    { href: "/relatorio-print", label: "Relatório para consulta" },
   ];
 
   return (
-    <header className="w-full bg-clinical-action text-white border-b-4 border-clinical-ink no-print">
-      <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 py-2.5 sm:py-3 border-b-2 border-white/20">
+    <header className="w-full bg-clinical-action text-white border-b-2 border-clinical-ink/20 shadow-sm no-print">
+      <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 py-3 sm:py-3.5 border-b border-white/20">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-2">
           <div>
-            <span className="font-mono text-[10px] sm:text-xs tracking-wider sm:tracking-widest uppercase block text-white/90">
-              SISTEMA NACIONAL DE SOBREVIDA ONCOLÓGICA • PROTOCOLO TRILHA
+            <span className="font-sans text-xs sm:text-sm tracking-wide block text-white/90">
+              Seu espaço seguro de acompanhamento e cuidado contínuo
             </span>
-            <h1 className="font-serif text-xl sm:text-2xl md:text-3xl font-black uppercase tracking-tight text-white">
-              TRILHA // CADERNETA CLÍNICA
+            <h1 className="font-serif text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-white mt-0.5">
+              Trilha • Cuidado Oncológico
             </h1>
           </div>
-          <div className="border border-white/40 px-2.5 py-1 bg-clinical-ink text-white font-mono text-xs sm:text-sm uppercase self-start md:self-auto shrink-0">
-            REGISTRO: BR-ONCO-9482-SUS
+          <div className="rounded-lg border border-white/30 px-3 py-1.5 bg-clinical-ink/80 text-white font-mono text-xs sm:text-sm self-start md:self-auto shrink-0 shadow-sm">
+            Código anônimo: BR-9482
           </div>
         </div>
       </div>
 
-      {/* Navegação Primária em Texto Puro - Rolagem horizontal sem quebra forçada no mobile */}
-      <nav className="w-full max-w-7xl mx-auto px-2 overflow-x-auto no-scrollbar" aria-label="Navegação Principal">
-        <ul className="flex flex-nowrap md:flex-wrap gap-1 py-1.5 min-w-max md:min-w-0">
+      {/* Navegação Primária Acolhedora */}
+      <nav className="w-full max-w-7xl mx-auto px-3 py-2 overflow-x-auto no-scrollbar" aria-label="Navegação Principal">
+        <ul className="flex flex-nowrap md:flex-wrap gap-1.5 sm:gap-2 min-w-max md:min-w-0">
           {links.map((item) => {
             const isActive = pathname === item.href;
             return (
               <li key={item.href} className="flex-shrink-0">
                 <Link
                   href={item.href}
-                  className={`min-h-[44px] sm:min-h-[48px] px-3 sm:px-4 inline-flex items-center justify-center font-mono text-xs sm:text-sm md:text-base font-bold uppercase tracking-wider whitespace-nowrap border-2 border-clinical-ink transition-none ${
+                  className={`min-h-[44px] sm:min-h-[46px] px-3.5 sm:px-4.5 rounded-lg inline-flex items-center justify-center font-sans text-xs sm:text-sm md:text-base font-semibold whitespace-nowrap transition-all duration-150 ${
                     isActive
-                      ? "bg-clinical-paper text-clinical-ink border-clinical-ink"
-                      : "bg-clinical-action text-white hover:bg-clinical-paper hover:text-clinical-ink focus:bg-clinical-paper focus:text-clinical-ink"
+                      ? "bg-clinical-paper text-clinical-ink shadow-sm font-bold"
+                      : "bg-white/10 text-white hover:bg-clinical-paper/90 hover:text-clinical-ink focus:bg-clinical-paper focus:text-clinical-ink"
                   }`}
                 >
                   {item.label}

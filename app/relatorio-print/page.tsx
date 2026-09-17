@@ -62,113 +62,113 @@ export default function RelatorioPrintPage() {
   return (
     <div className="space-y-6">
       {/* Botões de Ação na Tela (Ocultos no Print) */}
-      <div className="no-print border-4 border-clinical-ink bg-clinical-paper text-clinical-ink p-3 sm:p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-3 sm:gap-4">
+      <div className="no-print rounded-2xl border border-clinical-ink/20 bg-clinical-paper text-clinical-ink p-4 sm:p-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 shadow-sm">
         <div>
-          <span className="font-mono text-[10px] sm:text-xs uppercase font-bold text-clinical-action block">
-            MOTOR 1 // PRÉ-VISUALIZAÇÃO DE DOCUMENTO OFICIAL A4
+          <span className="font-sans text-xs font-semibold text-clinical-action uppercase tracking-wider block">
+            Resumo preparado para sua consulta
           </span>
-          <h1 className="font-serif text-xl sm:text-2xl font-black uppercase break-words text-clinical-ink">
-            RELATÓRIO CLÍNICO PARA CONSULTA MÉDICA
+          <h1 className="font-serif text-xl sm:text-2xl font-bold text-clinical-ink mt-0.5">
+            Relatório de Acompanhamento Médico
           </h1>
-          <p className="font-mono text-xs sm:text-sm uppercase mt-0.5 text-clinical-ink">
-            ESTE LAYOUT FOI COMPILADO PARA IMPRESSÃO EM PAPEL FÍSICO COM ALTO CONTRASTE P&amp;B.
+          <p className="font-sans text-xs sm:text-sm text-clinical-ink/80 mt-1">
+            Este documento reúne seus sintomas, adesão e dúvidas para levar impresso ao oncologista ou mostrar no celular.
           </p>
         </div>
         <button
           type="button"
           onClick={() => window.print()}
-          className="w-full md:w-auto min-h-[48px] px-6 sm:px-8 bg-clinical-action text-white font-mono text-sm sm:text-base font-black uppercase border-2 border-clinical-ink hover:bg-clinical-ink hover:text-white transition-none text-center shrink-0"
+          className="w-full md:w-auto min-h-[48px] px-6 rounded-xl bg-clinical-action text-white font-sans text-sm sm:text-base font-bold hover:bg-clinical-ink transition-all shadow-sm text-center shrink-0"
         >
-          IMPRIMIR EM PAPEL A4 (CTRL + P)
+          Imprimir ou Salvar em PDF (Ctrl + P)
         </button>
       </div>
 
       {/* DOCUMENTO OFICIAL IMPRESSO (PADRÃO SUS / CADERNETA FÍSICA) */}
-      <div className="bg-white text-clinical-ink p-3.5 sm:p-6 md:p-10 border-4 border-clinical-ink font-mono text-xs sm:text-sm leading-relaxed space-y-6">
+      <div className="bg-white text-clinical-ink p-5 sm:p-8 md:p-10 rounded-2xl border border-clinical-ink/20 font-sans text-xs sm:text-sm leading-relaxed space-y-6 shadow-sm">
         {/* Cabeçalho Oficial */}
-        <header className="border-b-4 border-clinical-ink pb-4 text-center">
-          <div className="font-mono text-[10px] sm:text-xs font-bold uppercase tracking-widest">
-            MINISTÉRIO DA SAÚDE // SISTEMA ÚNICO DE SAÚDE (SUS)
+        <header className="border-b-2 border-clinical-ink pb-4 text-center">
+          <div className="font-sans text-xs font-semibold uppercase tracking-widest text-clinical-ink/70">
+            Ministério da Saúde • Sistema Único de Saúde (SUS)
           </div>
-          <h2 className="font-serif text-xl sm:text-2xl md:text-3xl font-black uppercase mt-1 break-words">
-            RELATÓRIO CONSOLIDADO DE SOBREVIDA ONCOLÓGICA
+          <h2 className="font-serif text-xl sm:text-2xl md:text-3xl font-bold mt-1 break-words">
+            Relatório de Acompanhamento de Sobreaviso Oncológico
           </h2>
-          <div className="font-mono text-[10px] sm:text-xs font-bold uppercase mt-1">
-            PROTOCOLO TRILHA • COORTE DE SEGUIMENTO DE CÂNCER DE MAMA
+          <div className="font-sans text-xs text-clinical-ink/70 mt-1">
+            Protocolo Trilha • Cuidado Contínuo e Qualidade de Vida no Seguimento
           </div>
         </header>
 
         {/* Metadados do Paciente e Consulta */}
-        <section className="border-2 border-clinical-ink p-3 sm:p-4 grid grid-cols-1 sm:grid-cols-3 gap-2">
+        <section className="rounded-xl border border-clinical-ink/20 p-4 grid grid-cols-1 sm:grid-cols-3 gap-3 bg-clinical-paper">
           <div>
-            <span className="font-bold block text-[10px] sm:text-xs uppercase">IDENTIFICADOR ANÔNIMO:</span>
-            <span className="text-sm sm:text-base font-black break-words">{dadosRelatorio.pacienteId}</span>
+            <span className="font-semibold block text-xs text-clinical-ink/70">Código anônimo da paciente:</span>
+            <span className="text-sm sm:text-base font-bold break-words">{dadosRelatorio.pacienteId}</span>
           </div>
           <div>
-            <span className="font-bold block text-[10px] sm:text-xs uppercase">DATA DA EMISSÃO:</span>
-            <span className="text-sm sm:text-base font-black">{dadosRelatorio.dataEmissao}</span>
+            <span className="font-semibold block text-xs text-clinical-ink/70">Data de emissão:</span>
+            <span className="text-sm sm:text-base font-bold">{dadosRelatorio.dataEmissao}</span>
           </div>
           <div>
-            <span className="font-bold block text-[10px] sm:text-xs uppercase">DATA DA CONSULTA:</span>
-            <span className="text-sm sm:text-base font-black">{dadosRelatorio.proximaConsulta}</span>
+            <span className="font-semibold block text-xs text-clinical-ink/70">Data da consulta médica:</span>
+            <span className="text-sm sm:text-base font-bold">{dadosRelatorio.proximaConsulta}</span>
           </div>
         </section>
 
-        {/* Bloco 1: Adesão Farmacológica (MedicationStatement) */}
+        {/* Bloco 1: Adesão Farmacológica */}
         <section className="space-y-2">
-          <h3 className="font-serif text-base sm:text-lg font-black uppercase border-b-2 border-clinical-ink pb-1 break-words text-clinical-ink">
-            1. HORMONIOTERAPIA ADJUVANTE &amp; ADESÃO FARMACOLÓGICA
+          <h3 className="font-serif text-base sm:text-lg font-bold border-b border-clinical-ink/20 pb-1 break-words text-clinical-ink">
+            1. Hormonioterapia e Regularidade da Medicação
           </h3>
           <div className="w-full overflow-x-auto no-scrollbar -mx-1 px-1">
-            <table className="w-full min-w-[320px] border-collapse border-2 border-clinical-ink text-left">
+            <table className="w-full min-w-[320px] border-collapse border border-clinical-ink/30 text-left rounded-lg overflow-hidden">
               <tbody>
-                <tr className="border-b border-clinical-ink">
-                  <th className="p-2 border-r border-clinical-ink font-bold uppercase w-1/3 bg-clinical-paper text-clinical-ink text-xs sm:text-sm">FÁRMACO PRESCRITO:</th>
-                  <td className="p-2 font-black text-xs sm:text-sm">{dadosRelatorio.medicacao.farmaco}</td>
+                <tr className="border-b border-clinical-ink/20">
+                  <th className="p-2.5 border-r border-clinical-ink/20 font-semibold w-1/3 bg-clinical-paper text-xs sm:text-sm">Medicamento prescrito:</th>
+                  <td className="p-2.5 font-bold text-xs sm:text-sm">{dadosRelatorio.medicacao.farmaco}</td>
                 </tr>
-                <tr className="border-b border-clinical-ink">
-                  <th className="p-2 border-r border-clinical-ink font-bold uppercase bg-clinical-paper text-clinical-ink text-xs sm:text-sm">POSOLOGIA REGISTRADA:</th>
-                  <td className="p-2 text-xs sm:text-sm">{dadosRelatorio.medicacao.dosagem}</td>
+                <tr className="border-b border-clinical-ink/20">
+                  <th className="p-2.5 border-r border-clinical-ink/20 font-semibold bg-clinical-paper text-xs sm:text-sm">Posologia diária:</th>
+                  <td className="p-2.5 text-xs sm:text-sm">{dadosRelatorio.medicacao.dosagem}</td>
                 </tr>
-                <tr className="border-b border-clinical-ink">
-                  <th className="p-2 border-r border-clinical-ink font-bold uppercase bg-clinical-paper text-clinical-ink text-xs sm:text-sm">FASE DO TRATAMENTO:</th>
-                  <td className="p-2 text-xs sm:text-sm">{dadosRelatorio.medicacao.periodo}</td>
+                <tr className="border-b border-clinical-ink/20">
+                  <th className="p-2.5 border-r border-clinical-ink/20 font-semibold bg-clinical-paper text-xs sm:text-sm">Tempo de tratamento:</th>
+                  <td className="p-2.5 text-xs sm:text-sm">{dadosRelatorio.medicacao.periodo}</td>
                 </tr>
-                <tr className="border-b border-clinical-ink">
-                  <th className="p-2 border-r border-clinical-ink font-bold uppercase bg-clinical-paper text-clinical-ink text-xs sm:text-sm">ÍNDICE DE ADESÃO (RWD):</th>
-                  <td className="p-2 font-black text-xs sm:text-sm">{dadosRelatorio.medicacao.adesaoPercentual} ({dadosRelatorio.medicacao.dosesOmitidas})</td>
+                <tr className="border-b border-clinical-ink/20">
+                  <th className="p-2.5 border-r border-clinical-ink/20 font-semibold bg-clinical-paper text-xs sm:text-sm">Índice de regularidade (adesão):</th>
+                  <td className="p-2.5 font-bold text-xs sm:text-sm">{dadosRelatorio.medicacao.adesaoPercentual} ({dadosRelatorio.medicacao.dosesOmitidas})</td>
                 </tr>
                 <tr>
-                  <th className="p-2 border-r border-clinical-ink font-bold uppercase bg-clinical-paper text-clinical-ink text-xs sm:text-sm">ESTOQUE FÍSICO RESTANTE:</th>
-                  <td className="p-2 font-black text-clinical-alert text-xs sm:text-sm">{dadosRelatorio.medicacao.estoqueRestante}</td>
+                  <th className="p-2.5 border-r border-clinical-ink/20 font-semibold bg-clinical-paper text-xs sm:text-sm">Comprimidos restantes na caixa:</th>
+                  <td className="p-2.5 font-bold text-clinical-alert text-xs sm:text-sm">{dadosRelatorio.medicacao.estoqueRestante}</td>
                 </tr>
               </tbody>
             </table>
           </div>
         </section>
 
-        {/* Bloco 2: Monitoramento de Sintomas e Sinais de Alerta (Observations) */}
+        {/* Bloco 2: Monitoramento de Sintomas */}
         <section className="space-y-2">
-          <h3 className="font-serif text-base sm:text-lg font-black uppercase border-b-2 border-clinical-ink pb-1 break-words text-clinical-ink">
-            2. RECORRÊNCIA DE SINTOMAS CLÍNICOS (ÚLTIMOS 90 DIAS)
+          <h3 className="font-serif text-base sm:text-lg font-bold border-b border-clinical-ink/20 pb-1 break-words text-clinical-ink">
+            2. Sintomas Relatados nos Últimos 90 Dias
           </h3>
           <div className="w-full overflow-x-auto no-scrollbar -mx-1 px-1">
-            <table className="w-full min-w-[500px] border-collapse border-2 border-clinical-ink text-left">
+            <table className="w-full min-w-[500px] border-collapse border border-clinical-ink/30 text-left rounded-lg overflow-hidden">
               <thead>
-                <tr className="border-b-2 border-clinical-ink bg-clinical-paper text-clinical-ink">
-                  <th className="p-2 border-r border-clinical-ink font-bold uppercase text-xs">SINTOMA CLÍNICO</th>
-                  <th className="p-2 border-r border-clinical-ink font-bold uppercase text-xs">SISTEMA</th>
-                  <th className="p-2 border-r border-clinical-ink font-bold uppercase text-xs">FREQUÊNCIA</th>
-                  <th className="p-2 font-bold uppercase text-xs">OBSERVAÇÃO REGISTRADA</th>
+                <tr className="border-b border-clinical-ink/20 bg-clinical-paper">
+                  <th className="p-2.5 border-r border-clinical-ink/20 font-semibold text-xs">Sintoma</th>
+                  <th className="p-2.5 border-r border-clinical-ink/20 font-semibold text-xs">Código Clínico</th>
+                  <th className="p-2.5 border-r border-clinical-ink/20 font-semibold text-xs">Frequência</th>
+                  <th className="p-2.5 font-semibold text-xs">Observação anotada</th>
                 </tr>
               </thead>
               <tbody>
                 {dadosRelatorio.sintomasRecorrentes.map((s, idx) => (
-                  <tr key={idx} className="border-b border-clinical-ink last:border-0">
-                    <td className="p-2 border-r border-clinical-ink font-bold text-xs sm:text-sm">{s.sintoma}</td>
-                    <td className="p-2 border-r border-clinical-ink text-xs">{s.codigoLOINC}</td>
-                    <td className="p-2 border-r border-clinical-ink font-black text-center text-xs sm:text-sm">{s.ocorrencias90Dias}X</td>
-                    <td className="p-2 text-xs">{s.observacao}</td>
+                  <tr key={idx} className="border-b border-clinical-ink/15 last:border-0">
+                    <td className="p-2.5 border-r border-clinical-ink/15 font-semibold text-xs sm:text-sm">{s.sintoma}</td>
+                    <td className="p-2.5 border-r border-clinical-ink/15 text-xs text-clinical-ink/70">{s.codigoLOINC}</td>
+                    <td className="p-2.5 border-r border-clinical-ink/15 font-bold text-center text-xs sm:text-sm">{s.ocorrencias90Dias} vezes</td>
+                    <td className="p-2.5 text-xs">{s.observacao}</td>
                   </tr>
                 ))}
               </tbody>
@@ -176,40 +176,40 @@ export default function RelatorioPrintPage() {
           </div>
         </section>
 
-        {/* Bloco 3: Pauta Estruturada de Dúvidas para o Consultório (Motor 2) */}
+        {/* Bloco 3: Pauta Estruturada de Dúvidas */}
         <section className="space-y-2">
-          <h3 className="font-serif text-base sm:text-lg font-black uppercase border-b-2 border-clinical-ink pb-1 break-words text-clinical-ink">
-            3. PAUTA ESTRUTURADA DE DÚVIDAS E DEMANDAS DA PACIENTE
+          <h3 className="font-serif text-base sm:text-lg font-bold border-b border-clinical-ink/20 pb-1 break-words text-clinical-ink">
+            3. Dúvidas e Demandas da Paciente para a Consulta
           </h3>
-          <div className="border-2 border-clinical-ink p-3 sm:p-4 space-y-2 bg-clinical-paper text-clinical-ink">
+          <div className="rounded-xl border border-clinical-ink/20 p-4 space-y-2 bg-clinical-paper">
             {dadosRelatorio.pautaPerguntas.map((pauta, idx) => (
-              <div key={idx} className="font-bold text-xs sm:text-sm break-words">
+              <div key={idx} className="font-medium text-xs sm:text-sm break-words">
                 {pauta}
               </div>
             ))}
           </div>
         </section>
 
-        {/* Bloco 4: Histórico de Exames de Controle (Encounters) */}
+        {/* Bloco 4: Histórico de Exames de Controle */}
         <section className="space-y-2">
-          <h3 className="font-serif text-base sm:text-lg font-black uppercase border-b-2 border-clinical-ink pb-1 break-words text-clinical-ink">
-            4. EXAMES E PROCEDIMENTOS COMPLEMENTARES
+          <h3 className="font-serif text-base sm:text-lg font-bold border-b border-clinical-ink/20 pb-1 break-words text-clinical-ink">
+            4. Exames e Procedimentos Complementares
           </h3>
           <div className="w-full overflow-x-auto no-scrollbar -mx-1 px-1">
-            <table className="w-full min-w-[450px] border-collapse border-2 border-clinical-ink text-left">
+            <table className="w-full min-w-[450px] border-collapse border border-clinical-ink/30 text-left rounded-lg overflow-hidden">
               <thead>
-                <tr className="border-b-2 border-clinical-ink bg-clinical-paper text-clinical-ink">
-                  <th className="p-2 border-r border-clinical-ink font-bold uppercase text-xs">EXAME / PROCEDIMENTO</th>
-                  <th className="p-2 border-r border-clinical-ink font-bold uppercase text-xs">DATA</th>
-                  <th className="p-2 font-bold uppercase text-xs">STATUS DOCUMENTAL</th>
+                <tr className="border-b border-clinical-ink/20 bg-clinical-paper">
+                  <th className="p-2.5 border-r border-clinical-ink/20 font-semibold text-xs">Exame / Procedimento</th>
+                  <th className="p-2.5 border-r border-clinical-ink/20 font-semibold text-xs">Data</th>
+                  <th className="p-2.5 font-semibold text-xs">Situação</th>
                 </tr>
               </thead>
               <tbody>
                 {dadosRelatorio.examesRealizadosPeriodo.map((ex, idx) => (
-                  <tr key={idx} className="border-b border-clinical-ink last:border-0">
-                    <td className="p-2 border-r border-clinical-ink font-bold text-xs sm:text-sm">{ex.exame}</td>
-                    <td className="p-2 border-r border-clinical-ink text-xs sm:text-sm">{ex.data}</td>
-                    <td className="p-2 text-xs sm:text-sm">{ex.status}</td>
+                  <tr key={idx} className="border-b border-clinical-ink/15 last:border-0">
+                    <td className="p-2.5 border-r border-clinical-ink/15 font-semibold text-xs sm:text-sm">{ex.exame}</td>
+                    <td className="p-2.5 border-r border-clinical-ink/15 text-xs sm:text-sm">{ex.data}</td>
+                    <td className="p-2.5 text-xs sm:text-sm">{ex.status}</td>
                   </tr>
                 ))}
               </tbody>
@@ -218,18 +218,18 @@ export default function RelatorioPrintPage() {
         </section>
 
         {/* Campo para Anotações do Médico Oncologista */}
-        <section className="border-2 border-clinical-ink p-3 sm:p-4 space-y-5">
-          <span className="font-bold uppercase block text-xs">
-            ESPAÇO RESERVADO PARA CONDUTA E ANOTAÇÕES DO MÉDICO ASSISTENTE:
+        <section className="rounded-xl border border-clinical-ink/20 p-4 space-y-4">
+          <span className="font-semibold block text-xs text-clinical-ink/80">
+            Espaço reservado para conduta e anotações do médico assistente:
           </span>
-          <div className="border-b border-clinical-ink h-8"></div>
-          <div className="border-b border-clinical-ink h-8"></div>
-          <div className="border-b border-clinical-ink h-8"></div>
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-3 pt-3">
+          <div className="border-b border-clinical-ink/30 h-7"></div>
+          <div className="border-b border-clinical-ink/30 h-7"></div>
+          <div className="border-b border-clinical-ink/30 h-7"></div>
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-3 pt-2">
             <div className="text-xs break-words">
-              ASSINATURA E CARIMBO (CRM): <span className="inline-block border-b border-clinical-ink w-40 sm:w-56 align-bottom"></span>
+              Assinatura e carimbo (CRM): <span className="inline-block border-b border-clinical-ink w-40 sm:w-56 align-bottom"></span>
             </div>
-            <div className="text-xs">DATA: ____/____/2026</div>
+            <div className="text-xs">Data: ____/____/2026</div>
           </div>
         </section>
       </div>

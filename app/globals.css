@@ -13,11 +13,9 @@
   --color-success: #4A7059;
 }
 
-* {
-  box-shadow: none !important;
-  text-shadow: none !important;
-  transition: none !important;
-  border-radius: 0px !important;
+/* Estilos globais e acessibilidade */
+*, ::before, ::after {
+  box-sizing: border-box;
 }
 
 html, body {
