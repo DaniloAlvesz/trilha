@@ -134,6 +134,43 @@ export default function PapoPrivadoPage() {
   const [alertaSeguranca, setAlertaSeguranca] = useState<string | null>(null);
   const [toastMensagem, setToastMensagem] = useState<string | null>(null);
 
+  // Novos Estados para o Header Afetivo e Funcional
+  const [termoBusca, setTermoBusca] = useState("");
+  const [filtroApenasSalvos, setFiltroApenasSalvos] = useState(false);
+  const [modalNotificacoesAberto, setModalNotificacoesAberto] = useState(false);
+  const [modalPerfilAberto, setModalPerfilAberto] = useState(false);
+  const [temNotificacaoNova, setTemNotificacaoNova] = useState(true);
+
+  const [notificacoes, setNotificacoes] = useState([
+    {
+      id: "notif-1",
+      autor: "Samambaia #714",
+      avatarIcon: "🪴",
+      badgeClass: "bg-lime-100 text-lime-900 border-lime-200",
+      mensagem: "respondeu ao seu tópico sobre sono e roupas de algodão.",
+      tempo: "há 15 min",
+      lida: false,
+    },
+    {
+      id: "notif-2",
+      autor: "Bromélia #304",
+      avatarIcon: "🌿",
+      badgeClass: "bg-emerald-100 text-emerald-900 border-emerald-200",
+      mensagem: "enviou carinho e apoiou a sua dúvida sobre Tamoxifeno.",
+      tempo: "há 2 horas",
+      lida: false,
+    },
+    {
+      id: "notif-3",
+      autor: "Ipê Roxo #112",
+      avatarIcon: "🌺",
+      badgeClass: "bg-purple-100 text-purple-900 border-purple-200",
+      mensagem: "compartilhou uma experiência útil na sala de Linfedema.",
+      tempo: "ontem",
+      lida: true,
+    },
+  ]);
+
   const meuAvatar = getBotanyAvatar(meuAliasBotanico);
 
   const salasNomes: Record<CommunityThread["category"], string> = {
@@ -170,7 +207,7 @@ export default function PapoPrivadoPage() {
     e.stopPropagation();
     setSalvos((prev) => {
       const novo = !prev[threadId];
-      setToastMensagem(novo ? "Publicação salva nos seus itens guardados" : "Removido dos salvos");
+      setToastMensagem(novo ? "Dica guardada nos seus salvos!" : "Removido dos salvos");
       setTimeout(() => setToastMensagem(null), 3000);
       return { ...prev, [threadId]: novo };
     });
@@ -254,8 +291,21 @@ export default function PapoPrivadoPage() {
     setTimeout(() => setToastMensagem(null), 3000);
   };
 
-  const threadsFiltradas =
-    abaAtiva === "TODOS" ? threads : threads.filter((t) => t.category === abaAtiva);
+  // Filtragem Inteligente com Busca Instantânea e Salvos
+  const threadsFiltradas = threads.filter((t) => {
+    if (filtroApenasSalvos && !salvos[t.id]) return false;
+    if (abaAtiva !== "TODOS" && t.category !== abaAtiva) return false;
+    if (termoBusca.trim()) {
+      const q = termoBusca.toLowerCase().trim();
+      const bateTitulo = t.title.toLowerCase().includes(q);
+      const bateCorpo = t.body.toLowerCase().includes(q);
+      const bateCategoria = t.category.toLowerCase().includes(q);
+      const bateRespostas = (respostas[t.id] || []).some((r) => r.body.toLowerCase().includes(q));
+      return bateTitulo || bateCorpo || bateCategoria || bateRespostas;
+    }
+    return true;
+  });
+
   const threadAtual = threads.find((t) => t.id === threadAbertaId);
   const respostasDaThreadAtual = threadAbertaId ? respostas[threadAbertaId] || [] : [];
 
@@ -268,36 +318,137 @@ export default function PapoPrivadoPage() {
         </div>
       )}
 
-      {/* Header Estilo Twitter: Limpo com "Papo Privado" */}
+      {/* HEADER REESTRUTURADO: 1. Avatar Afetivo | 2. Barra de Busca Central | 3. Ações Rápidas */}
       <header className="bg-white rounded-3xl border border-clinical-surface/30 shadow-sm overflow-hidden sticky top-14 z-20">
-        <div className="px-5 py-3.5 flex items-center justify-between border-b border-clinical-surface/20">
-          <div>
-            <h1 className="font-serif text-xl sm:text-2xl font-bold text-clinical-ink leading-tight">
-              Papo Privado
-            </h1>
-            <p className="font-sans text-[11px] sm:text-xs text-clinical-ink/65">
-              Compartilhe pensamentos e apoio com total privacidade
-            </p>
+        {/* Barra Superior */}
+        <div className="px-3.5 sm:px-5 py-3 flex items-center gap-2.5 sm:gap-4 border-b border-clinical-surface/15">
+          {/* 1. O Avatar Afetivo (Heurística do Afeto) com Badge de Novidade */}
+          <button
+            type="button"
+            onClick={() => setModalPerfilAberto(true)}
+            className="relative focus:outline-none focus:ring-2 focus:ring-clinical-action/30 rounded-full group select-none shrink-0"
+            title="Meu perfil anônimo e mascote acolhedor"
+            aria-label="Perfil do usuário"
+          >
+            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-neutral-900 border-2 border-pink-100 shadow-sm flex items-center justify-center overflow-hidden group-hover:scale-105 transition-transform">
+              {/* Mascote Gatinho Preto e Branco Minimalista */}
+              <svg viewBox="0 0 36 36" className="w-9 h-9 sm:w-10 sm:h-10" fill="none">
+                <path d="M7 6L12 14H24L29 6L28 17C28 24 23.5 29 18 29C12.5 29 8 24 8 17L7 6Z" fill="#262626" />
+                <path d="M9 8.5L12.5 14H10L9 8.5Z" fill="#FDA4AF" />
+                <path d="M27 8.5L23.5 14H26L27 8.5Z" fill="#FDA4AF" />
+                <path d="M14 18C14 15.5 16 14 18 14C20 14 22 15.5 22 18C22 23 18 28 18 28C18 28 14 23 14 18Z" fill="#FFFFFF" />
+                <circle cx="13.5" cy="18.5" r="1.5" fill="#FFFFFF" />
+                <circle cx="22.5" cy="18.5" r="1.5" fill="#FFFFFF" />
+                <circle cx="13.5" cy="18.5" r="0.8" fill="#1C1917" />
+                <circle cx="22.5" cy="18.5" r="0.8" fill="#1C1917" />
+                <polygon points="17.2,20.5 18.8,20.5 18,21.5" fill="#FB7185" />
+              </svg>
+            </div>
+            {/* Bolinha vermelha de notificação (badge sutil de novidades) */}
+            {temNotificacaoNova && (
+              <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-rose-500 rounded-full border-2 border-white animate-pulse" />
+            )}
+          </button>
+
+          {/* 2. A Barra de Busca (Controle e Autonomia - Reduz Carga Cognitiva) */}
+          <div className="flex-1 relative min-w-0">
+            <div className="relative flex items-center">
+              <span className="absolute left-3.5 text-gray-400 pointer-events-none">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </span>
+              <input
+                type="text"
+                value={termoBusca}
+                onChange={(e) => setTermoBusca(e.target.value)}
+                placeholder="Buscar por sintoma, dica ou dúvida..."
+                className="w-full min-h-[42px] pl-10 pr-9 rounded-full bg-gray-100 hover:bg-gray-200/60 focus:bg-white text-clinical-ink text-xs sm:text-sm font-sans placeholder:text-gray-400 border border-transparent focus:border-clinical-action/30 focus:outline-none focus:ring-2 focus:ring-clinical-action/15 transition-all"
+              />
+              {termoBusca && (
+                <button
+                  type="button"
+                  onClick={() => setTermoBusca("")}
+                  className="absolute right-3 w-5 h-5 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center text-[10px] hover:bg-gray-400 transition-colors"
+                  aria-label="Limpar busca"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
           </div>
 
-          {/* Avatar da Conta Atual */}
-          <div className={`rounded-full border px-3 py-1 flex items-center gap-2 shadow-2xs ${meuAvatar.badgeClass}`}>
-            <span className="text-base">{meuAvatar.icon}</span>
-            <span className="font-serif font-bold text-xs text-clinical-ink">
-              {meuAvatar.nome}
-            </span>
+          {/* 3. Ações Rápidas (Ícones de Utilidade: Salvos & Notificações) */}
+          <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+            {/* Ícone Salvos (Bookmark) */}
+            <button
+              type="button"
+              onClick={() => {
+                setFiltroApenasSalvos((prev) => !prev);
+                if (!filtroApenasSalvos) {
+                  setToastMensagem("Filtrando dicas salvas");
+                  setTimeout(() => setToastMensagem(null), 2500);
+                }
+              }}
+              className={`min-w-[42px] min-h-[42px] rounded-full flex items-center justify-center transition-all relative ${
+                filtroApenasSalvos
+                  ? "bg-clinical-action text-white shadow-xs"
+                  : "text-gray-600 hover:bg-gray-100 hover:text-clinical-ink"
+              }`}
+              title={filtroApenasSalvos ? "Ver todo o feed" : "Ver dicas e conversas que você salvou"}
+              aria-label="Itens salvos"
+            >
+              <svg
+                className={`w-5 h-5 ${filtroApenasSalvos ? "fill-current" : ""}`}
+                fill={filtroApenasSalvos ? "currentColor" : "none"}
+                stroke="currentColor"
+                strokeWidth="1.9"
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+              </svg>
+              {Object.values(salvos).filter(Boolean).length > 0 && !filtroApenasSalvos && (
+                <span className="absolute top-2 right-2 w-2 h-2 bg-clinical-action rounded-full" />
+              )}
+            </button>
+
+            {/* Ícone Notificações (Sininho) */}
+            <button
+              type="button"
+              onClick={() => {
+                setModalNotificacoesAberto(true);
+                setTemNotificacaoNova(false);
+              }}
+              className="min-w-[42px] min-h-[42px] rounded-full flex items-center justify-center text-gray-600 hover:bg-gray-100 hover:text-clinical-ink transition-all relative"
+              title="Notificações e respostas"
+              aria-label="Ver notificações"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="1.9" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                />
+              </svg>
+              {temNotificacaoNova && (
+                <span className="absolute top-2.5 right-2.5 w-2.5 h-2.5 bg-rose-500 rounded-full border-2 border-white" />
+              )}
+            </button>
           </div>
         </div>
 
-        {/* Abas Superiores Estilo Twitter (Feed Tabs) */}
+        {/* Linha de Abas Estilo Twitter (Feed Tabs) */}
         <nav className="flex overflow-x-auto no-scrollbar border-b border-clinical-surface/15 bg-white">
           {abasDisponiveis.map((aba) => {
-            const isSelected = abaAtiva === aba.id;
+            const isSelected = abaAtiva === aba.id && !filtroApenasSalvos;
             return (
               <button
                 key={aba.id}
                 type="button"
-                onClick={() => setAbaAtiva(aba.id as typeof abaAtiva)}
+                onClick={() => {
+                  setAbaAtiva(aba.id as typeof abaAtiva);
+                  setFiltroApenasSalvos(false);
+                }}
                 className="flex-1 min-w-max px-4 py-3 text-xs sm:text-sm font-sans font-semibold transition-all relative flex flex-col items-center justify-center select-none"
               >
                 <span className={isSelected ? "text-clinical-action font-bold" : "text-clinical-ink/60 hover:text-clinical-ink"}>
@@ -310,7 +461,131 @@ export default function PapoPrivadoPage() {
             );
           })}
         </nav>
+
+        {/* Indicadores Ativos de Busca ou Salvos */}
+        {(termoBusca || filtroApenasSalvos) && (
+          <div className="bg-clinical-paper px-4 py-2 flex items-center justify-between text-xs text-clinical-ink font-sans border-b border-clinical-surface/15">
+            <div className="flex items-center gap-2">
+              <span>🔍</span>
+              {filtroApenasSalvos ? (
+                <span>Exibindo <strong>dicas salvas</strong> ({threadsFiltradas.length})</span>
+              ) : (
+                <span>Resultados para &ldquo;<strong>{termoBusca}</strong>&rdquo; ({threadsFiltradas.length})</span>
+              )}
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setTermoBusca("");
+                setFiltroApenasSalvos(false);
+              }}
+              className="font-bold text-clinical-action hover:underline"
+            >
+              Ver todo o feed
+            </button>
+          </div>
+        )}
       </header>
+
+      {/* MODAL / GAVETA DE NOTIFICAÇÕES ACOLHEDORAS */}
+      {modalNotificacoesAberto && (
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-white rounded-3xl p-5 shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex justify-between items-center border-b border-clinical-surface/20 pb-3">
+              <div className="flex items-center gap-2">
+                <span className="text-xl">🔔</span>
+                <h3 className="font-serif text-lg font-bold text-clinical-ink">
+                  Notificações
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setModalNotificacoesAberto(false)}
+                className="w-8 h-8 rounded-full bg-clinical-paper flex items-center justify-center text-clinical-ink hover:bg-clinical-surface/20 text-sm"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-2.5 max-h-[60vh] overflow-y-auto">
+              {notificacoes.map((n) => (
+                <div
+                  key={n.id}
+                  className={`p-3 rounded-2xl border flex gap-3 items-start transition-all ${
+                    n.lida
+                      ? "bg-white border-clinical-surface/20 opacity-80"
+                      : "bg-clinical-paper border-clinical-surface/40 shadow-2xs"
+                  }`}
+                >
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm shrink-0 border ${n.badgeClass}`}>
+                    {n.avatarIcon}
+                  </div>
+                  <div className="flex-1 text-xs space-y-0.5">
+                    <p className="text-clinical-ink leading-relaxed">
+                      <strong className="text-clinical-action font-serif">{n.autor}</strong> {n.mensagem}
+                    </p>
+                    <span className="text-[10px] text-clinical-ink/50 font-sans block">{n.tempo}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setModalNotificacoesAberto(false)}
+              className="w-full min-h-[44px] rounded-2xl bg-clinical-action text-white font-sans text-xs font-bold hover:bg-clinical-action/90 transition-all shadow-xs"
+            >
+              Fechar
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL / GAVETA DO PERFIL AFETIVO (MASCOTE & ALIAS BOTÂNICO) */}
+      {modalPerfilAberto && (
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="w-full max-w-sm bg-white rounded-3xl p-6 shadow-2xl space-y-4 text-center animate-in fade-in zoom-in-95 duration-150">
+            {/* Mascote Gatinho Grande */}
+            <div className="w-20 h-20 mx-auto rounded-full bg-neutral-900 border-4 border-pink-100 shadow-md flex items-center justify-center overflow-hidden">
+              <svg viewBox="0 0 36 36" className="w-18 h-18" fill="none">
+                <path d="M7 6L12 14H24L29 6L28 17C28 24 23.5 29 18 29C12.5 29 8 24 8 17L7 6Z" fill="#262626" />
+                <path d="M9 8.5L12.5 14H10L9 8.5Z" fill="#FDA4AF" />
+                <path d="M27 8.5L23.5 14H26L27 8.5Z" fill="#FDA4AF" />
+                <path d="M14 18C14 15.5 16 14 18 14C20 14 22 15.5 22 18C22 23 18 28 18 28C18 28 14 23 14 18Z" fill="#FFFFFF" />
+                <circle cx="13.5" cy="18.5" r="1.5" fill="#FFFFFF" />
+                <circle cx="22.5" cy="18.5" r="1.5" fill="#FFFFFF" />
+                <circle cx="13.5" cy="18.5" r="0.8" fill="#1C1917" />
+                <circle cx="22.5" cy="18.5" r="0.8" fill="#1C1917" />
+                <polygon points="17.2,20.5 18.8,20.5 18,21.5" fill="#FB7185" />
+              </svg>
+            </div>
+
+            <div className="space-y-1">
+              <span className="text-xs uppercase font-bold text-clinical-action tracking-wider block">
+                Mascote Acolhedor &bull; Perfil Seguro
+              </span>
+              <h3 className="font-serif text-xl font-bold text-clinical-ink">
+                {meuAvatar.nome} #{meuAvatar.codigo}
+              </h3>
+              <p className="font-mono text-xs text-clinical-ink/60">
+                {meuAvatar.handle}
+              </p>
+            </div>
+
+            <p className="font-sans text-xs text-clinical-ink/80 leading-relaxed bg-clinical-paper p-3.5 rounded-2xl border border-clinical-surface/30">
+              Seu perfil é 100% anônimo e protegido. Você pode interagir, tirar dúvidas e desabafar sem qualquer exposição pessoal.
+            </p>
+
+            <button
+              type="button"
+              onClick={() => setModalPerfilAberto(false)}
+              className="w-full min-h-[46px] rounded-2xl bg-clinical-action text-white font-sans text-xs font-bold hover:bg-clinical-action/90 transition-all shadow-xs"
+            >
+              Voltar para as conversas
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Alerta de Segurança se disparado */}
       {alertaSeguranca && (
