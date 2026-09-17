@@ -77,8 +77,8 @@ export default function PainelHoje() {
 
   return (
     <div className="space-y-6">
-      {/* Cabeçalho Acolhedor */}
-      <section className="bg-clinical-paper border border-clinical-surface/40 rounded-2xl p-4 sm:p-5 shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+      {/* Cabeçalho Acolhedor com Efeito Aquarela Integrado */}
+      <section className="bg-white/80 backdrop-blur-xs border border-clinical-surface/30 rounded-3xl p-4 sm:p-5 shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
         <div className="space-y-0.5">
           <span className="font-sans text-xs sm:text-sm text-clinical-ink/70 block capitalize">
             {new Date().toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "long", year: "numeric" })}

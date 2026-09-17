@@ -54,6 +54,22 @@ hr {
   margin: 1.5rem 0;
 }
 
+/* Aquarela rosa suave no topo da tela inicial */
+.global-layout-background {
+  min-height: 100vh;
+  /* Cor base de fundo super clara para contraste com textos */
+  background-color: #FDFBFC; 
+  
+  /* Manchas radiais suaves simulando a aquarela no topo */
+  background-image: 
+    radial-gradient(circle at 15% 0%, rgba(244, 114, 182, 0.4) 0%, transparent 45%),
+    radial-gradient(circle at 85% -5%, rgba(236, 72, 153, 0.3) 0%, transparent 40%),
+    radial-gradient(circle at 50% 15%, rgba(251, 146, 60, 0.1) 0%, transparent 50%);
+  
+  /* Mantém o fundo fixo enquanto o conteúdo rola por cima */
+  background-attachment: fixed;
+}
+
 @media print {
   body {
     background-color: #FFFFFF !important;
