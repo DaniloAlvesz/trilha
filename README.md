@@ -1,27 +1,35 @@
-# TRILHA // CADERNETA CLÍNICA ONCOLÓGICA
+# ONCO+
 
-Infraestrutura digital de acompanhamento clínico, logístico e emocional de sobrevivência oncológica.
+Protótipo de apoio ao acompanhamento de pessoas com câncer de mama, incluindo homens e mulheres. Interface em português simples, com diário, agenda e resumo pessoal para consulta.
 
-## 🩺 Padrão Documental & Clínico
-- **Brutalismo Clínico**: Alto contraste, sem overlays/modais intrusivos, otimizado para acessibilidade e uso ambulatorial.
-- **HL7 FHIR Release 4 Compliant**: Modelagem baseada nos recursos `MedicationStatement`, `Observation`, `Encounter` e `DocumentReference`.
-- **RWD (Real-World Data)**: Registro fidedigno de adesão medicamentosa e sintomas no mundo real.
+## Executar
 
-## 📱 Módulos do Sistema
-1. **Hoje**: Painel operacional com motores de alerta logístico (D-5), suporte de scanxiety (D-3) e controle de doses diárias.
-2. **Minha Agenda**: Registro imutável de consultas, exames de controle e procedimentos.
-3. **Meu Diário**: Observatório de sintomas somáticos e flutuações hormonais/emocionais.
-4. **Linha do Tempo**: Monitoramento fotográfico criptografado de cicatrizes e edema linfático.
-5. **Papo Privado**: Comunidade anônima com desvinculação de prontuário e proteção contra desinformação médica.
-6. **Relatório Clínico**: Compilação para impressão física em folha A4 para retorno médico no SUS.
+Node.js 20.9 ou superior, npm.
 
-## 🚀 Como Executar Localmente
-
-Instale as dependências e inicie o servidor:
-
-```bash
-npm install
+```sh
+npm ci
 npm run dev
 ```
 
-Abra [http://localhost:3000](http://localhost:3000) no navegador.
+Abra http://localhost:3000. Para validar: `npm run lint`, `npm test`, `npm run build`.
+
+## O que funciona
+
+- Registro de emoções e sintomas; histórico semanal sem sequências obrigatórias.
+- Agenda compartilhada com início e resumo; exportação de compromisso em calendário.
+- Rotina opcional de medicamento, com registros de tomada por data e opção de desfazer.
+- Dúvidas para consulta e resumo imprimível/PDF gerado pelo navegador.
+- Lembrete diário opcional por arquivo ICS importado no calendário pessoal.
+- Texto ampliado, navegação consistente, foco visível e formulários com rótulos.
+- Fotos opcionais com prévia, limite de 3 imagens, conversão para JPEG e exclusão.
+- Informações educativas com fontes e recursos para pedir apoio.
+
+## Limites explícitos
+
+Não há autenticação, backend clínico, equipe de monitoramento, integração com SUS ou notificações push. As fotos não são interpretadas e os registros não geram diagnósticos. Não se introduzem prescrições, doses, exames, códigos clínicos ou resultados fictícios.
+
+Por padrão os dados existem apenas na memória da aba. Armazenamento persistente em `localStorage` exige opção explícita; não tem senha, criptografia própria ou backup. Não usar este protótipo como prontuário ou repositório de dados sensíveis de participantes. Pessoas com acesso ao aparelho podem ver os dados. As requisições normais da hospedagem continuam existindo.
+
+A comunidade anterior era simulada. Esta versão oferece preparação para buscar apoio, sem inventar participantes, publicações ou moderação. Uma comunidade real requer backend e governança próprios.
+
+Veja [DOCUMENTACAO_TECNICA.md](DOCUMENTACAO_TECNICA.md) para arquitetura, evidências e plano de validação. Publicar no GitHub não comprova que o deploy da Vercel foi atualizado.
