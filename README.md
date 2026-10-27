@@ -22,7 +22,7 @@ Abra http://localhost:3000. Para validar: `npm run lint`, `npm test`, `npm run b
 - Lembrete diário opcional por arquivo ICS importado no calendário pessoal.
 - Texto ampliado, navegação consistente, foco visível e formulários com rótulos.
 - Fotos opcionais com prévia, limite de 3 imagens, conversão para JPEG e exclusão.
-- Informações educativas com fontes e recursos para pedir apoio.
+- Informações educativas com fontes e fórum por apelido: tópicos, respostas, busca, salvos, apoio e controles locais de ocultação.
 
 ## Limites explícitos
 
@@ -30,6 +30,10 @@ Não há autenticação, backend clínico, equipe de monitoramento, integração
 
 Por padrão os dados existem apenas na memória da aba. Armazenamento persistente em `localStorage` exige opção explícita; não tem senha, criptografia própria ou backup. Não usar este protótipo como prontuário ou repositório de dados sensíveis de participantes. Pessoas com acesso ao aparelho podem ver os dados. As requisições normais da hospedagem continuam existindo.
 
-A comunidade anterior era simulada. Esta versão oferece preparação para buscar apoio, sem inventar participantes, publicações ou moderação. Uma comunidade real requer backend e governança próprios.
+O fórum anônimo voltou como protótipo local. Você pode iniciar conversas, responder, salvar, apoiar e ocultar conteúdo; exemplos são identificados como fictícios. As conversas não são compartilhadas entre aparelhos, e denúncias não chegam a uma equipe. Uma comunidade real requer backend e governança próprios.
 
 Veja [DOCUMENTACAO_TECNICA.md](DOCUMENTACAO_TECNICA.md) para arquitetura, evidências e plano de validação. Publicar no GitHub não comprova que o deploy da Vercel foi atualizado.
+
+## Design e agentes
+
+A interface parte do celular, com quatro abas (Hoje, Diário, Agenda e Fórum), paleta rosé/ameixa e fonte Atkinson Hyperlegible hospedada no próprio projeto. Consulte [DESIGN.md](DESIGN.md), [AGENTS.md](AGENTS.md) e [o registro das skills](docs/skills-manifest.json). Os três papéis de agentes estão em `.codex/agents/`; não são processos autônomos permanentes.

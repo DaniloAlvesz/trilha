@@ -7,19 +7,11 @@ const tabs = [
   { href: "/", label: "Hoje", icon: "home" },
   { href: "/diario", label: "Diário", icon: "diary" },
   { href: "/agenda", label: "Agenda", icon: "calendar" },
-  { href: "/aprender", label: "Orientações", icon: "book" },
-  { href: "/ajuda", label: "Mais", icon: "more" },
+  { href: "/comunidade", label: "Fórum", icon: "users" },
 ];
 export default function HeaderNavigation() {
   const pathname = usePathname();
   const { data, update, message, notify } = useCare();
-  const extra = [
-    "/ajuda",
-    "/ajustes",
-    "/fotos",
-    "/comunidade",
-    "/relatorio-print",
-  ];
   return (
     <>
       <a className="skip-link" href="#conteudo">
@@ -33,7 +25,7 @@ export default function HeaderNavigation() {
             </span>
             <span>
               ONCO<span className="brand-plus">+</span>
-              <small>Cuidado que acompanha você</small>
+              <small>Seu cuidado, mais perto</small>
             </span>
           </Link>
           <div className="header-actions">
@@ -53,9 +45,13 @@ export default function HeaderNavigation() {
                 {data.largeText ? "Texto padrão" : "Aumentar texto"}
               </span>
             </button>
-            <Link className="help-link" href="/ajuda" aria-label="Ajuda">
+            <Link
+              className="help-link"
+              href="/ajuda"
+              aria-label="Mais opções e ajuda"
+            >
               <Icon name="help" />
-              <span>Ajuda</span>
+              <span>Mais</span>
             </Link>
           </div>
         </div>
@@ -63,10 +59,7 @@ export default function HeaderNavigation() {
       <nav className="main-nav no-print" aria-label="Navegação principal">
         <div>
           {tabs.map((t) => {
-            const active =
-              t.href === "/ajuda"
-                ? extra.includes(pathname)
-                : pathname === t.href;
+            const active = pathname === t.href;
             return (
               <Link
                 key={t.href}

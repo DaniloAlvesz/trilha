@@ -1,0 +1,28 @@
+{
+  "source": "app/globals.css",
+  "mode": "operate",
+  "font": {
+    "family": "Atkinson",
+    "weights": [400, 700],
+    "basePx": 17,
+    "largePx": 21,
+    "local": true
+  },
+  "focus": {
+    "outline": "3px solid #50263c",
+    "offset": "3px",
+    "halo": "0 0 0 6px #fff"
+  },
+  "layout": {
+    "mobileFirst": true,
+    "gutterPx": 18,
+    "breakpointsPx": [640, 900],
+    "bottomDestinations": 4
+  },
+  "motion": {
+    "button": "background-color 140ms, border-color 140ms",
+    "reducedMotion": true
+  },
+  "depth": "flat",
+  "radiusPx": { "control": 10, "panel": 14 }
+}

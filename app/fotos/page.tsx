@@ -45,7 +45,6 @@ export default function Photos() {
       </Link>
       <div className="page-heading">
         <div>
-          <p className="eyebrow">RECURSO OPCIONAL</p>
           <h1>Meus registros em fotos</h1>
           <p>
             Guarde imagens somente se isso fizer sentido para você e para seu

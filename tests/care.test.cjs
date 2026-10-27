@@ -101,3 +101,53 @@ test("stored data requires opt-in and rejects malformed content", () => {
   assert.equal(read.photos.length, 0);
   assert.equal(read.remember, true);
 });
+const forumModel = require(path.join(dir, "forum.js"));
+test("forum data rejects orphan replies and fictional identity collisions", () => {
+  const state = forumModel.readForum({
+    ...forumModel.emptyForum(),
+    threads: [
+      {
+        id: "example-apoio",
+        title: "changed",
+        body: "changed",
+        category: "Dia a dia",
+        author: "X",
+        createdAt: "2026-01-01T10:00Z",
+      },
+    ],
+    replies: [
+      {
+        id: "r",
+        threadId: "unknown",
+        author: "X",
+        body: "text",
+        createdAt: "2026-01-01T10:00Z",
+      },
+    ],
+  });
+  assert.equal(state.threads.length, 0);
+  assert.equal(state.replies.length, 0);
+});
+test("forum persists with the same explicit care consent and retains text without interpreting HTML", () => {
+  const f = {
+    ...forumModel.emptyForum(),
+    alias: "Jasmim-123",
+    threads: [
+      {
+        id: "own",
+        title: "<script>text</script>",
+        body: "Mensagem de teste",
+        category: "Dia a dia",
+        author: "Jasmim-123",
+        createdAt: "2026-01-01T10:00Z",
+      },
+    ],
+    saved: ["own", "missing"],
+  };
+  const data = c.readCare(
+    JSON.stringify({ ...c.emptyCare(), remember: true, forum: f }),
+  );
+  assert.equal(data.forum.threads[0].title, "<script>text</script>");
+  assert.deepEqual(data.forum.saved, ["own"]);
+  assert.equal(c.emptyCare().forum, undefined);
+});

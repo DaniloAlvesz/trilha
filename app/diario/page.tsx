@@ -1,6 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
+import Icon from "@/components/Icon";
 import { useCare } from "@/components/CareProvider";
 import { dateLabel } from "@/lib/care";
 const moods = [
@@ -28,14 +29,33 @@ export default function Diary() {
   const [intensity, setIntensity] = useState<number | null>(null);
   const [note, setNote] = useState("");
   const [error, setError] = useState("");
+  const [invalidGroup, setInvalidGroup] = useState("");
+  const moodStart = useRef<HTMLButtonElement>(null);
+  const symptomStart = useRef<HTMLButtonElement>(null);
+  const intensityStart = useRef<HTMLButtonElement>(null);
   const [saved, setSaved] = useState(false);
   const [remove, setRemove] = useState("");
   function save(e: React.FormEvent) {
     e.preventDefault();
     if (!mood || !symptom || intensity === null) {
+      const missing = !mood ? "mood" : !symptom ? "symptom" : "intensity";
+      setInvalidGroup(missing);
       setError(
-        "Escolha como está, um sintoma e a intensidade. Se não há sintoma, escolha “Sem sintoma agora”.",
+        missing === "mood"
+          ? "Escolha uma opção na etapa 1: como estão suas emoções. Você pode escolher “Prefiro não responder”."
+          : missing === "symptom"
+            ? "Escolha uma opção na etapa 2: como está seu corpo. Se não há sintoma, escolha “Sem sintoma agora”."
+            : "Escolha a intensidade do sintoma na etapa 3, de leve a muito forte.",
       );
+      requestAnimationFrame(() => {
+        const target =
+          missing === "mood"
+            ? moodStart
+            : missing === "symptom"
+              ? symptomStart
+              : intensityStart;
+        target.current?.focus();
+      });
       return;
     }
     update((d) => ({
@@ -55,6 +75,7 @@ export default function Diary() {
     }));
     setSaved(true);
     setError("");
+    setInvalidGroup("");
     setMood("");
     setSymptom("");
     setIntensity(null);
@@ -65,7 +86,6 @@ export default function Diary() {
     <div className="page-stack">
       <div className="page-heading">
         <div>
-          <p className="eyebrow">UM MOMENTO PARA VOCÊ</p>
           <h1>Como você está?</h1>
           <p>
             Escolha as opções e toque em salvar. Você pode fazer mais de um
@@ -92,33 +112,51 @@ export default function Diary() {
           )}
         </div>
       )}
-      <form className="card form-stack" onSubmit={save}>
-        <fieldset>
+      <form
+        className="card form-stack"
+        onSubmit={save}
+        aria-describedby="diary-instructions"
+      >
+        <p id="diary-instructions" className="field-hint">
+          Responda às etapas 1 e 2. Se escolher um sintoma, informe também a
+          intensidade na etapa 3. A anotação final é opcional.
+        </p>
+        <fieldset
+          aria-invalid={invalidGroup === "mood" || undefined}
+          aria-describedby={invalidGroup === "mood" ? "diary-error" : undefined}
+        >
           <legend>1. Como estão suas emoções?</legend>
           <div className="choice-grid">
             {moods.map((m) => (
               <button
                 type="button"
                 key={m}
+                ref={m === moods[0] ? moodStart : undefined}
                 aria-pressed={mood === m}
                 onClick={() => {
                   setMood(m);
                   setSaved(false);
                 }}
               >
-                {mood === m ? "✓ " : ""}
+                {mood === m && <Icon name="check" size={18} />}
                 {m}
               </button>
             ))}
           </div>
         </fieldset>
-        <fieldset>
+        <fieldset
+          aria-invalid={invalidGroup === "symptom" || undefined}
+          aria-describedby={
+            invalidGroup === "symptom" ? "diary-error" : undefined
+          }
+        >
           <legend>2. Como está seu corpo agora?</legend>
           <div className="choice-grid">
             {symptoms.map((s) => (
               <button
                 type="button"
                 key={s}
+                ref={s === symptoms[0] ? symptomStart : undefined}
                 aria-pressed={symptom === s}
                 onClick={() => {
                   setSymptom(s);
@@ -126,14 +164,19 @@ export default function Diary() {
                   setSaved(false);
                 }}
               >
-                {symptom === s ? "✓ " : ""}
+                {symptom === s && <Icon name="check" size={18} />}
                 {s}
               </button>
             ))}
           </div>
         </fieldset>
         {symptom && symptom !== symptoms[0] && (
-          <fieldset>
+          <fieldset
+            aria-invalid={invalidGroup === "intensity" || undefined}
+            aria-describedby={
+              invalidGroup === "intensity" ? "diary-error" : undefined
+            }
+          >
             <legend>3. Qual é a intensidade desse sintoma?</legend>
             <p className="field-hint">
               Escolha a opção que mais se aproxima do que você sente. Esta
@@ -144,10 +187,11 @@ export default function Diary() {
                 <button
                   type="button"
                   key={l}
+                  ref={i === 0 ? intensityStart : undefined}
                   aria-pressed={intensity === i + 1}
                   onClick={() => setIntensity(i + 1)}
                 >
-                  {intensity === i + 1 ? "✓ " : ""}
+                  {intensity === i + 1 && <Icon name="check" size={18} />}
                   {l}
                 </button>
               ))}
@@ -167,7 +211,7 @@ export default function Diary() {
           />
         </div>
         {error && (
-          <p className="error" role="alert">
+          <p id="diary-error" className="error" role="alert">
             {error}
           </p>
         )}

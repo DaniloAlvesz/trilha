@@ -1,0 +1,49 @@
+{
+  "installed": "2026-10-27",
+  "skills": [
+    {
+      "name": "web-design-guidelines",
+      "repository": "https://github.com/vercel-labs/agent-skills",
+      "path": "skills/web-design-guidelines",
+      "commit": "063bee94c3f4df8453406c830b0a7df0f2860278",
+      "applied": "Fresh Vercel interface rules: semantic controls, labels, focus, input handling and responsive review."
+    },
+    {
+      "name": "impeccable",
+      "repository": "https://github.com/pbakaus/impeccable",
+      "path": ".agents/skills/impeccable",
+      "commit": "414603bf14c7a344edb466bb1f85690c77ce8b7d",
+      "applied": "Operate mode, mobile adaptation, craft-floor and documentation. Context launcher failed with permission denied; references and product context read directly per fallback."
+    },
+    {
+      "name": "design-taste-frontend",
+      "folder": "taste-skill",
+      "repository": "https://github.com/Leonxlnx/taste-skill",
+      "path": "skills/taste-skill",
+      "commit": "12af471f627f866411b4bd785b19646d3672784c",
+      "applied": "App-screen direction draw and lint, flatter hierarchy, no decorative eyebrows or icon tiles. Browser inspection uses the available CUA browser rather than an external automation script."
+    },
+    {
+      "name": "ui-ux-pro-max",
+      "repository": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill",
+      "path": ".claude/skills/ui-ux-pro-max",
+      "commit": "28b3b8dee8c976df4fa3e94aed4e092ad43fcb03",
+      "applied": "Local queries for design system, navigation/touch and Next.js. Generated marketing patterns were off-topic twice and were not adopted; verified touch/navigation guidance and relevant general rules applied."
+    },
+    {
+      "name": "web-accessibility",
+      "source": "https://github.com/w3c/wcag",
+      "normative": "https://www.w3.org/TR/WCAG22/",
+      "kind": "locally-authored adaptation, not an official W3C skill",
+      "path": ".agents/skills/web-accessibility/SKILL.md",
+      "applied": "Contrast, 320px reflow, enlarged text, explicit form errors, associated descriptions and focus recovery."
+    }
+  ],
+  "agents": ["mobile_design", "accessibility", "forum"],
+  "configurationReference": "https://learn.chatgpt.com/docs/agent-configuration/subagents",
+  "validationNotes": {
+    "tasteLint": "0 FAIL; 3 warnings retained: zero-padded dates/times and accessibility focus halo, not resting-card shadows.",
+    "browserInspector": "CUA browser layout/flows; external Taste Playwright inspector not run.",
+    "impeccable": "Context launcher unavailable; documented fallback used."
+  }
+}

@@ -36,7 +36,6 @@ export default function Learn() {
     <div className="page-stack">
       <div className="page-heading">
         <div>
-          <p className="eyebrow">INFORMAÇÃO COM CLAREZA</p>
           <h1>Orientações para o seu cuidado</h1>
           <p>Textos curtos para apoiar suas conversas com a equipe de saúde.</p>
         </div>

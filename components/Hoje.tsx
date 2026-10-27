@@ -22,139 +22,67 @@ export default function Today() {
   const dose = data.doses[today];
   const days = recentDays(now);
   return (
-    <div className="page-stack">
-      <div className="page-heading">
+    <div className="page-stack home-page">
+      <div className="home-heading">
         <div>
-          <p className="eyebrow">SEU ESPAÇO DE CUIDADO</p>
-          <h1>Um dia de cada vez.</h1>
-          <p>O que você precisa para cuidar de você hoje?</p>
+          <h1>Seu cuidado hoje</h1>
+          <p>Um passo de cada vez, no seu tempo.</p>
         </div>
-        <span className="date-tag">
-          {now.toLocaleDateString("pt-BR", {
-            weekday: "long",
-            day: "numeric",
-            month: "long",
-          })}
-        </span>
+        <time dateTime={today}>
+          {now.toLocaleDateString("pt-BR", { day: "numeric", month: "short" })}
+        </time>
       </div>
-      {!data.welcomed && (
-        <section className="welcome card compact-welcome">
-          <div>
-            <h2>Seu cuidado começa com um pequeno passo.</h2>
-            <p>
-              Registre como está no cartão abaixo.{" "}
-              {data.remember
-                ? "Seus registros ficam neste navegador."
-                : "Por padrão, os registros ficam só nesta aba."}{" "}
-              <Link href="/ajustes">Escolher onde guardar meus registros</Link>
-            </p>
-          </div>
-          <button
-            className="text-button"
-            onClick={() => update((d) => ({ ...d, welcomed: true }))}
-          >
-            Entendi
-          </button>
-        </section>
-      )}
-      <div className="dashboard-grid">
-        <section className="daily-card">
-          <div className="row">
-            <span className="pill">SEU MOMENTO DE HOJE</span>
-            <Icon name="heart" size={28} />
-          </div>
-          <h2>
-            {checked
-              ? "Seu registro de hoje está aqui."
-              : "Como você está hoje?"}
+      <section className="daily-card" aria-labelledby="daily-title">
+        <div className="daily-title-row">
+          <h2 id="daily-title">
+            {checked ? "Você já registrou seu dia." : "Como você está hoje?"}
           </h2>
-          <p>
-            {checked
-              ? "Você pode voltar e anotar algo novo quando precisar."
-              : "Uma pausa breve para perceber seu corpo e suas emoções."}
-          </p>
-          <Link href="/diario" className="button light">
-            {checked ? "Ver ou acrescentar registro" : "Registrar como estou"}
+          <Icon name={checked ? "check" : "heart"} size={24} />
+        </div>
+        <p>
+          {checked
+            ? "Se algo mudou, você pode anotar de novo."
+            : "Conte como estão seu corpo e suas emoções."}
+        </p>
+        <Link className="button" href="/diario">
+          {checked ? "Ver meu diário" : "Registrar meu dia"}
+          <Icon name="arrow" size={20} />
+        </Link>
+        <span className="small">Cerca de 1 minuto. Sem pressa.</span>
+      </section>
+      <section className="today-agenda" aria-labelledby="next-title">
+        <div className="section-heading">
+          <h2 id="next-title">Próximo compromisso</h2>
+          <Link href="/agenda" className="text-link">
+            Ver agenda
+          </Link>
+        </div>
+        {next ? (
+          <Link className="appointment-preview" href="/agenda">
+            <Icon name="calendar" />
+            <span>
+              <strong>{next.title}</strong>
+              <time dateTime={next.date}>{dateLabel(next.date, true)}</time>
+            </span>
             <Icon name="arrow" size={20} />
           </Link>
-          <p className="small">Leva cerca de 1 minuto. Faça no seu tempo.</p>
-          <div
-            className="week-strip"
-            aria-label="Dias com registro nesta semana"
-          >
-            {days.map((day) => {
-              const done = data.checkIns.some(
-                (x) => todayKey(new Date(x.date)) === day,
-              );
-              return (
-                <div
-                  key={day}
-                  className={done ? "marked" : ""}
-                  aria-label={`${dateLabel(day)}: ${done ? "com registro" : "sem registro"}`}
-                >
-                  <span>
-                    {new Date(day + "T12:00:00")
-                      .toLocaleDateString("pt-BR", { weekday: "short" })
-                      .slice(0, 3)}
-                  </span>
-                  <span className="day-circle">
-                    {done ? "✓" : new Date(day + "T12:00:00").getDate()}
-                  </span>
-                </div>
-              );
-            })}
+        ) : (
+          <div className="agenda-empty">
+            <p>Nenhum compromisso adicionado.</p>
+            <Link href="/agenda" className="inline-link">
+              Adicionar consulta ou exame <Icon name="plus" size={18} />
+            </Link>
           </div>
-          <p className="small">
-            Cada registro ajuda a contar sua história. Não é preciso preencher
-            todos os dias.
-          </p>
-        </section>
-        <section className="card next-card">
-          <div className="section-label">
-            <Icon name="calendar" />
-            <span>SUA AGENDA</span>
-          </div>
-          <h2>
-            {next
-              ? "Seu próximo compromisso"
-              : "Sua próxima consulta, sem esquecer."}
-          </h2>
-          {next ? (
-            <>
-              <h3>{next.title}</h3>
-              <p className="appointment-date">{dateLabel(next.date, true)}</p>
-              {next.notes && <p>{next.notes}</p>}
-            </>
-          ) : (
-            <p>
-              Guarde a data e o que precisa levar. Tudo fica junto para você
-              consultar.
-            </p>
-          )}
-          <Link className="button secondary" href="/agenda">
-            {next ? "Ver minha agenda" : "Adicionar um compromisso"}
-            <Icon name="arrow" size={18} />
-          </Link>
-          <Link className="inline-link" href="/relatorio-print">
-            Preparar resumo para a consulta
-          </Link>
-        </section>
-      </div>
-      {data.medication ? (
-        <section className="card">
-          <div className="section-label">
-            <Icon name="check" />
-            <span>SEU REGISTRO DE MEDICAMENTO</span>
-          </div>
-          <h2>{data.medication}</h2>
-          <p>{data.schedule}</p>
-          <p>
-            Registre apenas o que aconteceu hoje. Siga a orientação da sua
-            equipe de saúde.
-          </p>
+        )}
+      </section>
+      {data.medication && (
+        <section className="routine-panel" aria-labelledby="med-title">
+          <h2 id="med-title">Meu medicamento hoje</h2>
+          <strong className="routine-name">{data.medication}</strong>
+          {data.schedule && <p>{data.schedule}</p>}
           <div className="actions">
             <button
-              className={`button ${dose === "taken" ? "" : "secondary"}`}
+              className="button secondary"
               aria-pressed={dose === "taken"}
               onClick={() => {
                 update((d) => ({
@@ -164,7 +92,7 @@ export default function Today() {
                 notify("Tomada de hoje registrada por você.");
               }}
             >
-              {dose === "taken" ? "✓ " : ""}Já tomei hoje
+              {dose === "taken" && <Icon name="check" size={18} />}Já tomei
             </button>
             <button
               className="button secondary"
@@ -175,70 +103,107 @@ export default function Today() {
                   doses: { ...d.doses, [today]: "not-taken" },
                 }));
                 notify(
-                  "Registrado como não tomado hoje. Dúvidas sobre doses devem ser conversadas com a equipe.",
+                  "Registrado como não tomado hoje. Converse com a equipe se tiver dúvidas sobre doses.",
                 );
               }}
             >
-              Não tomei hoje
+              {dose === "not-taken" && <Icon name="check" size={18} />}Não tomei
             </button>
-            {dose && (
-              <button
-                className="text-button"
-                onClick={() =>
-                  update((d) => {
-                    const doses = { ...d.doses };
-                    delete doses[today];
-                    return { ...d, doses };
-                  })
-                }
-              >
-                Desfazer registro de hoje
-              </button>
-            )}
           </div>
+          {dose && (
+            <button
+              className="text-button"
+              onClick={() =>
+                update((d) => {
+                  const doses = { ...d.doses };
+                  delete doses[today];
+                  return { ...d, doses };
+                })
+              }
+            >
+              Desfazer registro
+            </button>
+          )}
           <p className="small">
-            Este registro não confirma ingestão nem substitui orientação sobre
-            doses.
+            Siga a prescrição da sua equipe. Este registro não confirma
+            ingestão.
           </p>
         </section>
-      ) : (
-        <Link className="card feature-link" href="/ajustes">
-          <span className="icon-tile">
-            <Icon name="settings" />
-          </span>
-          <span>
-            <strong>Usa algum medicamento contínuo?</strong>
-            <span>Se quiser, configure um registro da sua rotina.</span>
-          </span>
-          <Icon name="arrow" />
-        </Link>
       )}
-      <div className="two-columns">
-        <Link className="card feature-link" href="/aprender">
-          <span className="icon-tile">
-            <Icon name="book" />
-          </span>
-          <span>
-            <strong>Informação para o seu momento</strong>
-            <span>Orientações curtas, com fontes para consultar.</span>
-          </span>
-          <Icon name="arrow" />
-        </Link>
-        <Link className="card feature-link" href="/comunidade">
-          <span className="icon-tile">
+      <section className="home-resources" aria-labelledby="resources-title">
+        <h2 id="resources-title">Para ajudar no seu dia</h2>
+        <div className="resource-list">
+          <Link href="/relatorio-print" className="resource-row">
+            <Icon name="diary" />
+            <span>
+              <strong>Preparar minha consulta</strong>
+              <span>Guardar dúvidas e levar meu resumo</span>
+            </span>
+            <Icon name="arrow" size={18} />
+          </Link>
+          <Link href="/comunidade" className="resource-row">
             <Icon name="users" />
-          </span>
-          <span>
-            <strong>Encontrar apoio</strong>
-            <span>Prepare uma conversa e conheça opções de suporte.</span>
-          </span>
-          <Icon name="arrow" />
-        </Link>
-      </div>
-      <p className="safety-note">
-        Os registros não são acompanhados por profissionais. Se precisar de
-        ajuda, entre em contato com seu serviço de saúde. Em uma emergência,
-        ligue 192.
+            <span>
+              <strong>Fórum anônimo</strong>
+              <span>Conversar sem mostrar meu nome</span>
+            </span>
+            <Icon name="arrow" size={18} />
+          </Link>
+          <Link href="/aprender" className="resource-row">
+            <Icon name="book" />
+            <span>
+              <strong>Orientações de saúde</strong>
+              <span>Informação simples, com fontes</span>
+            </span>
+            <Icon name="arrow" size={18} />
+          </Link>
+        </div>
+      </section>
+      <details className="week-details">
+        <summary>Ver meus registros da semana</summary>
+        <div
+          className="week-strip"
+          aria-label="Dias com registro nos últimos sete dias"
+        >
+          {days.map((day) => {
+            const done = data.checkIns.some(
+              (x) => todayKey(new Date(x.date)) === day,
+            );
+            return (
+              <div
+                key={day}
+                className={done ? "marked" : ""}
+                aria-label={`${dateLabel(day)}: ${done ? "com registro" : "sem registro"}`}
+              >
+                <span>
+                  {new Date(day + "T12:00:00")
+                    .toLocaleDateString("pt-BR", { weekday: "short" })
+                    .slice(0, 3)}
+                </span>
+                <span className="day-circle">
+                  {done ? (
+                    <Icon name="check" size={16} />
+                  ) : (
+                    new Date(day + "T12:00:00").getDate()
+                  )}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+        <p className="small">
+          Dias sem registro não são falhas. Use o diário quando ajudar você.
+        </p>
+      </details>
+      {!data.remember && (
+        <p className="storage-hint">
+          Quer encontrar seus registros amanhã?{" "}
+          <Link href="/ajustes">Escolher onde guardar</Link>.
+        </p>
+      )}
+      <p className="home-safety">
+        Os registros não são acompanhados por profissionais.{" "}
+        <Link href="/ajuda">Como buscar ajuda</Link>.
       </p>
     </div>
   );

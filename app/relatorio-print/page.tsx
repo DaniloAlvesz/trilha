@@ -10,7 +10,6 @@ export default function Report() {
     <div className="page-stack">
       <div className="page-heading">
         <div>
-          <p className="eyebrow">PARA LEVAR COM VOCÊ</p>
           <h1>Preparar minha consulta</h1>
           <p>Guarde suas dúvidas e leve um resumo do que você registrou.</p>
         </div>
@@ -61,7 +60,6 @@ export default function Report() {
         </p>
       </div>
       <article className="report">
-        <p className="eyebrow">ONCO+ · RESUMO PESSOAL</p>
         <h1>Registros para conversar na consulta</h1>
         <p>Emitido em {ready ? dateLabel(new Date().toISOString()) : "…"}</p>
         <p className="small">

@@ -64,7 +64,6 @@ export default function Settings() {
       </Link>
       <div className="page-heading">
         <div>
-          <p className="eyebrow">DO SEU JEITO</p>
           <h1>Seus dados e preferências</h1>
           <p>Você escolhe o que registrar e como usar o ONCO+.</p>
         </div>
@@ -250,9 +249,9 @@ export default function Settings() {
       <section className="card">
         <h2>Apagar meus registros</h2>
         <p>
-          Apaga diário, agenda, dúvidas, fotos, rotina e preferências deste
-          navegador. Arquivos PDF e lembretes já exportados precisam ser
-          apagados onde foram salvos.
+          Apaga diário, agenda, dúvidas, fotos, conversas do fórum, rotina e
+          preferências deste navegador. Arquivos PDF e lembretes já exportados
+          precisam ser apagados onde foram salvos.
         </p>
         {!confirm ? (
           <button

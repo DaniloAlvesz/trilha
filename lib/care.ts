@@ -1,3 +1,4 @@
+import { readForum, type ForumState } from "./forum";
 export type CheckIn = {
   id: string;
   date: string;
@@ -21,6 +22,7 @@ export type Photo = {
 };
 export type CareData = {
   version: 1;
+  forum?: ForumState;
   welcomed: boolean;
   remember: boolean;
   largeText: boolean;
@@ -141,6 +143,7 @@ export function readCare(raw: string | null): CareData | null {
     return {
       ...base,
       remember: true,
+      forum: readForum(d.forum),
       welcomed: d.welcomed === true,
       largeText: d.largeText === true,
       medication: str(d.medication, 100) ? d.medication : "",

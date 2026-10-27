@@ -8,7 +8,7 @@ Protótipo de suporte a pessoas com câncer de mama. Não é um serviço de assi
 
 Next.js App Router, React e TypeScript. `components/CareProvider.tsx` é a fonte compartilhada para diário, agenda, perguntas, rotina, fotos e preferências. `lib/care.ts` contém tipos, funções de data, validação do armazenamento, calendário e totais. Não existe banco remoto.
 
-Rotas: `/` hoje, `/diario`, `/agenda`, `/aprender`, `/ajuda`, `/ajustes`, `/relatorio-print`, `/fotos`, `/comunidade` (apoio, sem chat ativo). Endereços anteriores são preservados para não quebrar links.
+Rotas: `/` hoje, `/diario`, `/agenda`, `/aprender`, `/ajuda`, `/ajustes`, `/relatorio-print`, `/fotos`, `/comunidade` (fórum por apelido, local e sem compartilhamento remoto). Endereços anteriores são preservados para não quebrar links.
 
 A seleção diária de medicamento substitui a marcação na mesma data; não incrementa estoques ou presume ingestão. Datas sem informação não viram doses perdidas. Ao trocar medicamento, pede confirmação para apagar marcações anteriores, evitando atribuí-las a outro tratamento. Compromissos vencidos não viram automaticamente realizados. O início usa somente compromissos futuros pendentes. Datas diárias usam o fuso local.
 
@@ -42,3 +42,11 @@ As pesquisas de opinião informadas no trabalho acadêmico não medem retenção
 Métricas futuras, somente com consentimento e infraestrutura apropriada: proporção de pessoas que conclui primeiro registro; retorno no dia 1, 7 e 30 por coorte de entrada; dias com ação útil por semana; preparo/uso de resumo em consulta; desativação de lembretes; abandono e motivo. Diferenciar retorno ao app de adesão medicamentosa. A versão atual não envia análises a servidor e não inventa métricas.
 
 Antes de uso clínico: revisão do conteúdo por equipe habilitada; protocolos de orientação e escalonamento; autenticação, segurança e recuperação; revisão de privacidade; definição de responsabilidades de monitoramento. Chat real requer moderação, denúncia, bloqueio e resposta a riscos. Não há selo de conformidade ou certificação.
+
+## Revisão mobile-first e fórum
+
+A revisão passou a usar quatro destinos de navegação com rótulos legíveis, hierarquia de tarefas no início, controles em torno de 48–50px e ampliação de texto sem diminuir o menu. Paleta rose/plum/cream registrada em DESIGN.md; Atkinson Hyperlegible 400/700 servida localmente sob OFL, sem dependência de Google Fonts em tempo de uso.
+
+O fórum vive em `CareData.forum`, com validação em `lib/forum.ts` e o mesmo consentimento de armazenamento/exclusão do restante do app. Inclui apelido botânico, tópicos e respostas, busca normalizada, categorias, salvos, apoiar, ocultar autor e denúncia local. Há até 3 conversas de exemplo, sempre identificadas. Uma denúncia oculta o tópico no aparelho; não se afirma que foi enviada a moderadores. O app não garante anonimato completo: é uso por apelido, sem publicar nome, e os dados continuam acessíveis a quem usa o aparelho.
+
+Papéis de manutenção em `.codex/agents/` seguem a documentação oficial de agentes do Codex: https://learn.chatgpt.com/docs/agent-configuration/subagents . Modelos e permissões são herdados, sem credenciais adicionadas. As skills foram instaladas no ambiente e aplicadas; fontes e limitações dos helpers estão em `docs/skills-manifest.json`.

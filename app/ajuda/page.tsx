@@ -16,8 +16,14 @@ const links = [
   {
     href: "/comunidade",
     icon: "users",
-    title: "Encontrar apoio",
-    text: "Organize uma conversa sobre o que você precisa.",
+    title: "Fórum anônimo",
+    text: "Conheça as conversas e participe por apelido.",
+  },
+  {
+    href: "/aprender",
+    icon: "book",
+    title: "Orientações de saúde",
+    text: "Textos simples e fontes para consultar.",
   },
   {
     href: "/fotos",
@@ -31,7 +37,6 @@ export default function Help() {
     <div className="page-stack">
       <div className="page-heading">
         <div>
-          <p className="eyebrow">ESTAMOS AQUI PARA FACILITAR</p>
           <h1>Mais opções e ajuda</h1>
           <p>Encontre o que precisa, com calma e sem complicação.</p>
         </div>

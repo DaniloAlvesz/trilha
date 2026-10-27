@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { useCare } from "@/components/CareProvider";
 import { calendarFile, dateLabel, type Appointment } from "@/lib/care";
@@ -11,12 +11,24 @@ export default function Agenda() {
   const [filter, setFilter] = useState("Todos");
   const [remove, setRemove] = useState("");
   const [error, setError] = useState("");
+  const [invalidField, setInvalidField] = useState("");
+  const titleInput = useRef<HTMLInputElement>(null);
+  const dateInput = useRef<HTMLInputElement>(null);
   function save(e: React.FormEvent) {
     e.preventDefault();
     const values = new FormData(e.currentTarget as HTMLFormElement);
     const eventDate = String(values.get("date") || "");
     if (!title.trim() || !eventDate || isNaN(Date.parse(eventDate))) {
-      setError("Informe o compromisso e uma data válida.");
+      const missing = !title.trim() ? "title" : "date";
+      setInvalidField(missing);
+      setError(
+        missing === "title"
+          ? "Escreva o nome do compromisso. Por exemplo: consulta de retorno."
+          : "Escolha uma data e um horário válidos para o compromisso.",
+      );
+      requestAnimationFrame(() =>
+        (missing === "title" ? titleInput : dateInput).current?.focus(),
+      );
       return;
     }
     update((d) => ({
@@ -36,6 +48,7 @@ export default function Agenda() {
     setDate("");
     setNotes("");
     setError("");
+    setInvalidField("");
     notify(
       "Compromisso salvo. Se quiser um aviso, adicione ao calendário do celular.",
     );
@@ -62,17 +75,29 @@ export default function Agenda() {
     <div className="page-stack">
       <div className="page-heading">
         <div>
-          <p className="eyebrow">ORGANIZE SEU CUIDADO</p>
           <h1>Minha agenda</h1>
           <p>Consultas, exames e outros compromissos em um só lugar.</p>
         </div>
       </div>
-      <form className="card form-stack" onSubmit={save}>
+      <form
+        className="card form-stack"
+        noValidate
+        onSubmit={save}
+        aria-describedby="appointment-instructions"
+      >
         <h2>Adicionar um compromisso</h2>
+        <p id="appointment-instructions" className="field-hint">
+          Preencha o nome, a data e o horário. As observações são opcionais.
+        </p>
         <div>
           <label htmlFor="appointment-title">Qual é o compromisso?</label>
           <input
             id="appointment-title"
+            ref={titleInput}
+            aria-invalid={invalidField === "title" || undefined}
+            aria-describedby={
+              invalidField === "title" ? "appointment-error" : undefined
+            }
             required
             maxLength={100}
             value={title}
@@ -84,12 +109,22 @@ export default function Agenda() {
           <label htmlFor="appointment-date">Data e horário</label>
           <input
             id="appointment-date"
+            ref={dateInput}
+            aria-invalid={invalidField === "date" || undefined}
+            aria-describedby={
+              invalidField === "date"
+                ? "appointment-error appointment-date-hint"
+                : "appointment-date-hint"
+            }
             name="date"
             type="datetime-local"
             required
             value={date}
             onChange={(e) => setDate(e.target.value)}
           />
+          <p id="appointment-date-hint" className="field-hint">
+            Use o horário local da consulta.
+          </p>
         </div>
         <div>
           <label htmlFor="appointment-notes">
@@ -104,7 +139,7 @@ export default function Agenda() {
           />
         </div>
         {error && (
-          <p className="error" role="alert">
+          <p id="appointment-error" className="error" role="alert">
             {error}
           </p>
         )}
@@ -141,7 +176,7 @@ export default function Agenda() {
           <article key={x.id} className="record">
             <span className="small">
               {x.done
-                ? "✓ Realizado"
+                ? "Realizado"
                 : new Date(x.date).getTime() < Date.now()
                   ? "Data passada · confirme se aconteceu"
                   : "Agendado"}
